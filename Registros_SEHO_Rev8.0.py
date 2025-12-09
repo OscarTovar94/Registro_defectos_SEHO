@@ -1,11 +1,11 @@
 # Creación de aplicación de registros de defectos SEHO en python para no depender de Excel
 # ------- libraries
 import tkinter as tk
-from PIL import Image, ImageTk
 from tkinter import messagebox
 import csv
 import os
 from datetime import datetime
+from PIL import Image, ImageTk
 import pandas as pd
 from tkinter import Toplevel, messagebox
 from tkcalendar import Calendar
@@ -1376,6 +1376,27 @@ def root_logfile():
     app = CSVEditor(ventana_csv)
 
 
+def defect_root():
+    """ Función que abre la ventana defectos """
+    global root
+
+    # ---------- Root Defectos
+    root_defect = tk.Toplevel(root)
+    root_defect.attributes("-topmost", True)
+    root_defect.attributes("-fullscreen", True)
+    root_defect.overrideredirect(False)
+    root_defect.resizable(False, False)
+    root_defect.configure(bg="#F2F2F2")
+
+    root_defect.grid_rowconfigure(0, weight=1)
+    root_defect.grid_columnconfigure(0, weight=1)
+    # ----- Frame's root_defect
+    root_frame0 = tk.Frame(root_defect, bg="#F2F2F2")
+
+    root_frame0.grid_columnconfigure(0, weight=1)
+    root_frame0.grid_rowconfigure(0, weight=0)
+
+
 # ------------------------------------- LogFile -----------------------------------------------------------------------
 # Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
@@ -2281,7 +2302,7 @@ label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
 
 # ------------ Frame3_Row0
 # Horarios iniciales
-hora_inicial = tk.StringVar(value="12")
+hora_inicial = tk.StringVar(value="6")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
 
@@ -3017,4 +3038,5 @@ Frame5.grid(row=5, column=0, sticky="nsew")
 if __name__ == "__main__":
     actualizar_fecha_hora()
     root_scale()
+    calcular_defectos()
     root.mainloop()
