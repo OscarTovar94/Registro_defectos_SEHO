@@ -1380,6 +1380,34 @@ def defect_root():
     """ Función que abre la ventana defectos """
     global root
 
+    # ---------- Logic root_defect
+
+    def root_defect_scale():
+        # Obtener el tamaño de la pantalla
+        pantalla_ancho = root_defect.winfo_screenwidth()
+        pantalla_alto = root_defect.winfo_screenheight()
+
+        # Calcular el factor de escala basado en una resolución de referencia (1920x1080)
+        escala_x = pantalla_ancho / 1920
+        escala_y = pantalla_alto / 1080
+        escala = min(escala_x, escala_y)
+        root_frame0.config(padx=0 * escala, pady=0 * escala)
+
+        # Ajustar el tamaño de la fuente
+        fuente_8 = int(8 * escala)
+        fuente_10 = int(10 * escala)
+        fuente_12 = int(12 * escala)
+        fuente_14 = int(14 * escala)
+        fuente_16 = int(16 * escala)
+        fuente_20 = int(20 * escala)
+        fuente_22 = int(22 * escala)
+        fuente_30 = int(30 * escala)
+        fuente_40 = int(40 * escala)
+        fuente_50 = int(50 * escala)
+        fuente_70 = int(90 * escala)
+
+        label_de_0.config(font=("Arial", fuente_40, "bold"))  # Título
+
     # ---------- Root Defectos
     root_defect = tk.Toplevel(root)
     root_defect.attributes("-topmost", True)
@@ -1395,6 +1423,17 @@ def defect_root():
 
     root_frame0.grid_columnconfigure(0, weight=1)
     root_frame0.grid_rowconfigure(0, weight=0)
+
+    # ------------ root_frame0_Row0
+    # label_0: Titulo
+    label_de_0 = tk.Label(root_frame0, text="Defectos SEHO",
+                          fg="black", bg="#F2F2F2")
+    label_de_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+
+    # ---------------------------------------------------------------------------------------------
+    root_frame0.grid(row=0, column=0, sticky="nsew")
+
+    root_defect_scale()
 
 
 # ------------------------------------- LogFile -----------------------------------------------------------------------
@@ -2966,7 +3005,7 @@ label_153.grid(row=0, column=0, padx=0, pady=5, sticky="sw")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
-                      border=3, background="yellow")
+                      border=3, background="yellow", command=lambda: defect_root())
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
