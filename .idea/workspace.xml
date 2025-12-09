@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="aad8b3ac-1bd9-4715-992b-9e608189e079" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Images/SEHO.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/elrad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/elrad_image.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/fail.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/pass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Images/standby.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogFiles/LogFile.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LogFiles/Register.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Parameters.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/Images/SEHO.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/Images/elrad.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/Images/fail.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/Images/pass.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/Images/standby.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/RegistrosSEHO_Rev7.0.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/SEHO.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/Distribución.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/Parameters.csv" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/settings.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Program/pyinstaller.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Registros_SEHO_Rev8.0.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/distribucion.xlsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/root_settings.ini" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/settings.ini" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2ujwr2QtGNkqG1n60TtvN4xrbOX" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Python.RegistrosSEHO_Rev7.0.executor": "Run",
+    "Python.Registros_SEHO_Rev8.0.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/FamTovar/Desktop/Oscar/2- Cursos Udemy/Python"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-495700d161d3-aa17d162503b-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-243.22562.220" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="aad8b3ac-1bd9-4715-992b-9e608189e079" name="Changes" comment="" />
+      <created>1742775487552</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742775487552</updated>
+    </task>
+    <servers />
+  </component>
+</project>
