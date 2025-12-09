@@ -73,7 +73,7 @@ def root_scale():
     datos = int(16 * escala)
     horarios = int(14 * escala)
     etiquetas_parte_1= int(12 * escala)
-    bloque_1 = int(20 * escala)
+    bloque_1 = int(22 * escala)
     button_reset = int(12 * escala)
     etiquetas_parte_2 = int(12 * escala)
     bloque_2 = int(16 * escala)
@@ -395,6 +395,7 @@ def actualizar_fecha_hora():
     label_153.config(text=fecha_hora_actual)
     # Llamar a esta función de nuevo después de 1000 ms (1 segundo)
     root.after(1000, actualizar_fecha_hora)
+
 # ------------------------------------- LogFile -----------------------------------------------------------------------
 # Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
@@ -429,27 +430,31 @@ defect27 = settings_root("defect27")
 defect28 = settings_root("defect28")
 defect29 = settings_root("defect29")
 defect30 = settings_root("defect30")
-
-if not os.path.isfile(csv_file) and not os.path.isfile(csv_file2) :
+# Crear csv_file si no existe
+if not os.path.isfile(csv_file):
     with open(csv_file, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY', 'Wave1', 'Wave2', 'Flux',\
-                         'Conveyor', defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,\
-                         defect9, defect10, defect11, defect12, defect13, defect14, defect15, defect16, defect17,\
-                         defect18, defect19, defect20, defect21, defect22, defect23, defect24, defect25, defect26,\
-                         defect27, defect28, defect29, defect30])
+        writer.writerow([
+            'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
+            'Wave1', 'Wave2', 'Flux', 'Conveyor',
+            defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
+            defect9, defect10, defect11, defect12, defect13, defect14, defect15,
+            defect16, defect17, defect18, defect19, defect20, defect21, defect22,
+            defect23, defect24, defect25, defect26, defect27, defect28, defect29, defect30
+        ])
 
+# Crear csv_file2 si no existe
+if not os.path.isfile(csv_file2):
     with open(csv_file2, mode='w', newline='') as file:
         writer = csv.writer(file)
-        writer.writerow(['Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY', 'Wave1', 'Wave2', 'Flux',\
-                         'Conveyor', defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,\
-                         defect9, defect10, defect11, defect12, defect13, defect14, defect15, defect16, defect17,\
-                         defect18, defect19, defect20, defect21, defect22, defect23, defect24, defect25, defect26,\
-                         defect27, defect28, defect29, defect30])
-
-data = pd.read_csv(csv_file, encoding='latin1')
-data2 = pd.read_csv(csv_file2, encoding='latin1')
-
+        writer.writerow([
+            'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
+            'Wave1', 'Wave2', 'Flux', 'Conveyor',
+            defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
+            defect9, defect10, defect11, defect12, defect13, defect14, defect15,
+            defect16, defect17, defect18, defect19, defect20, defect21, defect22,
+            defect23, defect24, defect25, defect26, defect27, defect28, defect29, defect30
+        ])
 def guardar_datos(event=None):
     try:
         dat1 = label_36.cget("text").strip() or "0" # Modelo
@@ -544,8 +549,86 @@ def guardar_datos(event=None):
             entry_29.delete(0, tk.END)  # Defect30
             entry_30.delete(0, tk.END) # Pallet
             label_34.config(text="") # Defectos
+            calcular_defectos()
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
+
+data_logfile = pd.read_csv(csv_file, encoding='latin1')
+data_register = pd.read_csv(csv_file2, encoding='latin1')
+
+def calcular_defectos():
+    try:
+        data_register = pd.read_csv(csv_file2, encoding='latin1')
+        data_register['Fecha/Hora'] = pd.to_datetime(data_register['Fecha/Hora'], format='%d/%m/%Y %H:%M:%S')
+
+        # ---- Obtener modelos desde settings ----
+        models = [settings_root(f"Part#{i}") for i in range(1, 13)]
+
+        # ---- Listas de labels ----
+        labels_def = [label_63, label_64, label_65, label_66, label_67, label_68,
+                      label_69, label_70, label_71, label_72, label_73, label_74]
+
+        labels_est = [label_76, label_77, label_78, label_79, label_80, label_81,
+                      label_82, label_83, label_84, label_85, label_86, label_87]
+
+        labels_fpy = [label_89, label_90, label_91, label_92, label_93, label_94,
+                      label_95, label_96, label_97, label_98, label_99, label_100]
+
+        # Valor mínimo de FPY configurable
+        fpy_por_pallet = int(settings_root("FPY_PALLET"))
+
+        # ---- Fecha seleccionada ----
+        date = pd.to_datetime(label_153.cget("text"), format='%d/%m/%Y %H:%M:%S')
+
+        # ---- Horas ----
+        hora_inicio_1 = pd.to_datetime(f"{hora_inicial.get()}:{minuto_inicial.get()} {periodo_inicial.get()}",
+                                       format='%I:%M %p').time()
+        hora_fin_1 = pd.to_datetime(f"{hora_final.get()}:{minuto_final.get()} {periodo_final.get()}",
+                                    format='%I:%M %p').time()
+
+        # ==============================================================
+        #   CALCULAR PARA CADA MODELO
+        # ==============================================================
+        for i, modelo in enumerate(models):
+
+            # Filtrar por modelo y fecha
+            filtro_modelo_fecha = (data_register["Modelo"] == modelo) & \
+                                  (data_register["Fecha/Hora"].dt.date == date.date())
+
+            # Filtrar por hora
+            filtro_horas = data_register["Fecha/Hora"].dt.time.between(hora_inicio_1, hora_fin_1)
+
+            datos = data_register[filtro_modelo_fecha & filtro_horas]
+
+            # ---- DEFECTOS ----
+            suma_defectos = datos["Defectos"].sum()
+            labels_def[i].config(text=suma_defectos)
+
+            # ---- ESTÁNDAR ----
+            suma_estandar = datos["Estandar"].sum()
+            labels_est[i].config(text=suma_estandar)
+
+            # ---- FPY ----
+            if suma_estandar > 0:
+                fpy = (1 - (suma_defectos / suma_estandar)) * 100
+            else:
+                fpy = 0
+
+            lbl = labels_fpy[i]
+
+            # ---- Colores según FPY ----
+            if fpy == 0:
+                lbl.config(text="")
+            elif fpy > fpy_por_pallet:
+                lbl.config(fg="green", bg="#D9F2D0", text=f"{fpy:.2f}%")
+            elif fpy < fpy_por_pallet:
+                lbl.config(fg="red", bg="#FFCCCC", text=f"{fpy:.2f}%")
+            elif fpy == fpy_por_pallet:
+                lbl.config(fg="#E7601D", bg="#FBE7DD", text=f"{fpy:.2f}%")
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Se produjo un error: {e}")
+
 # ------------------------------------- GUI ---------------------------------------------------------------------------
 root = tk.Tk()
 root.attributes("-topmost", True)
