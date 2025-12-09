@@ -5,30 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aad8b3ac-1bd9-4715-992b-9e608189e079" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Images/SEHO.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Images/elrad.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Images/elrad_image.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Images/fail.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Images/pass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Images/standby.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LogFiles/LogFile.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LogFiles/Register.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Parameters.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/Images/SEHO.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/Images/elrad.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/Images/fail.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/Images/pass.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/Images/standby.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/RegistrosSEHO_Rev7.0.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/SEHO.ico" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/Distribución.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/Parameters.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/SupportFiles/settings.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Program/pyinstaller.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Registros_SEHO_Rev8.0.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/distribucion.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/root_settings.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogFiles/LogFile.csv" beforeDir="false" afterPath="$PROJECT_DIR$/LogFiles/LogFile.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LogFiles/Register.csv" beforeDir="false" afterPath="$PROJECT_DIR$/LogFiles/Register.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/root_settings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,15 +26,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.RegistrosSEHO_Rev7.0.executor": "Run",
-    "Python.Registros_SEHO_Rev8.0.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "C:/Users/FamTovar/Desktop/Oscar/2- Cursos Udemy/Python"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.Proportion_Rev6.0.executor&quot;: &quot;Run&quot;,
+    &quot;Python.RegistrosSEHO_Rev7.0.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Registros_SEHO_Rev8.0.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/FamTovar/Desktop/Oscar/2- Cursos Udemy/Python&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
