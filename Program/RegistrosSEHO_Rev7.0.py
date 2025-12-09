@@ -33,7 +33,8 @@ def fpy_pallets(*args):
                            ) if entry_defectos_con.get() else 0
     estandar = int(entry_estandar_con.get()) if entry_estandar_con.get() else 0
 
-    fpy = ((estandar - defectos_pallets) / estandar) * 100 if estandar > 0 else 0
+    fpy = ((estandar - defectos_pallets) / estandar) * \
+        100 if estandar > 0 else 0
 
     entry_fpy_pallet_con.delete(0, tk.END)
     entry_fpy_pallet_con.insert(0, f"{fpy:.2f}%")
@@ -256,7 +257,7 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     label_HLA.config(font=("Arial", fuente_16, "bold"))
     label_BGA200.config(font=("Arial", fuente_16, "bold"))
     label_FSA135.config(font=("Arial", fuente_16, "bold"))
-    #label_DC.config(font=("Arial", fuente_16, "bold"))
+    # label_DC.config(font=("Arial", fuente_16, "bold"))
     label_dc_i.config(font=("Arial", fuente_16, "bold"))
     label_locus.config(font=("Arial", fuente_16, "bold"))
     # -----------------Frame 2 row1
@@ -277,7 +278,7 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     entry_con_def_hla.config(font=("Arial", fuente_20, "bold"))
     entry_con_def_bga200.config(font=("Arial", fuente_20, "bold"))
     entry_con_def_fsa135.config(font=("Arial", fuente_20, "bold"))
-    #entry_con_def_dc.config(font=("Arial", fuente_20, "bold"))
+    # entry_con_def_dc.config(font=("Arial", fuente_20, "bold"))
     entry_con_def_dc_i.config(font=("Arial", fuente_20, "bold"))
     entry_con_def_locus.config(font=("Arial", fuente_20, "bold"))
     # -----------------Frame 2 row4
@@ -290,7 +291,7 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     entry_con_estan_hla.config(font=("Arial", fuente_20, "bold"))
     entry_con_estan_bga200.config(font=("Arial", fuente_20, "bold"))
     entry_con_estan_fsa135.config(font=("Arial", fuente_20, "bold"))
-    #entry_con_estan_dc.config(font=("Arial", fuente_20, "bold"))
+    # entry_con_estan_dc.config(font=("Arial", fuente_20, "bold"))
     entry_con_estan_dc_i.config(font=("Arial", fuente_20, "bold"))
     entry_con_estan_locus.config(font=("Arial", fuente_20, "bold"))
     # -----------------Frame 2 row5
@@ -303,7 +304,7 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     entry_fpy_hla.config(font=("Arial", fuente_22, "bold"))
     entry_fpy_bga200.config(font=("Arial", fuente_22, "bold"))
     entry_fpy_fsa135.config(font=("Arial", fuente_22, "bold"))
-    #entry_fpy_dc.config(font=("Arial", fuente_22, "bold"))
+    # entry_fpy_dc.config(font=("Arial", fuente_22, "bold"))
     entry_fpy_dc_i.config(font=("Arial", fuente_22, "bold"))
     entry_fpy_locus.config(font=("Arial", fuente_22, "bold"))
     # -----------------Frame 2 row6
@@ -315,7 +316,7 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     reset_hla.config(font=("Arial", fuente_12, "bold"))
     reset_bga200.config(font=("Arial", fuente_12, "bold"))
     reset_fsa135.config(font=("Arial", fuente_12, "bold"))
-    #reset_dc.config(font=("Arial", fuente_12, "bold"))
+    # reset_dc.config(font=("Arial", fuente_12, "bold"))
     reset_dci.config(font=("Arial", fuente_12, "bold"))
     reset_locus.config(font=("Arial", fuente_12, "bold"))
     # -----------------Frame 2 row7
@@ -334,10 +335,10 @@ def ajustar_escala():  # Funcion para ajustar escala de ventana
     boton_parametros.config(font=("Arial", fuente_8, "bold"))
 
 
-
 def actualizar_suma_defectos(*args):
     try:
-        defecto_1 = int(entry_falta_de_soldadura.get()) if entry_falta_de_soldadura.get() else 0
+        defecto_1 = int(entry_falta_de_soldadura.get()
+                        ) if entry_falta_de_soldadura.get() else 0
 
         defecto_2 = int(entry_exceso_de_soldadura.get()
                         ) if entry_exceso_de_soldadura.get() else 0
@@ -427,7 +428,8 @@ def modificar_csv(busqueda, reemplazo):
 
         # Verificar si la primera columna existe
         if len(df.columns) == 0:
-            messagebox.showerror("Error", "El archivo CSV no tiene columnas válidas")
+            messagebox.showerror(
+                "Error", "El archivo CSV no tiene columnas válidas")
             return 0
 
         primera_col = df.columns[0] if isinstance(df.columns, pd.Index) else 0
@@ -436,7 +438,8 @@ def modificar_csv(busqueda, reemplazo):
         cambios = (df[primera_col] == busqueda).sum()
 
         if cambios == 0:
-            messagebox.showinfo("Información", f"No se encontró '{busqueda}' en el archivo")
+            messagebox.showinfo(
+                "Información", f"No se encontró '{busqueda}' en el archivo")
             return 0
 
         # Realizar el reemplazo
@@ -530,7 +533,8 @@ def eliminar_filas_setup_2():
         return filas_eliminadas
 
     except FileNotFoundError:
-        messagebox.showerror("Error", f"No se encontró el archivo: {RUTA_CSV_2}")
+        messagebox.showerror(
+            "Error", f"No se encontró el archivo: {RUTA_CSV_2}")
         return 0
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un problema: {str(e)}")
@@ -549,6 +553,7 @@ def abrir_ventana_csv():
         def __init__(self, root):
             self.root = root
             self.root.title("LogFile")
+
             def cerrar_root():
                 root.destroy()
                 inicio()
@@ -710,7 +715,8 @@ def abrir_ventana_csv():
                 # Resetear índices
                 self.df.reset_index(drop=True, inplace=True)
                 self.mostrar_datos()  # Actualizar tabla
-                messagebox.showinfo("Éxito", "Fila eliminada correctamente.", parent=self.root)
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
             else:
                 messagebox.showwarning(
                     "Atención", "Seleccione una fila para eliminar.", parent=self.root)
@@ -743,11 +749,11 @@ def abrir_ventana_csv_registro():
         def __init__(self, root):
             self.root = root
             self.root.title("Registro")
+
             def cerrar_root():
                 root.destroy()
                 inicio()
             root.protocol("WM_DELETE_WINDOW", cerrar_root)
-
 
             # Configura la ventana para que se abra en pantalla completa pero manteniendo los botones de cerrar y minimizar
             self.root.state('zoomed')  # Maximiza la ventana al abrir
@@ -906,7 +912,8 @@ def abrir_ventana_csv_registro():
                 # Resetear índices
                 self.df.reset_index(drop=True, inplace=True)
                 self.mostrar_datos()  # Actualizar tabla
-                messagebox.showinfo("Éxito", "Fila eliminada correctamente.", parent=self.root)
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
             else:
                 messagebox.showwarning(
                     "Atención", "Seleccione una fila para eliminar.", parent=self.root)
@@ -923,6 +930,7 @@ def abrir_ventana_csv_registro():
     ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
     app = CSVEditor(ventana_csv)
 
+
 # ----------Ventana Parámetros----------------------------------------------------------------
 CSV3_PATH = obtener_configuracion("LogParameters")
 
@@ -933,6 +941,7 @@ def abrir_ventana_parametros():
         def __init__(self, root):
             self.root = root
             self.root.title("Parámetros")
+
             def cerrar_root():
                 root.destroy()
                 obtener_configuracion("LogParameters")
@@ -1103,7 +1112,8 @@ def abrir_ventana_parametros():
 
                     # Dividir el DataFrame y concatenar con la nueva fila en medio
                     self.df = pd.concat([
-                        self.df.iloc[:selected_index + 1],  # Parte superior incluyendo la fila seleccionada
+                        # Parte superior incluyendo la fila seleccionada
+                        self.df.iloc[:selected_index + 1],
                         pd.DataFrame([nueva_fila]),  # Nueva fila
                         self.df.iloc[selected_index + 1:]  # Parte inferior
                     ], ignore_index=True)
@@ -1117,10 +1127,11 @@ def abrir_ventana_parametros():
                     self.tree.focus(new_item)
                     self.tree.see(new_item)
                 else:
-                    messagebox.showwarning("Advertencia", "No hay datos cargados.", parent=self.root)
+                    messagebox.showwarning(
+                        "Advertencia", "No hay datos cargados.", parent=self.root)
             except Exception as e:
-                messagebox.showerror("Error", f"No se pudo agregar la fila: {str(e)}", parent=self.root)
-
+                messagebox.showerror(
+                    "Error", f"No se pudo agregar la fila: {str(e)}", parent=self.root)
 
         def eliminar_fila(self):
             """ Elimina la fila seleccionada """
@@ -1133,7 +1144,8 @@ def abrir_ventana_parametros():
                 # Resetear índices
                 self.df.reset_index(drop=True, inplace=True)
                 self.mostrar_datos()  # Actualizar tabla
-                messagebox.showinfo("Éxito", "Fila eliminada correctamente.", parent=self.root)
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
             else:
                 messagebox.showwarning(
                     "Atención", "Seleccione una fila para eliminar.", parent=self.root)
@@ -2438,47 +2450,47 @@ reset_lm.grid(row=5, column=1, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: RotoZip
 reset_rotozip = tk.Button(frame2, text="Reset", height=0, width=0,
-                          border=5, background="deepskyblue",command=lambda: modificar_csv("ROTOZIP", "ResetROTOZIP"))
+                          border=5, background="deepskyblue", command=lambda: modificar_csv("ROTOZIP", "ResetROTOZIP"))
 reset_rotozip.grid(row=5, column=2, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: Router
 reset_router = tk.Button(frame2, text="Reset", height=0, width=0,
-                         border=5, background="deepskyblue",command=lambda: modificar_csv("ROUTER 1617", "ResetROUTER 1617"))
+                         border=5, background="deepskyblue", command=lambda: modificar_csv("ROUTER 1617", "ResetROUTER 1617"))
 reset_router.grid(row=5, column=3, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: PR20
 reset_pr20 = tk.Button(frame2, text="Reset", height=0, width=0,
-                       border=5, background="deepskyblue",command=lambda: modificar_csv("PR20", "ResetPR20"))
+                       border=5, background="deepskyblue", command=lambda: modificar_csv("PR20", "ResetPR20"))
 reset_pr20.grid(row=5, column=4, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: FA08
 reset_fa08 = tk.Button(frame2, text="Reset", height=0, width=0,
-                       border=5, background="deepskyblue",command=lambda: modificar_csv("FA08", "ResetFA08"))
+                       border=5, background="deepskyblue", command=lambda: modificar_csv("FA08", "ResetFA08"))
 reset_fa08.grid(row=5, column=5, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: HLA
 reset_hla = tk.Button(frame2, text="Reset", height=0, width=0,
-                      border=5, background="deepskyblue",command=lambda: modificar_csv("HLA", "ResetHLA"))
+                      border=5, background="deepskyblue", command=lambda: modificar_csv("HLA", "ResetHLA"))
 reset_hla.grid(row=5, column=6, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: BGA200
 reset_bga200 = tk.Button(frame2, text="Reset", height=0, width=0,
-                         border=5, background="deepskyblue",command=lambda: modificar_csv("BGA200", "ResetBGA200"))
+                         border=5, background="deepskyblue", command=lambda: modificar_csv("BGA200", "ResetBGA200"))
 reset_bga200.grid(row=5, column=7, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: FSA135
 reset_fsa135 = tk.Button(frame2, text="Reset", height=0, width=0,
-                         border=5, background="deepskyblue",command=lambda: modificar_csv("FSA135", "ResetFSA135"))
+                         border=5, background="deepskyblue", command=lambda: modificar_csv("FSA135", "ResetFSA135"))
 reset_fsa135.grid(row=5, column=8, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: DC-I
 reset_dci = tk.Button(frame2, text="Reset", height=0, width=0,
-                      border=5, background="deepskyblue",command=lambda: modificar_csv("DC-I", "ResetDC-I"))
+                      border=5, background="deepskyblue", command=lambda: modificar_csv("DC-I", "ResetDC-I"))
 reset_dci.grid(row=5, column=9, padx=0, pady=0, sticky="nsew")
 
 # Boton Reset: LOCUS
 reset_locus = tk.Button(frame2, text="Reset", height=0, width=0,
-                        border=5, background="deepskyblue",command=lambda: modificar_csv("LOCUS", "ResetLOCUS"))
+                        border=5, background="deepskyblue", command=lambda: modificar_csv("LOCUS", "ResetLOCUS"))
 reset_locus.grid(row=5, column=10, padx=0, pady=0, sticky="nsew")
 # -------------------------------------Frame2 Row 6--------------------------------------------------------------------
 # label: FPY_Total
@@ -2513,22 +2525,22 @@ entry_hora_con.grid(row=10, column=1, padx=0, pady=0, sticky="sew")
 
 # Boton open: Defectos
 boton_defectos = tk.Button(frame2, text="Defectos", height=0, width=0,
-                     border=5,bg="#4EA72E", fg="#333333")
+                           border=5, bg="#4EA72E", fg="#333333")
 boton_defectos.grid(row=10, column=4, padx=0, pady=0, sticky="nsew")
 
 # Boton open: Parámetros
 boton_parametros = tk.Button(frame2, text="Parámetros", height=0, width=0,
-                     border=5,bg="#93D1ED", fg="#333333", command=abrir_ventana_parametros)
+                             border=5, bg="#93D1ED", fg="#333333", command=abrir_ventana_parametros)
 boton_parametros.grid(row=10, column=5, padx=0, pady=0, sticky="nsew")
 
 # Boton open: LogFileRegistro
 boton_logfileregistro = tk.Button(frame2, text="Registro", height=0, width=0,
-                     border=5,bg="#0F9ED5", fg="#333333", command=abrir_ventana_csv_registro)
+                                  border=5, bg="#0F9ED5", fg="#333333", command=abrir_ventana_csv_registro)
 boton_logfileregistro.grid(row=10, column=6, padx=0, pady=0, sticky="nsew")
 
 # Boton open: LogFileTotal
 boton_logfiletotal = tk.Button(frame2, text="LogFile", height=0, width=0,
-                     border=5,bg="#E97132", fg="#333333", command=abrir_ventana_csv)
+                               border=5, bg="#E97132", fg="#333333", command=abrir_ventana_csv)
 boton_logfiletotal.grid(row=10, column=7, padx=0, pady=0, sticky="nsew")
 
 

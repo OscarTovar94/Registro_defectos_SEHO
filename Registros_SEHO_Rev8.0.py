@@ -13,6 +13,7 @@ import pyautogui
 from tkinter import ttk, filedialog, messagebox
 import chardet
 import os
+import math
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
 
@@ -74,12 +75,13 @@ def root_scale():
     fuente_50 = int(50 * escala)
     fuente_70 = int(70 * escala)
     defct = int(18 * escala)
-    part_number = int(16 * escala)
+    part_number = int(14 * escala)
     datos = int(16 * escala)
     horarios = int(14 * escala)
     etiquetas_parte_1 = int(12 * escala)
     bloque_1 = int(22 * escala)
     button_reset = int(12 * escala)
+    button_ventanas = int(10 * escala)
     etiquetas_parte_2 = int(12 * escala)
     bloque_2 = int(16 * escala)
 
@@ -267,6 +269,7 @@ def root_scale():
     label_151.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#11
     label_152.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#12
     label_153.config(font=("Arial", fuente_12, "bold"))  # Fecha/Hora
+    label_154.config(font=("Arial", fuente_8, "bold"))  # Rev
 
     # --- entry's
     entry_0.config(font=("Arial", defct, "bold"))  # Defect
@@ -322,6 +325,11 @@ def root_scale():
     button_9.config(font=("Arial", button_reset, "bold"))  # Reset Part#10
     button_10.config(font=("Arial", button_reset, "bold"))  # Reset Part#11
     button_11.config(font=("Arial", button_reset, "bold"))  # Reset Part#12
+    button_12.config(font=("Arial", button_ventanas, "bold"))  # Defectos
+    button_13.config(font=("Arial", button_ventanas, "bold"))  # Soprte
+    button_14.config(font=("Arial", button_ventanas, "bold"))  # Parámetros
+    button_15.config(font=("Arial", button_ventanas, "bold"))  # Registros
+    button_16.config(font=("Arial", button_ventanas, "bold"))  # LogFile
 
 
 def suma_defectos(*args):
@@ -431,6 +439,941 @@ def actualizar_fecha_hora():
     label_153.config(text=fecha_hora_actual)
     # Llamar a esta función de nuevo después de 1000 ms (1 segundo)
     root.after(1000, actualizar_fecha_hora)
+
+
+def detectar_codificacion(archivo):
+    """Detecta la codificación del archivo"""
+    with open(archivo, 'rb') as f:
+        result = chardet.detect(f.read())
+    return result['encoding']
+
+
+def reset(busqueda, reemplazo):
+    """
+    Modifica el archivo CSV predefinido reemplazando valores en la primera columna
+    """
+    try:
+        # Detectar codificación primero
+        try:
+            encoding = detectar_codificacion(settings_root("Registro"))
+        except Exception as e:
+            encoding = 'latin-1'  # Codificación de respaldo
+
+        # Leer el archivo CSV con la codificación detectada
+        df = pd.read_csv(settings_root("Registro"), encoding=encoding)
+
+        # Verificar si la primera columna existe
+        if len(df.columns) == 0:
+            messagebox.showerror(
+                "Error", "El archivo CSV no tiene columnas válidas")
+            return 0
+
+        primera_col = df.columns[0] if isinstance(df.columns, pd.Index) else 0
+
+        # Contar ocurrencias antes del cambio
+        cambios = (df[primera_col] == busqueda).sum()
+
+        if cambios == 0:
+            messagebox.showinfo(
+                "Información", f"No se encontró '{busqueda}' en el archivo")
+            return 0
+
+        # Realizar el reemplazo
+        df[primera_col] = df[primera_col].replace(busqueda, reemplazo)
+
+        # Guardar el archivo (sobrescribe el original)
+        try:
+            df.to_csv(settings_root("Registro"),
+                      index=False, encoding=encoding)
+        except:
+            # Si falla, intentar con UTF-8
+            df.to_csv(settings_root("Registro"), index=False, encoding='utf-8')
+
+        calcular_defectos()
+        return cambios
+
+    except FileNotFoundError:
+        messagebox.showerror(
+            "Error", f"No se encontró el archivo: {settings_root('Registro')}")
+        return 0
+    except Exception as e:
+        messagebox.showerror("Error", f"Ocurrió un problema: {str(e)}")
+        return 0
+
+
+def root_parametros():
+    """ Función que abre la ventana secundaria para editar el CSV """
+    class CSVEditor:
+        def __init__(self, root):
+            self.root = root
+            self.root.title("Parámetros")
+
+            def cerrar_root():
+                root.destroy()
+                root.protocol("WM_DELETE_WINDOW", cerrar_root)
+
+            self.root.attributes("-fullscreen", True)
+            self.root.attributes("-topmost", True)
+
+            # Cargar automáticamente desde la ruta
+            self.archivo_csv = settings_root("Parameters")
+            self.df = None
+
+            # Botones
+            btn_frame = tk.Frame(root)
+            btn_frame.pack(fill="x", padx=10, pady=5)
+
+            self.btn_guardar = tk.Button(
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+            self.btn_guardar.pack(side="left", padx=5)
+
+            label_centro = tk.Label(
+                btn_frame, text="Parámetros", font=("Arial", 18, "bold"))
+            label_centro.pack(side="left", expand=True)
+
+            btn_cerrar = tk.Button(
+                btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
+                command=root.destroy)
+            btn_cerrar.pack(side="right", padx=5)
+
+            # Frame para la tabla con scroll
+            table_frame = tk.Frame(root)
+            table_frame.pack(expand=True, fill="both")
+
+            # Scrollbars
+            self.scroll_x = tk.Scrollbar(
+                table_frame, orient="horizontal")
+            self.scroll_y = tk.Scrollbar(table_frame, orient="vertical")
+
+            self.tree = ttk.Treeview(
+                table_frame, yscrollcommand=self.scroll_y.set, xscrollcommand=self.scroll_x.set)
+            self.tree.grid(row=0, column=0, sticky="nsew")
+
+            self.scroll_x.config(command=self.tree.xview)
+            self.scroll_y.config(command=self.tree.yview)
+
+            self.scroll_x.grid(row=1, column=0, sticky="ew")
+            self.scroll_y.grid(row=0, column=1, sticky="ns")
+
+            # Configurar el diseño para expandirse
+            table_frame.grid_rowconfigure(0, weight=1)
+            table_frame.grid_columnconfigure(0, weight=1)
+
+            # Eventos
+            # Editar con doble clic
+            self.tree.bind("<Double-1>", self.editar_celda)
+            # Clic derecho para menú
+            self.tree.bind("<Button-3>", self.mostrar_menu)
+
+            # Crear menú contextual
+            self.menu_contextual = tk.Menu(
+                self.root, tearoff=0)
+            self.menu_contextual.add_command(
+                label="Agregar fila", command=self.agregar_fila)
+            self.menu_contextual.add_command(
+                label="Eliminar fila", command=self.eliminar_fila)
+
+            # Aplicar estilo al encabezado
+            style = ttk.Style()
+            style.theme_use("alt")
+            style.configure("Treeview.Heading", font=(
+                "Arial", 14, "bold"), foreground="white", background="#4472C4")
+
+            style.configure("Treeview", font=("Arial", 12), rowheight=32, )
+
+            style.configure("Treeview",
+                            background="white",
+                            foreground="black",
+                            rowheight=28,
+                            fieldbackground="white")
+
+            style.map("Treeview", background=[("selected", "#C9DAF8")])
+
+            # Estilos para filas alternadas
+            self.tree.tag_configure(
+                "evenrow", background="#F2F2F2")  # Gris claro
+            self.tree.tag_configure("oddrow", background="white")     # Blanco
+
+            # Cargar el CSV al abrir el programa
+            if os.path.exists(self.archivo_csv):
+                self.cargar_csv()
+            else:
+                messagebox.showerror(
+                    "Error", f"No se encontró el archivo: {self.archivo_csv}", parent=self.root)
+
+        def detectar_codificacion(self, archivo):
+            """ Detecta la codificación del archivo CSV """
+            with open(archivo, "rb") as f:
+                result = chardet.detect(f.read())
+            return result["encoding"]
+
+        def cargar_csv(self):
+            """ Carga el archivo CSV y lo muestra en la tabla ordenado ascendente por la columna 0 """
+            try:
+                encoding_detectado = self.detectar_codificacion(
+                    self.archivo_csv)
+                self.df = pd.read_csv(
+                    self.archivo_csv, encoding=encoding_detectado)
+
+                # Nombre de la primera columna
+                col0 = self.df.columns[0]
+
+                # Intentar ordenar numéricamente cuando sea posible
+                # Convertimos a numérico (coerce convierte lo no-convertible a NaN)
+                col_numeric = pd.to_numeric(self.df[col0], errors="coerce")
+
+                if col_numeric.notna().any():  # hay al menos algún número => ordenar usando la versión numérica
+                    # Usamos una key que prioriza valores numéricos y deja el resto al final en orden lexicográfico
+                    # Para asegurar comportamiento estable convertimos nans a +inf para que queden al final
+                    sort_series = col_numeric.fillna(float("inf"))
+                    self.df = self.df.iloc[sort_series.argsort()].reset_index(
+                        drop=True)
+                else:
+                    # Ningún valor es numérico: orden lexicográfico por la columna 0
+                    self.df = self.df.sort_values(
+                        by=col0, kind="mergesort", ignore_index=True)
+
+                self.mostrar_datos()
+                # Habilita el botón de guardar
+                self.btn_guardar.config(state=tk.NORMAL)
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo cargar el archivo CSV.\n{str(e)}", parent=self.root)
+
+        def mostrar_datos(self):
+            """ Muestra los datos del DataFrame en el Treeview con encabezados de color """
+            # Limpiar tabla
+            self.tree.delete(*self.tree.get_children())
+            self.tree["columns"] = list(self.df.columns)
+            self.tree["show"] = "headings"
+
+            # Configurar encabezados y ancho fijo
+            for col in self.df.columns:
+                self.tree.heading(col, text=col, anchor="center")
+                # Ancho fijo de 160 píxeles
+                self.tree.column(col, width=160, anchor="center")
+
+            # Insertar filas
+            for i, row in self.df.iterrows():
+                if i % 2 == 0:
+                    tag = ("evenrow",)
+                else:
+                    tag = ("oddrow",)
+
+                self.tree.insert("", "end", values=list(row), tags=tag)
+
+        def editar_celda(self, event):
+            """ Permite editar una celda con doble clic """
+            item = self.tree.identify_row(event.y)  # Obtener fila seleccionada
+            column = self.tree.identify_column(
+                event.x)  # Obtener columna seleccionada
+
+            if item and column:
+                col_index = int(column[1:]) - 1  # Convertir columna a índice
+                row_id = self.tree.index(item)  # Índice de fila en el Treeview
+
+                x, y, width, height = self.tree.bbox(item, column)
+
+                entry = tk.Entry(self.tree)
+                entry.place(x=x, y=y, width=width, height=height)
+                entry.insert(0, self.tree.item(item, "values")[col_index])
+                entry.focus()
+
+                def guardar_valor(event):
+                    nuevo_valor = entry.get()
+
+                    # -------------------------------------------
+                    # Detectar tipo real de la columna en el DataFrame
+                    # -------------------------------------------
+                    col_dtype = str(self.df.dtypes.iloc[col_index])
+
+                    try:
+                        if col_dtype == "int64":
+                            nuevo_valor = int(nuevo_valor)
+                        elif col_dtype == "float64":
+                            nuevo_valor = float(nuevo_valor)
+                        # Puedes agregar más tipos si los necesitas
+                    except ValueError:
+                        messagebox.showerror(
+                            "Error",
+                            f"El valor '{nuevo_valor}' no es válido para el tipo {col_dtype}.",
+                            parent=self.root
+                        )
+                        entry.destroy()
+                        return
+
+                    # Actualizar Treeview
+                    self.tree.set(item, column, nuevo_valor)
+
+                    # Actualizar DataFrame sin warnings
+                    self.df.iloc[row_id, col_index] = nuevo_valor
+
+                    entry.destroy()
+
+                entry.bind("<Return>", guardar_valor)
+                entry.bind("<FocusOut>", lambda e: entry.destroy())
+
+        def mostrar_menu(self, event):
+            """ Muestra el menú contextual al hacer clic derecho """
+            item = self.tree.identify_row(event.y)
+            if item:
+                # Selecciona la fila sobre la que se hizo clic
+                self.tree.selection_set(item)
+                self.menu_contextual.post(event.x_root, event.y_root)
+
+        def agregar_fila(self):
+            """Agrega una nueva fila con valores 'N/A' debajo de la fila seleccionada"""
+            try:
+                if self.df is not None:
+                    # Obtener la fila seleccionada
+                    seleccion = self.tree.selection()
+
+                    if not seleccion:
+                        messagebox.showwarning("Advertencia", "Seleccione una fila para insertar debajo.",
+                                               parent=self.root)
+                        return
+
+                    # Obtener el índice de la fila seleccionada
+                    selected_index = self.tree.index(seleccion[0])
+
+                    # Crear nueva fila con 'N/A' en todas las columnas
+                    nueva_fila = {col: '0' for col in self.df.columns}
+
+                    # Dividir el DataFrame y concatenar con la nueva fila en medio
+                    self.df = pd.concat([
+                        # Parte superior incluyendo la fila seleccionada
+                        self.df.iloc[:selected_index + 1],
+                        pd.DataFrame([nueva_fila]),  # Nueva fila
+                        self.df.iloc[selected_index + 1:]  # Parte inferior
+                    ], ignore_index=True)
+
+                    # Actualizar la vista del Treeview
+                    self.mostrar_datos()
+
+                    # Seleccionar y enfocar la nueva fila
+                    new_item = self.tree.get_children()[selected_index + 1]
+                    self.tree.selection_set(new_item)
+                    self.tree.focus(new_item)
+                    self.tree.see(new_item)
+                else:
+                    messagebox.showwarning(
+                        "Advertencia", "No hay datos cargados.", parent=self.root)
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo agregar la fila: {str(e)}", parent=self.root)
+
+        def eliminar_fila(self):
+            """ Elimina la fila seleccionada """
+            seleccion = self.tree.selection()
+            if seleccion:
+                # Obtener índice de la fila seleccionada
+                row_id = self.tree.index(seleccion[0])
+                # Eliminar fila del DataFrame
+                self.df.drop(self.df.index[row_id], inplace=True)
+                # Resetear índices
+                self.df.reset_index(drop=True, inplace=True)
+                self.mostrar_datos()  # Actualizar tabla
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
+            else:
+                messagebox.showwarning(
+                    "Atención", "Seleccione una fila para eliminar.", parent=self.root)
+
+        def guardar_csv(self):
+            """ Guarda el DataFrame modificado en el mismo archivo CSV """
+            try:
+                self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
+
+    # Crear ventana secundaria
+    ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
+    app = CSVEditor(ventana_csv)
+
+
+def root_registros():
+    """ Función que abre la ventana secundaria para editar el CSV """
+    class CSVEditor:
+        def __init__(self, root):
+            self.root = root
+            self.root.title("Registros")
+
+            def cerrar_root():
+                root.destroy()
+                root.protocol("WM_DELETE_WINDOW", cerrar_root)
+
+            self.root.attributes("-fullscreen", True)
+            self.root.attributes("-topmost", True)
+
+            # Cargar automáticamente desde la ruta
+            self.archivo_csv = settings_root("Registro")
+            self.df = None
+
+            # Botones
+            btn_frame = tk.Frame(root)
+            btn_frame.pack(fill="x", padx=10, pady=5)
+
+            self.btn_guardar = tk.Button(
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+            self.btn_guardar.pack(side="left", padx=5)
+
+            label_centro = tk.Label(
+                btn_frame, text="Registros", font=("Arial", 18, "bold"))
+            label_centro.pack(side="left", expand=True)
+
+            btn_cerrar = tk.Button(
+                btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
+                command=root.destroy)
+            btn_cerrar.pack(side="right", padx=5)
+
+            # Frame para la tabla con scroll
+            table_frame = tk.Frame(root)
+            table_frame.pack(expand=True, fill="both")
+
+            # Scrollbars
+            self.scroll_x = tk.Scrollbar(
+                table_frame, orient="horizontal")
+            self.scroll_y = tk.Scrollbar(table_frame, orient="vertical")
+
+            self.tree = ttk.Treeview(
+                table_frame, yscrollcommand=self.scroll_y.set, xscrollcommand=self.scroll_x.set)
+            self.tree.grid(row=0, column=0, sticky="nsew")
+
+            self.scroll_x.config(command=self.tree.xview)
+            self.scroll_y.config(command=self.tree.yview)
+
+            self.scroll_x.grid(row=1, column=0, sticky="ew")
+            self.scroll_y.grid(row=0, column=1, sticky="ns")
+
+            # Configurar el diseño para expandirse
+            table_frame.grid_rowconfigure(0, weight=1)
+            table_frame.grid_columnconfigure(0, weight=1)
+
+            # Eventos
+            # Editar con doble clic
+            self.tree.bind("<Double-1>", self.editar_celda)
+            # Clic derecho para menú
+            self.tree.bind("<Button-3>", self.mostrar_menu)
+
+            # Crear menú contextual
+            self.menu_contextual = tk.Menu(
+                self.root, tearoff=0)
+            self.menu_contextual.add_command(
+                label="Agregar fila", command=self.agregar_fila)
+            self.menu_contextual.add_command(
+                label="Eliminar fila", command=self.eliminar_fila)
+
+            # Aplicar estilo al encabezado
+            style = ttk.Style()
+            style.theme_use("alt")
+            style.configure("Treeview.Heading", font=(
+                "Arial", 14, "bold"), foreground="white", background="#4472C4")
+
+            style.configure("Treeview", font=("Arial", 12), rowheight=32, )
+
+            style.configure("Treeview",
+                            background="white",
+                            foreground="black",
+                            rowheight=28,
+                            fieldbackground="white")
+
+            style.map("Treeview", background=[("selected", "#C9DAF8")])
+
+            # Estilos para filas alternadas
+            self.tree.tag_configure(
+                "evenrow", background="#F2F2F2")  # Gris claro
+            self.tree.tag_configure("oddrow", background="white")     # Blanco
+
+            # Cargar el CSV al abrir el programa
+            if os.path.exists(self.archivo_csv):
+                self.cargar_csv()
+            else:
+                messagebox.showerror(
+                    "Error", f"No se encontró el archivo: {self.archivo_csv}", parent=self.root)
+
+        def detectar_codificacion(self, archivo):
+            """ Detecta la codificación del archivo CSV """
+            with open(archivo, "rb") as f:
+                result = chardet.detect(f.read())
+            return result["encoding"]
+
+        def cargar_csv(self):
+            """ Carga el archivo CSV y lo muestra en la tabla ordenado por fecha descendente """
+            try:
+                encoding_detectado = self.detectar_codificacion(
+                    self.archivo_csv)
+                self.df = pd.read_csv(
+                    self.archivo_csv, encoding=encoding_detectado)
+
+                # Columna 4 tiene la fecha/hora
+                col_fecha = self.df.columns[4]
+
+                # Convertir la columna a datetime
+                self.df[col_fecha] = pd.to_datetime(
+                    self.df[col_fecha],
+                    format="%d/%m/%Y %H:%M:%S",
+                    errors="coerce"
+                )
+
+                # Ordenar (más reciente → más antiguo)
+                self.df = self.df.sort_values(
+                    by=col_fecha,
+                    ascending=False,
+                    ignore_index=True
+                )
+
+                # 🔥 IMPORTANTE: volver a convertir a TEXTO en el formato deseado
+                self.df[col_fecha] = self.df[col_fecha].dt.strftime(
+                    "%d/%m/%Y %H:%M:%S")
+
+                self.mostrar_datos()
+                self.btn_guardar.config(state=tk.NORMAL)
+
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo cargar el archivo CSV.\n{str(e)}", parent=self.root)
+
+        def mostrar_datos(self):
+            """ Muestra los datos del DataFrame en el Treeview con encabezados de color """
+            # Limpiar tabla
+            self.tree.delete(*self.tree.get_children())
+            self.tree["columns"] = list(self.df.columns)
+            self.tree["show"] = "headings"
+
+            # Configurar encabezados y ancho fijo
+            for col in self.df.columns:
+                self.tree.heading(col, text=col, anchor="center")
+
+                # 🔥 Evitar que las columnas se compriman
+                self.tree.column(col, width=160, minwidth=160,
+                                 stretch=False, anchor="center")
+
+            # Insertar filas
+            for i, row in self.df.iterrows():
+                tag = ("evenrow",) if i % 2 == 0 else ("oddrow",)
+                self.tree.insert("", "end", values=list(row), tags=tag)
+
+        def editar_celda(self, event):
+            """ Permite editar una celda con doble clic """
+            item = self.tree.identify_row(event.y)  # Obtener fila seleccionada
+            column = self.tree.identify_column(
+                event.x)  # Obtener columna seleccionada
+
+            if item and column:
+                col_index = int(column[1:]) - 1  # Convertir columna a índice
+                row_id = self.tree.index(item)  # Índice de fila en el Treeview
+
+                x, y, width, height = self.tree.bbox(item, column)
+
+                entry = tk.Entry(self.tree)
+                entry.place(x=x, y=y, width=width, height=height)
+                entry.insert(0, self.tree.item(item, "values")[col_index])
+                entry.focus()
+
+                def guardar_valor(event):
+                    nuevo_valor = entry.get()
+
+                    # -------------------------------------------
+                    # Detectar tipo real de la columna en el DataFrame
+                    # -------------------------------------------
+                    col_dtype = str(self.df.dtypes.iloc[col_index])
+
+                    try:
+                        if col_dtype == "int64":
+                            nuevo_valor = int(nuevo_valor)
+                        elif col_dtype == "float64":
+                            nuevo_valor = float(nuevo_valor)
+                        # Puedes agregar más tipos si los necesitas
+                    except ValueError:
+                        messagebox.showerror(
+                            "Error",
+                            f"El valor '{nuevo_valor}' no es válido para el tipo {col_dtype}.",
+                            parent=self.root
+                        )
+                        entry.destroy()
+                        return
+
+                    # Actualizar Treeview
+                    self.tree.set(item, column, nuevo_valor)
+
+                    # Actualizar DataFrame sin warnings
+                    self.df.iloc[row_id, col_index] = nuevo_valor
+
+                    entry.destroy()
+
+                entry.bind("<Return>", guardar_valor)
+                entry.bind("<FocusOut>", lambda e: entry.destroy())
+
+        def mostrar_menu(self, event):
+            """ Muestra el menú contextual al hacer clic derecho """
+            item = self.tree.identify_row(event.y)
+            if item:
+                # Selecciona la fila sobre la que se hizo clic
+                self.tree.selection_set(item)
+                self.menu_contextual.post(event.x_root, event.y_root)
+
+        def agregar_fila(self):
+            """Agrega una nueva fila con valores 'N/A' debajo de la fila seleccionada"""
+            try:
+                if self.df is not None:
+                    # Obtener la fila seleccionada
+                    seleccion = self.tree.selection()
+
+                    if not seleccion:
+                        messagebox.showwarning("Advertencia", "Seleccione una fila para insertar debajo.",
+                                               parent=self.root)
+                        return
+
+                    # Obtener el índice de la fila seleccionada
+                    selected_index = self.tree.index(seleccion[0])
+
+                    # Crear nueva fila con 'N/A' en todas las columnas
+                    nueva_fila = {col: '0' for col in self.df.columns}
+
+                    # Dividir el DataFrame y concatenar con la nueva fila en medio
+                    self.df = pd.concat([
+                        # Parte superior incluyendo la fila seleccionada
+                        self.df.iloc[:selected_index + 1],
+                        pd.DataFrame([nueva_fila]),  # Nueva fila
+                        self.df.iloc[selected_index + 1:]  # Parte inferior
+                    ], ignore_index=True)
+
+                    # Actualizar la vista del Treeview
+                    self.mostrar_datos()
+
+                    # Seleccionar y enfocar la nueva fila
+                    new_item = self.tree.get_children()[selected_index + 1]
+                    self.tree.selection_set(new_item)
+                    self.tree.focus(new_item)
+                    self.tree.see(new_item)
+                else:
+                    messagebox.showwarning(
+                        "Advertencia", "No hay datos cargados.", parent=self.root)
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo agregar la fila: {str(e)}", parent=self.root)
+
+        def eliminar_fila(self):
+            """ Elimina la fila seleccionada """
+            seleccion = self.tree.selection()
+            if seleccion:
+                # Obtener índice de la fila seleccionada
+                row_id = self.tree.index(seleccion[0])
+                # Eliminar fila del DataFrame
+                self.df.drop(self.df.index[row_id], inplace=True)
+                # Resetear índices
+                self.df.reset_index(drop=True, inplace=True)
+                self.mostrar_datos()  # Actualizar tabla
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
+            else:
+                messagebox.showwarning(
+                    "Atención", "Seleccione una fila para eliminar.", parent=self.root)
+
+        def guardar_csv(self):
+            """ Guarda el DataFrame modificado en el mismo archivo CSV """
+            try:
+                self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
+
+    # Crear ventana secundaria
+    ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
+    app = CSVEditor(ventana_csv)
+
+
+def root_logfile():
+    """ Función que abre la ventana secundaria para editar el CSV """
+    class CSVEditor:
+        def __init__(self, root):
+            self.root = root
+            self.root.title("LogFile")
+
+            def cerrar_root():
+                root.destroy()
+                root.protocol("WM_DELETE_WINDOW", cerrar_root)
+
+            self.root.attributes("-fullscreen", True)
+            self.root.attributes("-topmost", True)
+
+            # Cargar automáticamente desde la ruta
+            self.archivo_csv = settings_root("LogFile")
+            self.df = None
+
+            # Botones
+            btn_frame = tk.Frame(root)
+            btn_frame.pack(fill="x", padx=10, pady=5)
+
+            self.btn_guardar = tk.Button(
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+            self.btn_guardar.pack(side="left", padx=5)
+
+            label_centro = tk.Label(
+                btn_frame, text="LogFile", font=("Arial", 18, "bold"))
+            label_centro.pack(side="left", expand=True)
+
+            btn_cerrar = tk.Button(
+                btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
+                command=root.destroy)
+            btn_cerrar.pack(side="right", padx=5)
+
+            # Frame para la tabla con scroll
+            table_frame = tk.Frame(root)
+            table_frame.pack(expand=True, fill="both")
+
+            # Scrollbars
+            self.scroll_x = tk.Scrollbar(
+                table_frame, orient="horizontal")
+            self.scroll_y = tk.Scrollbar(table_frame, orient="vertical")
+
+            self.tree = ttk.Treeview(
+                table_frame, yscrollcommand=self.scroll_y.set, xscrollcommand=self.scroll_x.set)
+            self.tree.grid(row=0, column=0, sticky="nsew")
+
+            self.scroll_x.config(command=self.tree.xview)
+            self.scroll_y.config(command=self.tree.yview)
+
+            self.scroll_x.grid(row=1, column=0, sticky="ew")
+            self.scroll_y.grid(row=0, column=1, sticky="ns")
+
+            # Configurar el diseño para expandirse
+            table_frame.grid_rowconfigure(0, weight=1)
+            table_frame.grid_columnconfigure(0, weight=1)
+
+            # Eventos
+            # Editar con doble clic
+            self.tree.bind("<Double-1>", self.editar_celda)
+            # Clic derecho para menú
+            self.tree.bind("<Button-3>", self.mostrar_menu)
+
+            # Crear menú contextual
+            self.menu_contextual = tk.Menu(
+                self.root, tearoff=0)
+            self.menu_contextual.add_command(
+                label="Agregar fila", command=self.agregar_fila)
+            self.menu_contextual.add_command(
+                label="Eliminar fila", command=self.eliminar_fila)
+
+            # Aplicar estilo al encabezado
+            style = ttk.Style()
+            style.theme_use("alt")
+            style.configure("Treeview.Heading", font=(
+                "Arial", 14, "bold"), foreground="white", background="#4472C4")
+
+            style.configure("Treeview", font=("Arial", 12), rowheight=32, )
+
+            style.configure("Treeview",
+                            background="white",
+                            foreground="black",
+                            rowheight=28,
+                            fieldbackground="white")
+
+            style.map("Treeview", background=[("selected", "#C9DAF8")])
+
+            # Estilos para filas alternadas
+            self.tree.tag_configure(
+                "evenrow", background="#F2F2F2")  # Gris claro
+            self.tree.tag_configure("oddrow", background="white")     # Blanco
+
+            # Cargar el CSV al abrir el programa
+            if os.path.exists(self.archivo_csv):
+                self.cargar_csv()
+            else:
+                messagebox.showerror(
+                    "Error", f"No se encontró el archivo: {self.archivo_csv}", parent=self.root)
+
+        def detectar_codificacion(self, archivo):
+            """ Detecta la codificación del archivo CSV """
+            with open(archivo, "rb") as f:
+                result = chardet.detect(f.read())
+            return result["encoding"]
+
+        def cargar_csv(self):
+            """ Carga el archivo CSV y lo muestra en la tabla ordenado por fecha descendente """
+            try:
+                encoding_detectado = self.detectar_codificacion(
+                    self.archivo_csv)
+                self.df = pd.read_csv(
+                    self.archivo_csv, encoding=encoding_detectado)
+
+                # Columna 4 tiene la fecha/hora
+                col_fecha = self.df.columns[4]
+
+                # Convertir la columna a datetime
+                self.df[col_fecha] = pd.to_datetime(
+                    self.df[col_fecha],
+                    format="%d/%m/%Y %H:%M:%S",
+                    errors="coerce"
+                )
+
+                # Ordenar (más reciente → más antiguo)
+                self.df = self.df.sort_values(
+                    by=col_fecha,
+                    ascending=False,
+                    ignore_index=True
+                )
+
+                # 🔥 IMPORTANTE: volver a convertir a TEXTO en el formato deseado
+                self.df[col_fecha] = self.df[col_fecha].dt.strftime(
+                    "%d/%m/%Y %H:%M:%S")
+
+                self.mostrar_datos()
+                self.btn_guardar.config(state=tk.NORMAL)
+
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo cargar el archivo CSV.\n{str(e)}", parent=self.root)
+
+        def mostrar_datos(self):
+            """ Muestra los datos del DataFrame en el Treeview con encabezados de color """
+            # Limpiar tabla
+            self.tree.delete(*self.tree.get_children())
+            self.tree["columns"] = list(self.df.columns)
+            self.tree["show"] = "headings"
+
+            # Configurar encabezados y ancho fijo
+            for col in self.df.columns:
+                self.tree.heading(col, text=col, anchor="center")
+
+                # 🔥 Evitar que las columnas se compriman
+                self.tree.column(col, width=160, minwidth=160,
+                                 stretch=False, anchor="center")
+
+            # Insertar filas
+            for i, row in self.df.iterrows():
+                tag = ("evenrow",) if i % 2 == 0 else ("oddrow",)
+                self.tree.insert("", "end", values=list(row), tags=tag)
+
+        def editar_celda(self, event):
+            """ Permite editar una celda con doble clic """
+            item = self.tree.identify_row(event.y)  # Obtener fila seleccionada
+            column = self.tree.identify_column(
+                event.x)  # Obtener columna seleccionada
+
+            if item and column:
+                col_index = int(column[1:]) - 1  # Convertir columna a índice
+                row_id = self.tree.index(item)  # Índice de fila en el Treeview
+
+                x, y, width, height = self.tree.bbox(item, column)
+
+                entry = tk.Entry(self.tree)
+                entry.place(x=x, y=y, width=width, height=height)
+                entry.insert(0, self.tree.item(item, "values")[col_index])
+                entry.focus()
+
+                def guardar_valor(event):
+                    nuevo_valor = entry.get()
+
+                    # -------------------------------------------
+                    # Detectar tipo real de la columna en el DataFrame
+                    # -------------------------------------------
+                    col_dtype = str(self.df.dtypes.iloc[col_index])
+
+                    try:
+                        if col_dtype == "int64":
+                            nuevo_valor = int(nuevo_valor)
+                        elif col_dtype == "float64":
+                            nuevo_valor = float(nuevo_valor)
+                        # Puedes agregar más tipos si los necesitas
+                    except ValueError:
+                        messagebox.showerror(
+                            "Error",
+                            f"El valor '{nuevo_valor}' no es válido para el tipo {col_dtype}.",
+                            parent=self.root
+                        )
+                        entry.destroy()
+                        return
+
+                    # Actualizar Treeview
+                    self.tree.set(item, column, nuevo_valor)
+
+                    # Actualizar DataFrame sin warnings
+                    self.df.iloc[row_id, col_index] = nuevo_valor
+
+                    entry.destroy()
+
+                entry.bind("<Return>", guardar_valor)
+                entry.bind("<FocusOut>", lambda e: entry.destroy())
+
+        def mostrar_menu(self, event):
+            """ Muestra el menú contextual al hacer clic derecho """
+            item = self.tree.identify_row(event.y)
+            if item:
+                # Selecciona la fila sobre la que se hizo clic
+                self.tree.selection_set(item)
+                self.menu_contextual.post(event.x_root, event.y_root)
+
+        def agregar_fila(self):
+            """Agrega una nueva fila con valores 'N/A' debajo de la fila seleccionada"""
+            try:
+                if self.df is not None:
+                    # Obtener la fila seleccionada
+                    seleccion = self.tree.selection()
+
+                    if not seleccion:
+                        messagebox.showwarning("Advertencia", "Seleccione una fila para insertar debajo.",
+                                               parent=self.root)
+                        return
+
+                    # Obtener el índice de la fila seleccionada
+                    selected_index = self.tree.index(seleccion[0])
+
+                    # Crear nueva fila con 'N/A' en todas las columnas
+                    nueva_fila = {col: '0' for col in self.df.columns}
+
+                    # Dividir el DataFrame y concatenar con la nueva fila en medio
+                    self.df = pd.concat([
+                        # Parte superior incluyendo la fila seleccionada
+                        self.df.iloc[:selected_index + 1],
+                        pd.DataFrame([nueva_fila]),  # Nueva fila
+                        self.df.iloc[selected_index + 1:]  # Parte inferior
+                    ], ignore_index=True)
+
+                    # Actualizar la vista del Treeview
+                    self.mostrar_datos()
+
+                    # Seleccionar y enfocar la nueva fila
+                    new_item = self.tree.get_children()[selected_index + 1]
+                    self.tree.selection_set(new_item)
+                    self.tree.focus(new_item)
+                    self.tree.see(new_item)
+                else:
+                    messagebox.showwarning(
+                        "Advertencia", "No hay datos cargados.", parent=self.root)
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo agregar la fila: {str(e)}", parent=self.root)
+
+        def eliminar_fila(self):
+            """ Elimina la fila seleccionada """
+            seleccion = self.tree.selection()
+            if seleccion:
+                # Obtener índice de la fila seleccionada
+                row_id = self.tree.index(seleccion[0])
+                # Eliminar fila del DataFrame
+                self.df.drop(self.df.index[row_id], inplace=True)
+                # Resetear índices
+                self.df.reset_index(drop=True, inplace=True)
+                self.mostrar_datos()  # Actualizar tabla
+                messagebox.showinfo(
+                    "Éxito", "Fila eliminada correctamente.", parent=self.root)
+            else:
+                messagebox.showwarning(
+                    "Atención", "Seleccione una fila para eliminar.", parent=self.root)
+
+        def guardar_csv(self):
+            """ Guarda el DataFrame modificado en el mismo archivo CSV """
+            try:
+                self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+            except Exception as e:
+                messagebox.showerror(
+                    "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
+
+    # Crear ventana secundaria
+    ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
+    app = CSVEditor(ventana_csv)
 
 
 # ------------------------------------- LogFile -----------------------------------------------------------------------
@@ -669,18 +1612,96 @@ def calcular_defectos():
 
             lbl = labels_fpy[i]
 
+            valor = float(fpy)
+
+            if valor.is_integer():
+                texto = f"{valor:.0f}%"
+            else:
+                texto = f"{valor:.2f}%"
+
+            # ---- Colores según FPY ----
+            if fpy == 0:
+                lbl.config(text="", fg="black",
+                           bg="#F2F2F2", bd=0, relief="flat")
+            elif fpy > fpy_model:
+                lbl.config(fg="green", bg="#D9F2D0",
+                           text=texto, bd=.5, relief="ridge", justify="center")
+            elif fpy < fpy_model:
+                lbl.config(fg="red", bg="#FFCCCC",
+                           text=texto, bd=.5, relief="ridge", justify="center")
+            else:  # fpy == fpy_model
+                lbl.config(fg="#E7601D", bg="#FBE7DD",
+                           text=texto, bd=.5, relief="ridge", justify="center")
+
+        calcular_fpy_total()
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Se produjo un error: {e}")
+
+
+def calcular_fpy_total():
+    try:
+        data_logfile = pd.read_csv(csv_file, encoding='latin1')
+        data_logfile['Fecha/Hora'] = pd.to_datetime(
+            data_logfile['Fecha/Hora'], format='%d/%m/%Y %H:%M:%S')
+
+        # ---- Obtener modelos desde settings ----
+        models = [settings_root(f"Part#{i}") for i in range(1, 13)]
+
+        # ---- Lista de labels ----
+        labels_fpy = [label_102, label_103, label_104, label_105, label_106, label_107,
+                      label_108, label_109, label_110, label_111, label_112, label_113]
+
+        # Valor mínimo de FPY configurable
+        fpy_model = int(settings_root("FPY_MODEL"))
+
+        # ---- Fecha seleccionada ----
+        date = pd.to_datetime(label_153.cget(
+            "text"), format='%d/%m/%Y %H:%M:%S')
+        # ==============================================================
+        #   CALCULAR PARA CADA MODELO
+        # ==============================================================
+        for i, modelo in enumerate(models):
+
+            # Filtrar por modelo y fecha
+            filtro_modelo_fecha = (data_logfile["Modelo"] == modelo) & \
+                                  (data_logfile["Fecha/Hora"].dt.date ==
+                                   date.date())
+
+            datos = data_logfile[filtro_modelo_fecha]
+
+            # ---- DEFECTOS ----
+            suma_defectos = datos["Defectos"].sum()
+
+            # ---- ESTÁNDAR ----
+            suma_estandar = datos["Estandar"].sum()
+            # ---- FPY ----
+            if suma_estandar > 0:
+                fpy = (1 - (suma_defectos / suma_estandar)) * 100
+            else:
+                fpy = 0
+
+            lbl = labels_fpy[i]
+
+            valor = float(fpy)
+
+            if valor.is_integer():
+                texto = f"{valor:.0f}%"
+            else:
+                texto = f"{valor:.2f}%"
+
             # ---- Colores según FPY ----
             if fpy == 0:
                 lbl.config(text="")
             elif fpy > fpy_model:
-                lbl.config(fg="green", bg="#D9F2D0", text=f"{fpy:.2f}%", bd=.5,
-                           relief="ridge")
+                lbl.config(fg="green", bg="#D9F2D0",
+                           text=texto, bd=.5, relief="ridge", justify="center")
             elif fpy < fpy_model:
-                lbl.config(fg="red", bg="#FFCCCC", text=f"{fpy:.2f}%", bd=.5,
-                           relief="ridge")
-            elif fpy == fpy_model:
-                lbl.config(fg="#E7601D", bg="#FBE7DD", text=f"{fpy:.2f}%", bd=.5,
-                           relief="ridge")
+                lbl.config(fg="red", bg="#FFCCCC",
+                           text=texto, bd=.5, relief="ridge", justify="center")
+            else:  # fpy == fpy_model
+                lbl.config(fg="#E7601D", bg="#FBE7DD",
+                           text=texto, bd=.5, relief="ridge", justify="center")
 
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
@@ -787,6 +1808,12 @@ for col in range(1, 12):
     Frame4.grid_columnconfigure(col, weight=1, uniform="cols")
 # ------- Frame5
 Frame5.grid_columnconfigure(0, weight=1)
+Frame5.grid_columnconfigure(1, weight=1)
+Frame5.grid_columnconfigure(2, weight=1)
+Frame5.grid_columnconfigure(3, weight=1)
+Frame5.grid_columnconfigure(4, weight=1)
+Frame5.grid_columnconfigure(5, weight=1)
+Frame5.grid_columnconfigure(6, weight=1)
 Frame5.grid_rowconfigure(0, weight=1)
 # ------------ Frame0_Row0
 # Cargar logo ELRAD
@@ -1587,62 +2614,62 @@ label_100.grid(row=3, column=12, padx=0, pady=0, sticky="nsew")
 # ------------ Frame4_Row4
 # button_0: Reset Part#1
 button_0 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_1, "Reset"))
 button_0.grid(row=4, column=1, padx=0, pady=0, sticky="nsew")
 
 # button_1: Reset Part#2
 button_1 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_2, "Reset"))
 button_1.grid(row=4, column=2, padx=0, pady=0, sticky="nsew")
 
 # button_2: Reset Part#3
 button_2 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_3, "Reset"))
 button_2.grid(row=4, column=3, padx=0, pady=0, sticky="nsew")
 
 # button_3: Reset Part#4
 button_3 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_4, "Reset"))
 button_3.grid(row=4, column=4, padx=0, pady=0, sticky="nsew")
 
 # button_4: Reset Part#5
 button_4 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_5, "Reset"))
 button_4.grid(row=4, column=5, padx=0, pady=0, sticky="nsew")
 
 # button_5: Reset Part#6
 button_5 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_6, "Reset"))
 button_5.grid(row=4, column=6, padx=0, pady=0, sticky="nsew")
 
 # button_6: Reset Part#7
 button_6 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_7, "Reset"))
 button_6.grid(row=4, column=7, padx=0, pady=0, sticky="nsew")
 
 # button_7: Reset Part#8
 button_7 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_8, "Reset"))
 button_7.grid(row=4, column=8, padx=0, pady=0, sticky="nsew")
 
 # button_8: Reset Part#9
 button_8 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_9, "Reset"))
 button_8.grid(row=4, column=9, padx=0, pady=0, sticky="nsew")
 
 # button_9: Reset Part#10
 button_9 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                     border=3, background="deepskyblue")
+                     border=3, background="deepskyblue", command=lambda: reset(part_10, "Reset"))
 button_9.grid(row=4, column=10, padx=0, pady=0, sticky="nsew")
 
 # button_10: Reset Part#11
 button_10 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                      border=3, background="deepskyblue")
+                      border=3, background="deepskyblue", command=lambda: reset(part_11, "Reset"))
 button_10.grid(row=4, column=11, padx=0, pady=0, sticky="nsew")
 
 # button_11: Reset Part#12
 button_11 = tk.Button(Frame4, text="Reset", height=0, width=0,
-                      border=3, background="deepskyblue")
+                      border=3, background="deepskyblue", command=lambda: reset(part_12, "Reset"))
 button_11.grid(row=4, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame4_Row5
@@ -1913,8 +2940,38 @@ label_152.grid(row=8, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame5_Row0
 # Label_153: Fecha/Hora
-label_153 = tk.Label(Frame5, fg="black", bg="#EDEDED")
+label_153 = tk.Label(Frame5, fg="black", bg="#F2F2F2")
 label_153.grid(row=0, column=0, padx=0, pady=5, sticky="sw")
+
+# button_12: Defectos
+button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
+                      border=3, background="yellow")
+button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
+
+# button_13: Soporte
+button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
+                      border=3, background="red")
+button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
+
+# button_14: Parámetros
+button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
+                      border=3, background="#D86DCD", command=lambda: root_parametros())
+button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
+
+# button_15: Registros
+button_15 = tk.Button(Frame5, text="Registros", height=0, width=0,
+                      border=3, background="#0070C0", command=lambda: root_registros())
+button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
+
+# button_16: LogFile
+button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
+                      border=3, background="#00B050", command=lambda: root_logfile())
+button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
+
+# Label_154: Rev
+label_154 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
+                     fg="black", bg="#F2F2F2")
+label_154.grid(row=0, column=6, padx=0, pady=5, sticky="se")
 
 # ---------------------------------------------------------------------------------------------------------------------
 entry_0.bind("<KeyRelease>", suma_defectos)
