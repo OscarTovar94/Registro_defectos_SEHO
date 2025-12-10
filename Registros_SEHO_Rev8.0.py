@@ -5,15 +5,11 @@ from tkinter import messagebox
 import csv
 import os
 from datetime import datetime
+from tkinter import ttk
 from PIL import Image, ImageTk
 import pandas as pd
-from tkinter import Toplevel, messagebox
-from tkcalendar import Calendar
-import pyautogui
-from tkinter import ttk, filedialog, messagebox
 import chardet
-import os
-import math
+
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
 
@@ -378,6 +374,7 @@ def suma_defectos(*args):
 
 
 def buscar_pallets(event):
+    """Función buscar pallets."""
     pallet_buscado = entry_30.get()
     encontrado = False
     with open(settings_root("Parameters"), newline='') as archivo_csv:
@@ -406,6 +403,7 @@ def buscar_pallets(event):
 
 
 def fpy_pallets(*args):
+    """Función calcular fpy de pallets"""
     defectos_pallet = label_34.cget("text").strip() or "0"
     estandar_pallet = label_38.cget("text").strip() or "0"
 
@@ -433,6 +431,7 @@ def fpy_pallets(*args):
 
 
 def actualizar_fecha_hora():
+    """Función para mostrar fecha y hora"""
     # Obtener la fecha y hora actual
     fecha_hora_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     # Actualizar el texto del Label
@@ -1498,6 +1497,7 @@ if not os.path.isfile(csv_file2):
 
 
 def guardar_datos(event=None):
+    """Función para guardar registros en csv"""
     try:
         dat1 = label_36.cget("text").strip() or "0"  # Modelo
         dat2 = entry_30.get().strip() or "0"  # Pallet
@@ -1601,6 +1601,7 @@ data_register = pd.read_csv(csv_file2, encoding='latin1')
 
 
 def calcular_defectos():
+    """Función para calcular los defectos y FPY"""
     try:
         data_register = pd.read_csv(csv_file2, encoding='latin1')
         data_register['Fecha/Hora'] = pd.to_datetime(
@@ -1700,6 +1701,7 @@ def calcular_defectos():
 
 
 def calcular_fpy_total():
+    """Función para calcular el fpy total"""
     try:
         data_logfile = pd.read_csv(csv_file, encoding='latin1')
         data_logfile['Fecha/Hora'] = pd.to_datetime(
@@ -2474,7 +2476,7 @@ label_61.grid(row=0, column=12, padx=0, pady=0, sticky="nsew")
 
 # label_62: Defectos
 label_62 = tk.Label(Frame4, text="Defectos:",
-                    fg="black", bg="#FFFFC9", justify="right")
+                    fg="black", bg="#FFFFC9", anchor="e")
 label_62.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
 
 # label_63: Defectos Part#1
@@ -2541,7 +2543,7 @@ label_74.grid(row=1, column=12, padx=0, pady=0, sticky="nsew")
 
 # label_75: Producido
 label_75 = tk.Label(Frame4, text="Producido:",
-                    fg="black", bg="#FFFFC9", justify="right")
+                    fg="black", bg="#FFFFC9", anchor="e")
 label_75.grid(row=2, column=0, padx=0, pady=0, sticky="nsew")
 
 # label_76: Producido Part#1
@@ -2608,7 +2610,7 @@ label_87.grid(row=2, column=12, padx=0, pady=0, sticky="nsew")
 
 # label_88: FPY
 label_88 = tk.Label(Frame4, text="FPY:",
-                    fg="black", bg="#FFFFC9", justify="right")
+                    fg="black", bg="#FFFFC9", anchor="e")
 label_88.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
 
 # label_89: FPY Part#1
