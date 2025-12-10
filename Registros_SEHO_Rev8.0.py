@@ -122,12 +122,14 @@ def root_scale():
     part_number = int(14 * escala)
     datos = int(16 * escala)
     horarios = int(14 * escala)
-    etiquetas_parte_1 = int(12 * escala)
-    bloque_1 = int(22 * escala)
+    etiquetas_parte_1 = int(13 * escala)
+    bloque_1 = int(20 * escala)
     button_reset = int(12 * escala)
     button_ventanas = int(10 * escala)
-    etiquetas_parte_2 = int(12 * escala)
-    bloque_2 = int(16 * escala)
+    etiquetas_parte_2 = int(11 * escala)
+    bloque_2 = int(14 * escala)
+    etiquetas_parte_3 = int(10 * escala)
+    bloque_3 = int(8 * escala)
 
     # --- label's
     label_0.config(font=("Arial", fuente_40, "bold"))  # Título
@@ -272,48 +274,76 @@ def root_scale():
     label_111.config(font=("Arial", bloque_2, "bold"))  # FPY Total Part#10
     label_112.config(font=("Arial", bloque_2, "bold"))  # FPY Total Part#11
     label_113.config(font=("Arial", bloque_2, "bold"))  # FPY Total Part#12
-    label_114.config(font=("Arial", etiquetas_parte_2, "bold"))  # TopDefectos
-    label_115.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#1
-    label_116.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#2
-    label_117.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#3
-    label_118.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#4
-    label_119.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#5
-    label_120.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#6
-    label_121.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#7
-    label_122.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#8
-    label_123.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#9
-    label_124.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#10
-    label_125.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#11
-    label_126.config(font=("Arial", bloque_2, "bold"))  # TopDefectos Part#12
+    label_114.config(font=("Arial", etiquetas_parte_2, "bold"))  # Total Defect
+    label_115.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#1
+    label_116.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#2
+    label_117.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#3
+    label_118.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#4
+    label_119.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#5
+    label_120.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#6
+    label_121.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#7
+    label_122.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#8
+    label_123.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#9
+    label_124.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#10
+    label_125.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#11
+    label_126.config(font=("Arial", bloque_2, "bold"))  # Total Defect Part#12
     label_127.config(font=("Arial", etiquetas_parte_2, "bold")
-                     )  # TotalDefectos
-    label_128.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#1
-    label_129.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#2
-    label_130.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#3
-    label_131.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#4
-    label_132.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#5
-    label_133.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#6
-    label_134.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#7
-    label_135.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#8
-    label_136.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#9
-    label_137.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#10
-    label_138.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#11
-    label_139.config(font=("Arial", bloque_2, "bold"))  # TotalDefectos Part#12
-    label_140.config(font=("Arial", etiquetas_parte_2, "bold"))  # %Defectos
-    label_141.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#1
-    label_142.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#2
-    label_143.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#3
-    label_144.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#4
-    label_145.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#5
-    label_146.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#6
-    label_147.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#7
-    label_148.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#8
-    label_149.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#9
-    label_150.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#10
-    label_151.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#11
-    label_152.config(font=("Arial", bloque_2, "bold"))  # %Defectos Part#12
-    label_153.config(font=("Arial", fuente_12, "bold"))  # Fecha/Hora
-    label_154.config(font=("Arial", fuente_8, "bold"))  # Rev
+                     )  # Total Produc
+    label_128.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#1
+    label_129.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#2
+    label_130.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#3
+    label_131.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#4
+    label_132.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#5
+    label_133.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#6
+    label_134.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#7
+    label_135.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#8
+    label_136.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#9
+    label_137.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#10
+    label_138.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#11
+    label_139.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#12
+    label_140.config(font=("Arial", etiquetas_parte_3, "bold"))  # TopDefect
+    label_141.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#1
+    label_142.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#2
+    label_143.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#3
+    label_144.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#4
+    label_145.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#5
+    label_146.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#6
+    label_147.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#7
+    label_148.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#8
+    label_149.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#9
+    label_150.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#10
+    label_151.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#11
+    label_152.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#12
+    label_153.config(font=("Arial", etiquetas_parte_3, "bold")
+                     )  # Cant.Defect Part#1
+    label_154.config(font=("Arial", bloque_3, "bold"))  # Cant.pDefect Part#1
+    label_155.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_156.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_157.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_158.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_159.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_160.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_161.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_162.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_163.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_164.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_165.config(font=("Arial", bloque_3, "bold"))  # Cant.Defect Part#1
+    label_166.config(font=("Arial", etiquetas_parte_3, "bold")
+                     )  # %Defect Part#1
+    label_167.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_168.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_169.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_170.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_171.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_172.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_173.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_174.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_175.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_176.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_177.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_178.config(font=("Arial", bloque_3, "bold"))  # %Defect Part#1
+    label_179.config(font=("Arial", fuente_12, "bold"))  # Fecha/Hora
+    label_180.config(font=("Arial", fuente_8, "bold"))  # Rev
 
     # --- entry's
     entry_0.config(font=("Arial", defct, "bold"))  # Defect
@@ -483,7 +513,7 @@ def actualizar_fecha_hora():
     # Obtener la fecha y hora actual
     fecha_hora_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     # Actualizar el texto del Label
-    label_153.config(text=fecha_hora_actual)
+    label_179.config(text=fecha_hora_actual)
     # Llamar a esta función de nuevo después de 1000 ms (1 segundo)
     root.after(1000, actualizar_fecha_hora)
 
@@ -536,7 +566,7 @@ def reset(busqueda, reemplazo):
             # Si falla, intentar con UTF-8
             df.to_csv(settings_root("Registro"), index=False, encoding='utf-8')
 
-        calcular_defectos()
+        root.after(300, calcular_defectos)
         return cambios
 
     except FileNotFoundError:
@@ -1549,7 +1579,7 @@ part_12 = settings_part_numbers("Part#12")
 # ------------------------------------- LogFile -----------------------------------------------------------------------
 # Crear csv_file si no existe
 if not os.path.isfile(csv_file):
-    with open(csv_file, mode='w', newline='') as file:
+    with open(csv_file, mode='w', newline='',  encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([
             'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
@@ -1562,7 +1592,7 @@ if not os.path.isfile(csv_file):
 
 # Crear csv_file2 si no existe
 if not os.path.isfile(csv_file2):
-    with open(csv_file2, mode='w', newline='') as file:
+    with open(csv_file2, mode='w', newline='',  encoding="utf-8") as file:
         writer = csv.writer(file)
         writer.writerow([
             'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
@@ -1581,7 +1611,7 @@ def guardar_datos(event=None):
         dat2 = entry_30.get().strip() or "0"  # Pallet
         dat3 = label_34.cget("text").strip() or "0"  # Defectos
         dat4 = label_38.cget("text").strip() or "0"  # Estandar
-        dat5 = label_153.cget("text").strip() or "0"  # Fecha/Hora
+        dat5 = label_179.cget("text").strip() or "0"  # Fecha/Hora
         dat6 = label_40.cget("text").strip() or "0"  # FPY
         dat7 = label_42.cget("text").strip() or "0"  # Wave 1
         dat8 = label_44.cget("text").strip() or "0"  # Wave 2
@@ -1702,7 +1732,7 @@ def calcular_defectos():
         fpy_model = int(settings_limits("FPY_MODEL"))
 
         # ---- Fecha seleccionada ----
-        date = pd.to_datetime(label_153.cget(
+        date = pd.to_datetime(label_179.cget(
             "text"), format='%d/%m/%Y %H:%M:%S')
 
         # ---- Horas ----
@@ -1730,17 +1760,17 @@ def calcular_defectos():
             # ---- DEFECTOS ----
             suma_defectos = datos["Defectos"].sum()
 
-            if suma_defectos == 0:
-                labels_def[i].config(text="")
-            else:
-                labels_def[i].config(text=suma_defectos)
-
             # ---- ESTÁNDAR ----
             suma_estandar = datos["Estandar"].sum()
 
-            if suma_estandar == 0:
+            if suma_defectos == 0 and suma_estandar == 0:
+                labels_def[i].config(text="")
                 labels_est[i].config(text="")
+            elif suma_defectos == 0 and suma_estandar != 0:
+                labels_def[i].config(text="0")
+                labels_est[i].config(text=suma_estandar)
             else:
+                labels_def[i].config(text=suma_defectos)
                 labels_est[i].config(text=suma_estandar)
 
             # ---- FPY ----
@@ -1772,14 +1802,14 @@ def calcular_defectos():
                 lbl.config(fg="#E7601D", bg="#FBE7DD",
                            text=texto, bd=.5, relief="ridge", justify="center")
 
-        root.after(300, calcular_fpy_total)
+        root.after(300, calcular_defectos_totales)
 
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
 
 
-def calcular_fpy_total():
-    """Función para calcular el fpy total"""
+def calcular_defectos_totales():
+    """Función para calcular los defectos y FPY"""
     try:
         data_logfile = pd.read_csv(csv_file, encoding='latin1')
         data_logfile['Fecha/Hora'] = pd.to_datetime(
@@ -1788,7 +1818,13 @@ def calcular_fpy_total():
         # ---- Obtener modelos desde settings ----
         models = [settings_part_numbers(f"Part#{i}") for i in range(1, 13)]
 
-        # ---- Lista de labels ----
+        # ---- Listas de labels ----
+        labels_def = [label_115, label_116, label_117, label_118, label_119, label_120,
+                      label_121, label_122, label_123, label_124, label_125, label_126]
+
+        labels_est = [label_128, label_129, label_130, label_131, label_132, label_133,
+                      label_134, label_135, label_136, label_137, label_138, label_139]
+
         labels_fpy = [label_102, label_103, label_104, label_105, label_106, label_107,
                       label_108, label_109, label_110, label_111, label_112, label_113]
 
@@ -1796,8 +1832,15 @@ def calcular_fpy_total():
         fpy_model = int(settings_limits("FPY_MODEL"))
 
         # ---- Fecha seleccionada ----
-        date = pd.to_datetime(label_153.cget(
+        date = pd.to_datetime(label_179.cget(
             "text"), format='%d/%m/%Y %H:%M:%S')
+
+        # ---- Horas ----
+        hora_inicio_1 = pd.to_datetime(f"{hora_inicial.get()}:{minuto_inicial.get()} {periodo_inicial.get()}",
+                                       format='%I:%M %p').time()
+        hora_fin_1 = pd.to_datetime(f"{hora_final.get()}:{minuto_final.get()} {periodo_final.get()}",
+                                    format='%I:%M %p').time()
+
         # ==============================================================
         #   CALCULAR PARA CADA MODELO
         # ==============================================================
@@ -1808,13 +1851,28 @@ def calcular_fpy_total():
                                   (data_logfile["Fecha/Hora"].dt.date ==
                                    date.date())
 
-            datos = data_logfile[filtro_modelo_fecha]
+            # Filtrar por hora
+            filtro_horas = data_logfile["Fecha/Hora"].dt.time.between(
+                hora_inicio_1, hora_fin_1)
+
+            datos = data_logfile[filtro_modelo_fecha & filtro_horas]
 
             # ---- DEFECTOS ----
             suma_defectos = datos["Defectos"].sum()
 
             # ---- ESTÁNDAR ----
             suma_estandar = datos["Estandar"].sum()
+
+            if suma_defectos == 0 and suma_estandar == 0:
+                labels_def[i].config(text="")
+                labels_est[i].config(text="")
+            elif suma_defectos == 0 and suma_estandar != 0:
+                labels_def[i].config(text="0")
+                labels_est[i].config(text=suma_estandar)
+            else:
+                labels_def[i].config(text=suma_defectos)
+                labels_est[i].config(text=suma_estandar)
+
             # ---- FPY ----
             if suma_estandar > 0:
                 fpy = (1 - (suma_defectos / suma_estandar)) * 100
@@ -1832,7 +1890,8 @@ def calcular_fpy_total():
 
             # ---- Colores según FPY ----
             if fpy == 0:
-                lbl.config(text="")
+                lbl.config(text="", fg="black",
+                           bg="#F2F2F2", bd=0, relief="flat")
             elif fpy > fpy_model:
                 lbl.config(fg="green", bg="#D9F2D0",
                            text=texto, bd=.5, relief="ridge", justify="center")
@@ -1944,6 +2003,8 @@ Frame4.grid_rowconfigure(5, weight=0)
 Frame4.grid_rowconfigure(6, weight=0)
 Frame4.grid_rowconfigure(7, weight=0)
 Frame4.grid_rowconfigure(8, weight=0)
+Frame4.grid_rowconfigure(9, weight=0)
+Frame4.grid_rowconfigure(10, weight=0)
 for col in range(1, 12):
     Frame4.grid_columnconfigure(col, weight=1, uniform="cols")
 # ------- Frame5
@@ -2417,7 +2478,7 @@ label_49.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
 
 # Horarios finales
 hora_final = tk.StringVar(value="11")
-minuto_final = tk.StringVar(value="59")
+minuto_final = tk.StringVar(value="30")
 periodo_final = tk.StringVar(value="PM")
 
 # spinbox_3: Hora final
@@ -2431,7 +2492,7 @@ spinbox_4 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_final,
 spinbox_4.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
 
 # spinbox_5: Periodo final
-spinbox_5 = tk.Spinbox(Frame3, values=("AM", "PM"), textvariable=periodo_final,
+spinbox_5 = tk.Spinbox(Frame3, values=("PM", "AM"), textvariable=periodo_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
 
@@ -2774,7 +2835,7 @@ button_11.grid(row=4, column=12, padx=0, pady=0, sticky="nsew")
 
 # label_101: FPY Total
 label_101 = tk.Label(Frame4, text="FPY Total:",
-                     fg="black", bg="#CAEDFB", justify="right")
+                     fg="black", bg="#CAEDFB", anchor="e")
 label_101.grid(row=5, column=0, padx=0, pady=0, sticky="nsew")
 
 # label_102: FPY Total Part#1
@@ -2838,208 +2899,342 @@ label_113 = tk.Label(Frame4,
 label_113.grid(row=5, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame4_Row6
-# label_114: TopDefectos
-label_114 = tk.Label(Frame4, text="TopDefectos:",
-                     fg="black", bg="#CAEDFB", justify="right")
+# label_114: Total Defect:
+label_114 = tk.Label(Frame4, text="Total Defect:",
+                     fg="black", bg="#CAEDFB", anchor="e")
 label_114.grid(row=6, column=0, padx=0, pady=0, sticky="nsew")
 
-# label_115: TopDefectos Part#1
+# label_115: Total Defect Part#1
 label_115 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_115.grid(row=6, column=1, padx=0, pady=0, sticky="nsew")
 
-# label_116: TopDefectos Part#2
+# label_116: Total Defect Part#2
 label_116 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_116.grid(row=6, column=2, padx=0, pady=0, sticky="nsew")
 
-# label_117: TopDefectos Part#3
+# label_117: Total Defect Part#3
 label_117 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_117.grid(row=6, column=3, padx=0, pady=0, sticky="nsew")
 
-# label_118: TopDefectos Part#4
+# label_118: Total Defect Part#4
 label_118 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_118.grid(row=6, column=4, padx=0, pady=0, sticky="nsew")
 
-# label_119: TopDefectos Part#5
+# label_119: Total Defect Part#5
 label_119 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_119.grid(row=6, column=5, padx=0, pady=0, sticky="nsew")
 
-# label_120: TopDefectos Part#6
+# label_120: Total Defect Part#6
 label_120 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_120.grid(row=6, column=6, padx=0, pady=0, sticky="nsew")
 
-# label_121: TopDefectos Part#7
+# label_121: Total Defect Part#7
 label_121 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_121.grid(row=6, column=7, padx=0, pady=0, sticky="nsew")
 
-# label_122: TopDefectos Part#8
+# label_122: Total Defect Part#8
 label_122 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_122.grid(row=6, column=8, padx=0, pady=0, sticky="nsew")
 
-# label_123: TopDefectos Part#9
+# label_123: Total Defect Part#9
 label_123 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_123.grid(row=6, column=9, padx=0, pady=0, sticky="nsew")
 
-# label_124: TopDefectos Part#10
+# label_124: Total Defect Part#10
 label_124 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_124.grid(row=6, column=10, padx=0, pady=0, sticky="nsew")
 
-# label_125: TopDefectos Part#11
+# label_125: Total Defect Part#11
 label_125 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_125.grid(row=6, column=11, padx=0, pady=0, sticky="nsew")
 
-# label_126: TopDefectos Part#12
+# label_126: Total Defect Part#12
 label_126 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_126.grid(row=6, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame4_Row7
-# label_127: TotalDefectos
-label_127 = tk.Label(Frame4, text="TotalDefectos:",
-                     fg="black", bg="#CAEDFB", justify="right")
+# label_127: Total Produc
+label_127 = tk.Label(Frame4, text="Total Produc:",
+                     fg="black", bg="#CAEDFB", anchor="e")
 label_127.grid(row=7, column=0, padx=0, pady=0, sticky="nsew")
 
-# label_128: TotalDefectos Part#1
+# label_128: Total Produc Part#1
 label_128 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_128.grid(row=7, column=1, padx=0, pady=0, sticky="nsew")
 
-# label_129: TotalDefectos Part#2
+# label_129: Total Produc Part#2
 label_129 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_129.grid(row=7, column=2, padx=0, pady=0, sticky="nsew")
 
-# label_130: TotalDefectos Part#3
+# label_130: Total Produc Part#3
 label_130 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_130.grid(row=7, column=3, padx=0, pady=0, sticky="nsew")
 
-# label_131: TotalDefectos Part#4
+# label_131: Total Produc Part#4
 label_131 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_131.grid(row=7, column=4, padx=0, pady=0, sticky="nsew")
 
-# label_132: TotalDefectos Part#5
+# label_132: Total Produc Part#5
 label_132 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_132.grid(row=7, column=5, padx=0, pady=0, sticky="nsew")
 
-# label_133: TotalDefectos Part#6
+# label_133: Total Produc Part#6
 label_133 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_133.grid(row=7, column=6, padx=0, pady=0, sticky="nsew")
 
-# label_134: TotalDefectos Part#7
+# label_134: Total Produc Part#7
 label_134 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_134.grid(row=7, column=7, padx=0, pady=0, sticky="nsew")
 
-# label_135: TotalDefectos Part#8
+# label_135: Total Produc Part#8
 label_135 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_135.grid(row=7, column=8, padx=0, pady=0, sticky="nsew")
 
-# label_136: TotalDefectos Part#9
+# label_136: Total Produc Part#9
 label_136 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_136.grid(row=7, column=9, padx=0, pady=0, sticky="nsew")
 
-# label_137: TotalDefectos Part#10
+# label_137: Total Produc Part#10
 label_137 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_137.grid(row=7, column=10, padx=0, pady=0, sticky="nsew")
 
-# label_138: TotalDefectos Part#11
+# label_138: Total Produc Part#11
 label_138 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_138.grid(row=7, column=11, padx=0, pady=0, sticky="nsew")
 
-# label_139: TotalDefectos Part#12
+# label_139: Total Produc Part#12
 label_139 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_139.grid(row=7, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame4_Row8
 
-# label_140: %Defectos
-label_140 = tk.Label(Frame4, text="%Defectos:",
-                     fg="black", bg="#CAEDFB", justify="right")
+# label_140: TopDefect
+label_140 = tk.Label(Frame4, text="TopDefect:",
+                     fg="black", bg="#FBE2D5", anchor="e")
 label_140.grid(row=8, column=0, padx=0, pady=0, sticky="nsew")
 
-# label_141: %Defectos Part#1
+# label_141: TopDefect Part#1
 label_141 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_141.grid(row=8, column=1, padx=0, pady=0, sticky="nsew")
 
-# label_142: %Defectos Part#2
+# label_142: TopDefect Part#2
 label_142 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_142.grid(row=8, column=2, padx=0, pady=0, sticky="nsew")
 
-# label_143: %Defectos Part#3
+# label_143: TopDefect Part#3
 label_143 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_143.grid(row=8, column=3, padx=0, pady=0, sticky="nsew")
 
-# label_144: %Defectos Part#4
+# label_144: TopDefect Part#4
 label_144 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_144.grid(row=8, column=4, padx=0, pady=0, sticky="nsew")
 
-# label_145: %Defectos Part#5
+# label_145: TopDefect Part#5
 label_145 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_145.grid(row=8, column=5, padx=0, pady=0, sticky="nsew")
 
-# label_146: %Defectos Part#6
+# label_146: TopDefect Part#6
 label_146 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_146.grid(row=8, column=6, padx=0, pady=0, sticky="nsew")
 
-# label_147: %Defectos Part#7
+# label_147: TopDefect Part#7
 label_147 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_147.grid(row=8, column=7, padx=0, pady=0, sticky="nsew")
 
-# label_148: %Defectos Part#8
+# label_148: TopDefect Part#8
 label_148 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_148.grid(row=8, column=8, padx=0, pady=0, sticky="nsew")
 
-# label_149: %Defectos Part#9
+# label_149: TopDefect Part#9
 label_149 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_149.grid(row=8, column=9, padx=0, pady=0, sticky="nsew")
 
-# label_150: %Defectos Part#10
+# label_150: TopDefect Part#10
 label_150 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_150.grid(row=8, column=10, padx=0, pady=0, sticky="nsew")
 
-# label_151: %Defectos Part#11
+# label_151: TopDefect Part#11
 label_151 = tk.Label(Frame4,
                      fg="black", bg="#A6A6A6")
 label_151.grid(row=8, column=11, padx=0, pady=0, sticky="nsew")
 
-# label_152: %Defectos Part#12
+# label_152: TopDefect Part#12
 label_152 = tk.Label(Frame4,
                      fg="black", bg="#D9D9D9")
 label_152.grid(row=8, column=12, padx=0, pady=0, sticky="nsew")
 
+# ------------ Frame4_Row9
+
+# label_153: Cant.Defect
+label_153 = tk.Label(Frame4, text="Cant.Defect:",
+                     fg="black", bg="#FBE2D5", anchor="e")
+label_153.grid(row=9, column=0, padx=0, pady=0, sticky="nsew")
+
+# label_154: Cant.Defect Part#1
+label_154 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_154.grid(row=9, column=1, padx=0, pady=0, sticky="nsew")
+
+# label_155: Cant.Defect Part#2
+label_155 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_155.grid(row=9, column=2, padx=0, pady=0, sticky="nsew")
+
+# label_156: Cant.Defect Part#3
+label_156 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_156.grid(row=9, column=3, padx=0, pady=0, sticky="nsew")
+
+# label_157: Cant.Defect Part#4
+label_157 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_157.grid(row=9, column=4, padx=0, pady=0, sticky="nsew")
+
+# label_158: Cant.Defect Part#5
+label_158 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_158.grid(row=9, column=5, padx=0, pady=0, sticky="nsew")
+
+# label_159: Cant.Defect Part#6
+label_159 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_159.grid(row=9, column=6, padx=0, pady=0, sticky="nsew")
+
+# label_160: Cant.Defect Part#7
+label_160 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_160.grid(row=9, column=7, padx=0, pady=0, sticky="nsew")
+
+# label_161: Cant.Defect Part#8
+label_161 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_161.grid(row=9, column=8, padx=0, pady=0, sticky="nsew")
+
+# label_162: Cant.Defect Part#9
+label_162 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_162.grid(row=9, column=9, padx=0, pady=0, sticky="nsew")
+
+# label_163: Cant.Defect Part#10
+label_163 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_163.grid(row=9, column=10, padx=0, pady=0, sticky="nsew")
+
+# label_164: Cant.Defect Part#11
+label_164 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_164.grid(row=9, column=11, padx=0, pady=0, sticky="nsew")
+
+# label_165: Cant.Defect Part#12
+label_165 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_165.grid(row=9, column=12, padx=0, pady=0, sticky="nsew")
+
+# ------------ Frame4_Row10
+
+# label_166: %Defect
+label_166 = tk.Label(Frame4, text="%Defect:",
+                     fg="black", bg="#FBE2D5", anchor="e")
+label_166.grid(row=10, column=0, padx=0, pady=0, sticky="nsew")
+
+# label_167: %Defect Part#1
+label_167 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_167.grid(row=10, column=1, padx=0, pady=0, sticky="nsew")
+
+# label_168: %Defect Part#2
+label_168 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_168.grid(row=10, column=2, padx=0, pady=0, sticky="nsew")
+
+# label_169: %Defect Part#3
+label_169 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_169.grid(row=10, column=3, padx=0, pady=0, sticky="nsew")
+
+# label_170: %Defect Part#4
+label_170 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_170.grid(row=10, column=4, padx=0, pady=0, sticky="nsew")
+
+# label_171: %Defect Part#5
+label_171 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_171.grid(row=10, column=5, padx=0, pady=0, sticky="nsew")
+
+# label_172: %Defect Part#6
+label_172 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_172.grid(row=10, column=6, padx=0, pady=0, sticky="nsew")
+
+# label_173: %Defect Part#7
+label_173 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_173.grid(row=10, column=7, padx=0, pady=0, sticky="nsew")
+
+# label_174: %Defect Part#8
+label_174 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_174.grid(row=10, column=8, padx=0, pady=0, sticky="nsew")
+
+# label_175: %Defect Part#9
+label_175 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_175.grid(row=10, column=9, padx=0, pady=0, sticky="nsew")
+
+# label_176: %Defect Part#10
+label_176 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_176.grid(row=10, column=10, padx=0, pady=0, sticky="nsew")
+
+# label_177: %Defect Part#11
+label_177 = tk.Label(Frame4,
+                     fg="black", bg="#A6A6A6")
+label_177.grid(row=10, column=11, padx=0, pady=0, sticky="nsew")
+
+# label_178: %Defect Part#12
+label_178 = tk.Label(Frame4,
+                     fg="black", bg="#D9D9D9")
+label_178.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
+
 # ------------ Frame5_Row0
-# Label_153: Fecha/Hora
-label_153 = tk.Label(Frame5, fg="black", bg="#F2F2F2")
-label_153.grid(row=0, column=0, padx=0, pady=5, sticky="sw")
+# Label_179: Fecha/Hora
+label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="w")
+label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
@@ -3066,10 +3261,10 @@ button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
                       border=3, background="#00B050", command=lambda: root_logfile())
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
 
-# Label_154: Rev
-label_154 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
-                     fg="black", bg="#F2F2F2")
-label_154.grid(row=0, column=6, padx=0, pady=5, sticky="se")
+# Label_180: Rev
+label_180 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
+                     fg="black", bg="#F2F2F2", anchor="e")
+label_180.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
 entry_0.bind("<KeyRelease>", suma_defectos)
