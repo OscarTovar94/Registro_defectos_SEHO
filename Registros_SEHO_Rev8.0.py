@@ -29,6 +29,54 @@ def settings_root(clave):
     return None
 
 
+def settings_defects(clave):
+    """Función para cargar defectos."""
+    try:
+        with open("C:/Registro_defectos_SEHO/defects.ini", "r",  encoding="utf-8") as config:
+            for linea in config:
+                if linea.startswith(clave):
+                    return linea.split("=")[1].strip()
+    except FileNotFoundError:
+        messagebox.showerror(
+            "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+    except ImportError as e:
+        messagebox.showerror(
+            "Error", f"Ocurrió un error al leer la configuración: {e}")
+    return None
+
+
+def settings_part_numbers(clave):
+    """Función para cargar defectos."""
+    try:
+        with open("C:/Registro_defectos_SEHO/part_numbers.ini", "r",  encoding="utf-8") as config:
+            for linea in config:
+                if linea.startswith(clave):
+                    return linea.split("=")[1].strip()
+    except FileNotFoundError:
+        messagebox.showerror(
+            "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+    except ImportError as e:
+        messagebox.showerror(
+            "Error", f"Ocurrió un error al leer la configuración: {e}")
+    return None
+
+
+def settings_limits(clave):
+    """Función para cargar defectos."""
+    try:
+        with open("C:/Registro_defectos_SEHO/limits.ini", "r",  encoding="utf-8") as config:
+            for linea in config:
+                if linea.startswith(clave):
+                    return linea.split("=")[1].strip()
+    except FileNotFoundError:
+        messagebox.showerror(
+            "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+    except ImportError as e:
+        messagebox.showerror(
+            "Error", f"Ocurrió un error al leer la configuración: {e}")
+    return None
+
+
 def toggle_minimize():
     """Function minimize root."""
     root.iconify()
@@ -413,7 +461,7 @@ def fpy_pallets(*args):
     fpy = ((estandar_pallet - defectos_pallet) / estandar_pallet) * \
         100 if estandar_pallet > 0 else 0
 
-    fpy_por_pallet = settings_root("FPY_PALLET")
+    fpy_por_pallet = settings_limits("FPY_PALLET")
     fpy_por_pallet = int(fpy_por_pallet)
 
     if fpy == 0:
@@ -1380,8 +1428,23 @@ def defect_root():
     global root
 
     # ---------- Logic root_defect
+    def settings_defect(clave):
+        """Function to load settings."""
+        try:
+            with open("C:/Registro_defectos_SEHO/defect_settings.ini", "r",  encoding="utf-8") as config:
+                for linea in config:
+                    if linea.startswith(clave):
+                        return linea.split("=")[1].strip()
+        except FileNotFoundError:
+            messagebox.showerror(
+                "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+        except ImportError as e:
+            messagebox.showerror(
+                "Error", f"Ocurrió un error al leer la configuración: {e}")
+        return None
 
     def root_defect_scale():
+        """Funcíon para escalar root defectos"""
         # Obtener el tamaño de la pantalla
         pantalla_ancho = root_defect.winfo_screenwidth()
         pantalla_alto = root_defect.winfo_screenheight()
@@ -1435,40 +1498,55 @@ def defect_root():
     root_defect_scale()
 
 
-# ------------------------------------- LogFile -----------------------------------------------------------------------
+# ------------------------------------- Variables ---------------------------------------------------------------------
 # Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
 csv_file2 = settings_root("Registro")
-defect1 = settings_root("defect1")
-defect2 = settings_root("defect2")
-defect3 = settings_root("defect3")
-defect4 = settings_root("defect4")
-defect5 = settings_root("defect5")
-defect6 = settings_root("defect6")
-defect7 = settings_root("defect7")
-defect8 = settings_root("defect8")
-defect9 = settings_root("defect9")
-defect10 = settings_root("defect10")
-defect11 = settings_root("defect11")
-defect12 = settings_root("defect12")
-defect13 = settings_root("defect13")
-defect14 = settings_root("defect14")
-defect15 = settings_root("defect15")
-defect16 = settings_root("defect16")
-defect17 = settings_root("defect17")
-defect18 = settings_root("defect18")
-defect19 = settings_root("defect19")
-defect20 = settings_root("defect20")
-defect21 = settings_root("defect21")
-defect22 = settings_root("defect22")
-defect23 = settings_root("defect23")
-defect24 = settings_root("defect24")
-defect25 = settings_root("defect25")
-defect26 = settings_root("defect26")
-defect27 = settings_root("defect27")
-defect28 = settings_root("defect28")
-defect29 = settings_root("defect29")
-defect30 = settings_root("defect30")
+# Defectos
+defect1 = settings_defects("defect1")
+defect2 = settings_defects("defect2")
+defect3 = settings_defects("defect3")
+defect4 = settings_defects("defect4")
+defect5 = settings_defects("defect5")
+defect6 = settings_defects("defect6")
+defect7 = settings_defects("defect7")
+defect8 = settings_defects("defect8")
+defect9 = settings_defects("defect9")
+defect10 = settings_defects("defect10")
+defect11 = settings_defects("defect11")
+defect12 = settings_defects("defect12")
+defect13 = settings_defects("defect13")
+defect14 = settings_defects("defect14")
+defect15 = settings_defects("defect15")
+defect16 = settings_defects("defect16")
+defect17 = settings_defects("defect17")
+defect18 = settings_defects("defect18")
+defect19 = settings_defects("defect19")
+defect20 = settings_defects("defect20")
+defect21 = settings_defects("defect21")
+defect22 = settings_defects("defect22")
+defect23 = settings_defects("defect23")
+defect24 = settings_defects("defect24")
+defect25 = settings_defects("defect25")
+defect26 = settings_defects("defect26")
+defect27 = settings_defects("defect27")
+defect28 = settings_defects("defect28")
+defect29 = settings_defects("defect29")
+defect30 = settings_defects("defect30")
+# Mumero de partes
+part_1 = settings_part_numbers("Part#1")
+part_2 = settings_part_numbers("Part#2")
+part_3 = settings_part_numbers("Part#3")
+part_4 = settings_part_numbers("Part#4")
+part_5 = settings_part_numbers("Part#5")
+part_6 = settings_part_numbers("Part#6")
+part_7 = settings_part_numbers("Part#7")
+part_8 = settings_part_numbers("Part#8")
+part_9 = settings_part_numbers("Part#9")
+part_10 = settings_part_numbers("Part#10")
+part_11 = settings_part_numbers("Part#11")
+part_12 = settings_part_numbers("Part#12")
+# ------------------------------------- LogFile -----------------------------------------------------------------------
 # Crear csv_file si no existe
 if not os.path.isfile(csv_file):
     with open(csv_file, mode='w', newline='') as file:
@@ -1591,7 +1669,7 @@ def guardar_datos(event=None):
             entry_29.delete(0, tk.END)  # Defect30
             entry_30.delete(0, tk.END)  # Pallet
             label_34.config(text="")  # Defectos
-            calcular_defectos()
+            root.after(300, calcular_defectos)
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
 
@@ -1608,7 +1686,7 @@ def calcular_defectos():
             data_register['Fecha/Hora'], format='%d/%m/%Y %H:%M:%S')
 
         # ---- Obtener modelos desde settings ----
-        models = [settings_root(f"Part#{i}") for i in range(1, 13)]
+        models = [settings_part_numbers(f"Part#{i}") for i in range(1, 13)]
 
         # ---- Listas de labels ----
         labels_def = [label_63, label_64, label_65, label_66, label_67, label_68,
@@ -1621,7 +1699,7 @@ def calcular_defectos():
                       label_95, label_96, label_97, label_98, label_99, label_100]
 
         # Valor mínimo de FPY configurable
-        fpy_model = int(settings_root("FPY_MODEL"))
+        fpy_model = int(settings_limits("FPY_MODEL"))
 
         # ---- Fecha seleccionada ----
         date = pd.to_datetime(label_153.cget(
@@ -1694,7 +1772,7 @@ def calcular_defectos():
                 lbl.config(fg="#E7601D", bg="#FBE7DD",
                            text=texto, bd=.5, relief="ridge", justify="center")
 
-        calcular_fpy_total()
+        root.after(300, calcular_fpy_total)
 
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
@@ -1708,14 +1786,14 @@ def calcular_fpy_total():
             data_logfile['Fecha/Hora'], format='%d/%m/%Y %H:%M:%S')
 
         # ---- Obtener modelos desde settings ----
-        models = [settings_root(f"Part#{i}") for i in range(1, 13)]
+        models = [settings_part_numbers(f"Part#{i}") for i in range(1, 13)]
 
         # ---- Lista de labels ----
         labels_fpy = [label_102, label_103, label_104, label_105, label_106, label_107,
                       label_108, label_109, label_110, label_111, label_112, label_113]
 
         # Valor mínimo de FPY configurable
-        fpy_model = int(settings_root("FPY_MODEL"))
+        fpy_model = int(settings_limits("FPY_MODEL"))
 
         # ---- Fecha seleccionada ----
         date = pd.to_datetime(label_153.cget(
@@ -1912,7 +1990,6 @@ label_1.grid(row=0, column=0, columnspan=10, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame1_Row1
 # ----- Defecto 1
-defect1 = settings_root("defect1")
 # label_2: Defacto 1
 label_2 = tk.Label(Frame1, text=f"{defect1}:",
                    fg="black", bg="#F2F2F2")
@@ -1923,7 +2000,6 @@ entry_0 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_0.grid(row=1, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 2
-defect2 = settings_root("defect2")
 # label_3: Defacto 2
 label_3 = tk.Label(Frame1, text=f"{defect2}:",
                    fg="black", bg="#F2F2F2")
@@ -1934,7 +2010,6 @@ entry_1 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_1.grid(row=1, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 3
-defect3 = settings_root("defect3")
 # label_4: Defacto 3
 label_4 = tk.Label(Frame1, text=f"{defect3}:",
                    fg="black", bg="#F2F2F2")
@@ -1945,7 +2020,6 @@ entry_2 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_2.grid(row=1, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 4
-defect4 = settings_root("defect4")
 # label_5: Defacto 4
 label_5 = tk.Label(Frame1, text=f"{defect4}:",
                    fg="black", bg="#F2F2F2")
@@ -1956,7 +2030,6 @@ entry_3 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_3.grid(row=1, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 5
-defect5 = settings_root("defect5")
 # label_6: Defacto 5
 label_6 = tk.Label(Frame1, text=f"{defect5}:",
                    fg="black", bg="#F2F2F2")
@@ -1968,7 +2041,6 @@ entry_4.grid(row=1, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row2
 # ----- Defecto 6
-defect6 = settings_root("defect6")
 # label_7: Defacto 6
 label_7 = tk.Label(Frame1, text=f"{defect6}:",
                    fg="black", bg="#F2F2F2")
@@ -1979,7 +2051,6 @@ entry_5 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_5.grid(row=2, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 7
-defect7 = settings_root("defect7")
 # label_8: Defacto 7
 label_8 = tk.Label(Frame1, text=f"{defect7}:",
                    fg="black", bg="#F2F2F2")
@@ -1990,7 +2061,6 @@ entry_6 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_6.grid(row=2, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 8
-defect8 = settings_root("defect8")
 # label_9: Defacto 8
 label_9 = tk.Label(Frame1, text=f"{defect8}:",
                    fg="black", bg="#F2F2F2")
@@ -2001,7 +2071,6 @@ entry_7 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_7.grid(row=2, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 9
-defect9 = settings_root("defect9")
 # label_10: Defacto 9
 label_10 = tk.Label(Frame1, text=f"{defect9}:",
                     fg="black", bg="#F2F2F2")
@@ -2012,7 +2081,6 @@ entry_8 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_8.grid(row=2, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 10
-defect10 = settings_root("defect10")
 # label_11: Defacto 10
 label_11 = tk.Label(Frame1, text=f"{defect10}:",
                     fg="black", bg="#F2F2F2")
@@ -2024,7 +2092,6 @@ entry_9.grid(row=2, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row3
 # ----- Defecto 11
-defect11 = settings_root("defect11")
 # label_12: Defacto 11
 label_12 = tk.Label(Frame1, text=f"{defect11}:",
                     fg="black", bg="#F2F2F2")
@@ -2035,7 +2102,6 @@ entry_10 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_10.grid(row=3, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 12
-defect12 = settings_root("defect12")
 # label_13: Defacto 12
 label_13 = tk.Label(Frame1, text=f"{defect12}:",
                     fg="black", bg="#F2F2F2")
@@ -2046,7 +2112,6 @@ entry_11 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_11.grid(row=3, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 13
-defect13 = settings_root("defect13")
 # label_14: Defacto 13
 label_14 = tk.Label(Frame1, text=f"{defect13}:",
                     fg="black", bg="#F2F2F2")
@@ -2057,7 +2122,6 @@ entry_12 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_12.grid(row=3, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 14
-defect14 = settings_root("defect14")
 # label_15: Defacto 14
 label_15 = tk.Label(Frame1, text=f"{defect14}:",
                     fg="black", bg="#F2F2F2")
@@ -2068,7 +2132,6 @@ entry_13 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_13.grid(row=3, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 15
-defect15 = settings_root("defect15")
 # label_16: Defacto 15
 label_16 = tk.Label(Frame1, text=f"{defect15}:",
                     fg="black", bg="#F2F2F2")
@@ -2080,7 +2143,6 @@ entry_14.grid(row=3, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row4
 # ----- Defecto 16
-defect16 = settings_root("defect16")
 # label_17: Defacto 16
 label_17 = tk.Label(Frame1, text=f"{defect16}:",
                     fg="black", bg="#F2F2F2")
@@ -2091,7 +2153,6 @@ entry_15 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_15.grid(row=4, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 17
-defect17 = settings_root("defect17")
 # label_18: Defacto 17
 label_18 = tk.Label(Frame1, text=f"{defect17}:",
                     fg="black", bg="#F2F2F2")
@@ -2102,7 +2163,6 @@ entry_16 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_16.grid(row=4, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 18
-defect18 = settings_root("defect18")
 # label_19: Defacto 18
 label_19 = tk.Label(Frame1, text=f"{defect18}:",
                     fg="black", bg="#F2F2F2")
@@ -2113,7 +2173,6 @@ entry_17 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_17.grid(row=4, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 19
-defect19 = settings_root("defect19")
 # label_20: Defacto 19
 label_20 = tk.Label(Frame1, text=f"{defect19}:",
                     fg="black", bg="#F2F2F2")
@@ -2124,7 +2183,6 @@ entry_18 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_18.grid(row=4, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 20
-defect20 = settings_root("defect20")
 # label_21: Defacto 20
 label_21 = tk.Label(Frame1, text=f"{defect20}:",
                     fg="black", bg="#F2F2F2")
@@ -2136,7 +2194,6 @@ entry_19.grid(row=4, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row5
 # ----- Defecto 21
-defect21 = settings_root("defect21")
 # label_22: Defacto 21
 label_22 = tk.Label(Frame1, text=f"{defect21}:",
                     fg="black", bg="#F2F2F2")
@@ -2147,7 +2204,6 @@ entry_20 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_20.grid(row=5, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 22
-defect22 = settings_root("defect22")
 # label_23: Defacto 22
 label_23 = tk.Label(Frame1, text=f"{defect22}:",
                     fg="black", bg="#F2F2F2")
@@ -2158,7 +2214,6 @@ entry_21 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_21.grid(row=5, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 23
-defect23 = settings_root("defect23")
 # label_24: Defacto 23
 label_24 = tk.Label(Frame1, text=f"{defect23}:",
                     fg="black", bg="#F2F2F2")
@@ -2169,7 +2224,6 @@ entry_22 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_22.grid(row=5, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 24
-defect24 = settings_root("defect24")
 # label_25: Defacto 24
 label_25 = tk.Label(Frame1, text=f"{defect24}:",
                     fg="black", bg="#F2F2F2")
@@ -2180,7 +2234,6 @@ entry_23 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_23.grid(row=5, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 25
-defect25 = settings_root("defect25")
 # label_26: Defacto 25
 label_26 = tk.Label(Frame1, text=f"{defect25}:",
                     fg="black", bg="#F2F2F2")
@@ -2192,7 +2245,6 @@ entry_24.grid(row=5, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row6
 # ----- Defecto 26
-defect26 = settings_root("defect26")
 # label_27: Defacto 26
 label_27 = tk.Label(Frame1, text=f"{defect26}:",
                     fg="black", bg="#F2F2F2")
@@ -2203,7 +2255,6 @@ entry_25 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_25.grid(row=6, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 27
-defect27 = settings_root("defect27")
 # label_28: Defacto 27
 label_28 = tk.Label(Frame1, text=f"{defect27}:",
                     fg="black", bg="#F2F2F2")
@@ -2214,7 +2265,6 @@ entry_26 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_26.grid(row=6, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 28
-defect28 = settings_root("defect28")
 # label_29: Defacto 28
 label_29 = tk.Label(Frame1, text=f"{defect28}:",
                     fg="black", bg="#F2F2F2")
@@ -2225,7 +2275,6 @@ entry_27 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_27.grid(row=6, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 29
-defect29 = settings_root("defect29")
 # label_30: Defacto 29
 label_30 = tk.Label(Frame1, text=f"{defect29}:",
                     fg="black", bg="#F2F2F2")
@@ -2236,7 +2285,6 @@ entry_28 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
 entry_28.grid(row=6, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 30
-defect30 = settings_root("defect30")
 # label_31: Defacto 30
 label_31 = tk.Label(Frame1, text=f"{defect30}:",
                     fg="black", bg="#F2F2F2")
@@ -2389,84 +2437,72 @@ spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
 
 # ------------ Frame4_Row0
 # ----- Part#1
-part_1 = settings_root("Part#1")
 # label_50: Numero de parte 1
 label_50 = tk.Label(Frame4, text=part_1,
                     fg="black")
 label_50.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#2
-part_2 = settings_root("Part#2")
 # label_51: Numero de parte 2
 label_51 = tk.Label(Frame4, text=part_2,
                     fg="black")
 label_51.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#3
-part_3 = settings_root("Part#3")
 # label_52: Numero de parte 3
 label_52 = tk.Label(Frame4, text=part_3,
                     fg="black")
 label_52.grid(row=0, column=3, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#4
-part_4 = settings_root("Part#4")
 # label_53: Numero de parte 4
 label_53 = tk.Label(Frame4, text=part_4,
                     fg="black")
 label_53.grid(row=0, column=4, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#5
-part_5 = settings_root("Part#5")
 # label_54: Numero de parte 5
 label_54 = tk.Label(Frame4, text=part_5,
                     fg="black")
 label_54.grid(row=0, column=5, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#6
-part_6 = settings_root("Part#6")
 # label_55: Numero de parte 6
 label_55 = tk.Label(Frame4, text=part_6,
                     fg="black")
 label_55.grid(row=0, column=6, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#7
-part_7 = settings_root("Part#7")
 # label_56: Numero de parte 7
 label_56 = tk.Label(Frame4, text=part_7,
                     fg="black")
 label_56.grid(row=0, column=7, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#8
-part_8 = settings_root("Part#8")
 # label_57: Numero de parte 8
 label_57 = tk.Label(Frame4, text=part_8,
                     fg="black")
 label_57.grid(row=0, column=8, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#9
-part_9 = settings_root("Part#9")
 # label_58: Numero de parte 9
 label_58 = tk.Label(Frame4, text=part_9,
                     fg="black")
 label_58.grid(row=0, column=9, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#10
-part_10 = settings_root("Part#10")
 # label_59: Numero de parte 10
 label_59 = tk.Label(Frame4, text=part_10,
                     fg="black")
 label_59.grid(row=0, column=10, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#11
-part_11 = settings_root("Part#11")
 # label_60: Numero de parte 11
 label_60 = tk.Label(Frame4, text=part_11,
                     fg="black")
 label_60.grid(row=0, column=11, padx=0, pady=0, sticky="nsew")
 
 # ----- Part#12
-part_12 = settings_root("Part#12")
 # label_61: Numero de parte 12
 label_61 = tk.Label(Frame4, text=part_12,
                     fg="black")
@@ -3079,5 +3115,5 @@ Frame5.grid(row=5, column=0, sticky="nsew")
 if __name__ == "__main__":
     actualizar_fecha_hora()
     root_scale()
-    calcular_defectos()
+    root.after(500, calcular_defectos)
     root.mainloop()
