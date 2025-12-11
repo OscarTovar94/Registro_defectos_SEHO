@@ -601,7 +601,7 @@ def root_parametros():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -892,7 +892,7 @@ def root_registros():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -1184,7 +1184,7 @@ def root_logfile():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -1565,12 +1565,19 @@ def support_root():
 
         # ----- Label's
         label_rs_0.config(font=("Arial", fuente_70, "bold"))  # Título
+        label_rs_1.config(font=("Arial", fuente_40, "bold")
+                          )  # Código de colores ANDON
+        label_rs_2.config(font=("Arial", fuente_20, "bold"))  # Ingeniería
         # ----- Botton's
-        button_rs_0.config(font=("Arial", button_support, "bold"))  # Solicitar soporte ingeniería
-        button_rs_1.config(font=("Arial", button_support, "bold"))  # Solicitar soporte calidad
-        button_rs_2.config(font=("Arial", button_support, "bold"))  # Solicitar soporte producción
-        button_rs_3.config(font=("Arial", button_support, "bold"))  # Solicitar soporte todos
-        button_rs_4.config(font=("Arial", fuente_20, "bold")) # Cerrar ventana
+        # Solicitar soporte ingeniería
+        button_rs_0.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte calidad
+        button_rs_1.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte producción
+        button_rs_2.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte todos
+        button_rs_3.config(font=("Arial", button_support, "bold"))
+        button_rs_4.config(font=("Arial", fuente_20, "bold"))  # Cerrar ventana
 
     def closed_rs():
         """Función para cerrar root soporte"""
@@ -1624,8 +1631,6 @@ def support_root():
             # Cambiar a rojo
             button_rs_3.configure(bg="#00B0F0")
 
-
-
     # ----- GUI root support ------------------------------------------------------------------------------------------
     root_support = tk.Toplevel(root)
     root_support.attributes("-topmost", True)
@@ -1649,29 +1654,40 @@ def support_root():
 
     # ----- Frame0
     frame0_rs.grid_columnconfigure(0, weight=1)
-    frame0_rs.grid_rowconfigure(0, weight=0)
+    frame0_rs.grid_rowconfigure(0, weight=1)
 
     # ----- Frame1
     frame1_rs.grid_columnconfigure(0, weight=1)
     frame1_rs.grid_columnconfigure(1, weight=1)
     frame1_rs.grid_columnconfigure(2, weight=1)
     frame1_rs.grid_columnconfigure(3, weight=1)
-    frame1_rs.grid_rowconfigure(0, weight=0)
+    frame1_rs.grid_rowconfigure(0, weight=1)
     for col in range(0, 4):
         frame1_rs.grid_columnconfigure(col, weight=1, uniform="cols")
 
     # ----- Frame2
     frame2_rs.grid_columnconfigure(0, weight=1)
-    frame2_rs.grid_rowconfigure(0, weight=0)
+    frame2_rs.grid_columnconfigure(1, weight=1)
+    frame2_rs.grid_columnconfigure(2, weight=1)
+    frame2_rs.grid_columnconfigure(3, weight=1)
+    frame2_rs.grid_columnconfigure(4, weight=1)
+    frame2_rs.grid_columnconfigure(5, weight=1)
+    frame2_rs.grid_columnconfigure(6, weight=1)
+    frame2_rs.grid_columnconfigure(7, weight=1)
+    frame2_rs.grid_rowconfigure(0, weight=1)
+    frame2_rs.grid_rowconfigure(1, weight=1)
+    frame2_rs.grid_rowconfigure(2, weight=1)
+    frame2_rs.grid_rowconfigure(3, weight=1)
+    frame2_rs.grid_rowconfigure(4, weight=1)
 
     # ----- Frame3
     frame3_rs.grid_columnconfigure(0, weight=1)
-    frame3_rs.grid_rowconfigure(0, weight=0)
+    frame3_rs.grid_rowconfigure(0, weight=1)
 
     # ----- Frame0_Row0
     # label_rs_0: Título
-    label_rs_0 = tk.Label(frame0_rs, text="Soporte",
-                       fg="black", bg="#F2F2F2")
+    label_rs_0 = tk.Label(frame0_rs, text="Solicitud de soporte",
+                          fg="black", bg="#F2F2F2")
     label_rs_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
 
     # ----- Frame1_Row0
@@ -1695,13 +1711,25 @@ def support_root():
                             border=5, background="#00B0F0", command=lambda: todos())
     button_rs_3.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
 
+    # ----- Frame2_Row0
+    # label_rs_1: Código de colores ANDON
+    label_rs_1 = tk.Label(frame2_rs, text="Código de colores ANDON",
+                          fg="black", bg="#F2F2F2")
+    label_rs_1.grid(row=0, column=1, columnspan=6,
+                    padx=0, pady=0, sticky="nsew")
 
+    # ----- Frame2_Row1
+    # label_rs_2: Código de colores ANDON
+    label_rs_2 = tk.Label(frame2_rs, text="Ingeniería:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_2.grid(row=1, column=1,
+                    padx=0, pady=0, sticky="nsew")
 
     # ----- Frame3_Row0
     # button_rs_4: Cerrar_root
-    button_rs_4 = tk.Button(frame3_rs, text="Salir", height=0, width=0,
-                          border=5, background="#00B050", command=lambda: closed_rs())
-    button_rs_4.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+    button_rs_4 = tk.Button(frame3_rs, text="Cerrar", height=0, width=50,
+                            border=5, background="#00B03E", command=lambda: closed_rs())
+    button_rs_4.grid(row=0, column=0, padx=0, pady=0)
 
     # ---------------------------------------------------------------------------------------------
     frame0_rs.grid(row=0, column=0, sticky="nsew")
@@ -2188,7 +2216,7 @@ Frame4.grid_rowconfigure(7, weight=0)
 Frame4.grid_rowconfigure(8, weight=0)
 Frame4.grid_rowconfigure(9, weight=0)
 Frame4.grid_rowconfigure(10, weight=0)
-for col in range(1, 12):
+for col in range(1, 13):
     Frame4.grid_columnconfigure(col, weight=1, uniform="cols")
 # ------- Frame5
 Frame5.grid_columnconfigure(0, weight=1)
