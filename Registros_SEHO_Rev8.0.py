@@ -9,6 +9,7 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import pandas as pd
 import chardet
+from tkcalendar import DateEntry
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
@@ -1568,6 +1569,23 @@ def support_root():
         label_rs_1.config(font=("Arial", fuente_40, "bold")
                           )  # Código de colores ANDON
         label_rs_2.config(font=("Arial", fuente_20, "bold"))  # Ingeniería
+        label_rs_3.config(font=("Arial", fuente_16, "bold"))  # Ingeniería Rojo
+        label_rs_4.config(font=("Arial", fuente_20, "bold"))  # Calidad
+        label_rs_5.config(font=("Arial", fuente_16, "bold"))  # Calidad Rojo
+        label_rs_6.config(font=("Arial", fuente_20, "bold"))  # Calidad +
+        label_rs_7.config(font=("Arial", fuente_16, "bold"))  # Calidad Naranja
+        label_rs_8.config(font=("Arial", fuente_20, "bold"))  # Producción
+        label_rs_9.config(font=("Arial", fuente_16, "bold"))  # Producción Rojo
+        label_rs_10.config(font=("Arial", fuente_20, "bold"))  # Producción +
+        label_rs_11.config(font=("Arial", fuente_16, "bold")
+                           )  # Producción Verde
+        label_rs_12.config(font=("Arial", fuente_20, "bold"))  # Todos
+        label_rs_13.config(font=("Arial", fuente_16, "bold"))  # Todos Rojo
+        label_rs_14.config(font=("Arial", fuente_20, "bold"))  # Todos +
+        label_rs_15.config(font=("Arial", fuente_16, "bold"))  # Todos Naranja
+        label_rs_16.config(font=("Arial", fuente_20, "bold"))  # Todos +
+        label_rs_17.config(font=("Arial", fuente_16, "bold"))  # Todos Verde
+
         # ----- Botton's
         # Solicitar soporte ingeniería
         button_rs_0.config(font=("Arial", button_support, "bold"))
@@ -1648,9 +1666,10 @@ def support_root():
 
     # ----- Frame's root_defect
     frame0_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=30)
-    frame1_rs = tk.Frame(root_support, bg="#F2F2F2")
-    frame2_rs = tk.Frame(root_support, bg="#F2F2F2")
-    frame3_rs = tk.Frame(root_support, bg="#F2F2F2")
+    frame1_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
+    frame2_rs = tk.Frame(root_support, bg="#F2F2F2",
+                         padx=0, pady=0, bd=2, relief="solid")
+    frame3_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
 
     # ----- Frame0
     frame0_rs.grid_columnconfigure(0, weight=1)
@@ -1679,6 +1698,8 @@ def support_root():
     frame2_rs.grid_rowconfigure(2, weight=1)
     frame2_rs.grid_rowconfigure(3, weight=1)
     frame2_rs.grid_rowconfigure(4, weight=1)
+    for col in range(0, 8):
+        frame2_rs.grid_columnconfigure(col, weight=1, uniform="cols")
 
     # ----- Frame3
     frame3_rs.grid_columnconfigure(0, weight=1)
@@ -1719,17 +1740,110 @@ def support_root():
                     padx=0, pady=0, sticky="nsew")
 
     # ----- Frame2_Row1
-    # label_rs_2: Código de colores ANDON
+    # label_rs_2: Ingeniería
     label_rs_2 = tk.Label(frame2_rs, text="Ingeniería:",
                           fg="black", bg="#F2F2F2", anchor="e")
     label_rs_2.grid(row=1, column=1,
                     padx=0, pady=0, sticky="nsew")
 
+    # label_rs_3: Rojo Ingeniería
+    label_rs_3 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_3.grid(row=1, column=2,
+                    padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame2_Row2
+    # label_rs_4: Calidad
+    label_rs_4 = tk.Label(frame2_rs, text="Calidad:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_4.grid(row=2, column=1,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_5: Rojo Calidad
+    label_rs_5 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_5.grid(row=2, column=2,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_6: + Calidad
+    label_rs_6 = tk.Label(frame2_rs, text="+",
+                          fg="black", bg="#F2F2F2")
+    label_rs_6.grid(row=2, column=3,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_7: Naranja Calidad
+    label_rs_7 = tk.Label(frame2_rs,
+                          fg="black", bg="#FFC000")
+    label_rs_7.grid(row=2, column=4,
+                    padx=0, pady=5, sticky="nsew")
+
+    # ----- Frame2_Row3
+    # label_rs_8: Producción
+    label_rs_8 = tk.Label(frame2_rs, text="Producción:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_8.grid(row=3, column=1,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_9: Rojo Producción
+    label_rs_9 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_9.grid(row=3, column=2,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_10: + Producción
+    label_rs_10 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_10.grid(row=3, column=3,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_11: Verde Producción
+    label_rs_11 = tk.Label(frame2_rs,
+                           fg="black", bg="#4EA72E")
+    label_rs_11.grid(row=3, column=4,
+                     padx=0, pady=5, sticky="nsew")
+
+    # ----- Frame2_Row4
+    # label_rs_12: Todos
+    label_rs_12 = tk.Label(frame2_rs, text="Todos:",
+                           fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_12.grid(row=4, column=1,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_13: Rojo Todos
+    label_rs_13 = tk.Label(frame2_rs, text="Alarma",
+                           fg="black", bg="red")
+    label_rs_13.grid(row=4, column=2,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_14: + Todos
+    label_rs_14 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_14.grid(row=4, column=3,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_15: Naranja Todos
+    label_rs_15 = tk.Label(frame2_rs,
+                           fg="black", bg="#FFC000")
+    label_rs_15.grid(row=4, column=4,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_16: + Todos
+    label_rs_16 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_16.grid(row=4, column=5,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_17: Verde Todos
+    label_rs_17 = tk.Label(frame2_rs,
+                           fg="black", bg="#4EA72E")
+    label_rs_17.grid(row=4, column=6,
+                     padx=0, pady=5, sticky="nsew")
+
     # ----- Frame3_Row0
     # button_rs_4: Cerrar_root
-    button_rs_4 = tk.Button(frame3_rs, text="Cerrar", height=0, width=50,
-                            border=5, background="#00B03E", command=lambda: closed_rs())
-    button_rs_4.grid(row=0, column=0, padx=0, pady=0)
+    button_rs_4 = tk.Button(frame3_rs, text="Cerrar", height=0, width=20,
+                            border=5, background="red", fg="white", command=lambda: closed_rs())
+    button_rs_4.grid(row=0, column=0, padx=0, pady=10)
 
     # ---------------------------------------------------------------------------------------------
     frame0_rs.grid(row=0, column=0, sticky="nsew")
