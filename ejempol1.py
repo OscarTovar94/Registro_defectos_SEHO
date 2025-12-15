@@ -15,7 +15,7 @@ root.geometry("300x200")
 # Crear el widget DateEntry
 # date_pattern='dd/mm/yyyy' para formato día/mes/año
 cal = DateEntry(root, width=12, background='darkblue',
-                foreground='white', borderwidth=2,
+                foreground='white', borderwidth=2, showweeknumbers=False,
                 date_pattern='dd/mm/yyyy')
 cal.pack(pady=20)
 
