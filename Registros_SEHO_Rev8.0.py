@@ -1660,7 +1660,7 @@ def defect_root():
 
     # button_rd_1: Ingeniería
     button_rd_1 = tk.Button(frame1_rd, text="Buscar", height=0, width=20,
-                            border=3, background="deepskyblue", command=lambda: closed_rd())
+                            border=3, background="deepskyblue", command=closed_rd)
     button_rd_1.grid(row=0, column=11, padx=5, pady=0, sticky="nsew")
 
     # ---------------------------------------------------------------------------------------------
@@ -1855,22 +1855,22 @@ def support_root():
     # ----- Frame1_Row0
     # button_rs_0: Ingeniería
     button_rs_0 = tk.Button(frame1_rs, text="Ingeniería", height=0, width=0,
-                            border=5, background="red", command=lambda: ingenieria())
+                            border=5, background="red", command=ingenieria)
     button_rs_0.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
 
     # button_rs_1: Calidad
     button_rs_1 = tk.Button(frame1_rs, text="Calidad", height=0, width=0,
-                            border=5, background="#FFC000", command=lambda: calidad())
+                            border=5, background="#FFC000", command=calidad)
     button_rs_1.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
 
     # button_rs_2: Producción
     button_rs_2 = tk.Button(frame1_rs, text="Producción", height=0, width=0,
-                            border=5, background="green", command=lambda: produccion())
+                            border=5, background="green", command=produccion)
     button_rs_2.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
 
     # button_rs_3: Todos
     button_rs_3 = tk.Button(frame1_rs, text="Todos", height=0, width=0,
-                            border=5, background="#00B0F0", command=lambda: todos())
+                            border=5, background="#00B0F0", command=todos)
     button_rs_3.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
 
     # ----- Frame2_Row0
@@ -1983,7 +1983,7 @@ def support_root():
     # ----- Frame3_Row0
     # button_rs_4: Cerrar_root
     button_rs_4 = tk.Button(frame3_rs, text="Cerrar", height=0, width=20,
-                            border=5, background="red", fg="white", command=lambda: closed_rs())
+                            border=5, background="red", fg="white", command=closed_rs)
     button_rs_4.grid(row=0, column=0, padx=0, pady=10)
 
     # ---------------------------------------------------------------------------------------------
@@ -3699,37 +3699,37 @@ label_178.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame5_Row0
 # Label_179: Fecha/Hora
-label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="w")
+label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="sw")
 label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
-                      border=3, background="yellow", command=lambda: defect_root())
+                      border=3, background="yellow", command=defect_root)
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
-                      border=3, background="red", command=lambda: support_root())
+                      border=3, background="red", command=support_root)
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 
 # button_14: Parámetros
 button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
-                      border=3, background="#D86DCD", command=lambda: root_parametros())
+                      border=3, background="#D86DCD", command=root_parametros)
 button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
 
 # button_15: Registros
 button_15 = tk.Button(Frame5, text="Registros", height=0, width=0,
-                      border=3, background="#0070C0", command=lambda: root_registros())
+                      border=3, background="#0070C0", command=root_registros)
 button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
 
 # button_16: LogFile
 button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
-                      border=3, background="#00B050", command=lambda: root_logfile())
+                      border=3, background="#00B050", command=root_logfile)
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
 
 # Label_180: Rev
 label_180 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
-                     fg="black", bg="#F2F2F2", anchor="e")
+                     fg="black", bg="#F2F2F2", anchor="se")
 label_180.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
