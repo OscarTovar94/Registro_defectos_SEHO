@@ -49,7 +49,7 @@ def settings_defects(clave):
 def settings_part_numbers(clave):
     """Función para cargar defectos."""
     try:
-        with open("C:/Registro_defectos_SEHO/part_numbers.ini", "r",  encoding="utf-8") as config:
+        with open("C:/Registro_defectos_SEHO/models.ini", "r",  encoding="utf-8") as config:
             for linea in config:
                 if linea.startswith(clave):
                     return linea.split("=")[1].strip()
@@ -1507,7 +1507,7 @@ def defect_root():
     def settings_part_numbers_rd(clave):
         """Función para cargar defectos."""
         try:
-            with open("C:/Registro_defectos_SEHO/part_numbers.ini", "r",  encoding="utf-8") as config:
+            with open("C:/Registro_defectos_SEHO/models.ini", "r",  encoding="utf-8") as config:
                 for linea in config:
                     if linea.startswith(clave):
                         return linea.split("=")[1].strip()
