@@ -875,11 +875,12 @@ def root_parametros():
     app = CSVEditor(ventana_csv)
 
 
-def root_registros():
+def root_registros(on_close_callback=None):
     """ Función que abre la ventana secundaria para editar el CSV """
     class CSVEditor:
-        def __init__(self, root):
+        def __init__(self, root, on_close_callback=None):
             self.root = root
+            self.on_close_callback = on_close_callback
             self.root.title("Registros")
 
             def cerrar_root():
@@ -907,7 +908,7 @@ def root_registros():
 
             btn_cerrar = tk.Button(
                 btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
-                command=root.destroy)
+                command=self.cerrar_ventana)
             btn_cerrar.pack(side="right", padx=5)
 
             # Frame para la tabla con scroll
@@ -974,6 +975,11 @@ def root_registros():
             else:
                 messagebox.showerror(
                     "Error", f"No se encontró el archivo: {self.archivo_csv}", parent=self.root)
+
+        def cerrar_ventana(self):
+            if self.on_close_callback:
+                self.on_close_callback()
+            self.root.destroy()
 
         def detectar_codificacion(self, archivo):
             """ Detecta la codificación del archivo CSV """
@@ -1166,19 +1172,16 @@ def root_registros():
 
     # Crear ventana secundaria
     ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
-    app = CSVEditor(ventana_csv)
+    app = CSVEditor(ventana_csv, on_close_callback)
 
 
-def root_logfile():
+def root_logfile(on_close_callback=None):
     """ Función que abre la ventana secundaria para editar el CSV """
     class CSVEditor:
-        def __init__(self, root):
+        def __init__(self, root, on_close_callback=None):
             self.root = root
+            self.on_close_callback = on_close_callback
             self.root.title("LogFile")
-
-            def cerrar_root():
-                root.destroy()
-                root.protocol("WM_DELETE_WINDOW", cerrar_root)
 
             self.root.attributes("-fullscreen", True)
             self.root.attributes("-topmost", True)
@@ -1201,7 +1204,7 @@ def root_logfile():
 
             btn_cerrar = tk.Button(
                 btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
-                command=root.destroy)
+                command=self.cerrar_ventana)
             btn_cerrar.pack(side="right", padx=5)
 
             # Frame para la tabla con scroll
@@ -1274,6 +1277,11 @@ def root_logfile():
             with open(archivo, "rb") as f:
                 result = chardet.detect(f.read())
             return result["encoding"]
+
+        def cerrar_ventana(self):
+            if self.on_close_callback:
+                self.on_close_callback()
+            self.root.destroy()
 
         def cargar_csv(self):
             """ Carga el archivo CSV y lo muestra en la tabla ordenado por fecha descendente """
@@ -1460,7 +1468,11 @@ def root_logfile():
 
     # Crear ventana secundaria
     ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
-    app = CSVEditor(ventana_csv)
+    app = CSVEditor(ventana_csv, on_close_callback)
+
+
+def actualizar_principal():
+    calcular_defectos()
 
 
 def support_root():
@@ -3823,27 +3835,27 @@ label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
-                      border=3, background="yellow", command=defect_root)
+                      border=3, background="yellow", command=lambda: defect_root)
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
-                      border=3, background="red", command=support_root)
+                      border=3, background="red", command=lambda: support_root)
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 
 # button_14: Parámetros
 button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
-                      border=3, background="#D86DCD", command=root_parametros)
+                      border=3, background="#D86DCD", command=lambda: root_parametros)
 button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
 
 # button_15: Registros
 button_15 = tk.Button(Frame5, text="Registros", height=0, width=0,
-                      border=3, background="#0070C0", command=root_registros)
+                      border=3, background="#0070C0", command=lambda: root_registros(actualizar_principal))
 button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
 
 # button_16: LogFile
 button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
-                      border=3, background="#00B050", command=root_logfile)
+                      border=3, background="#00B050", command=lambda: root_logfile(actualizar_principal))
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
 
 # Label_180: Rev
