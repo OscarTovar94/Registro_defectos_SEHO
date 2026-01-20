@@ -3835,17 +3835,17 @@ label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
-                      border=3, background="yellow", command= defect_root)
+                      border=3, background="yellow", command=defect_root)
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
-                      border=3, background="red", command= support_root)
+                      border=3, background="red", command=support_root)
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 
 # button_14: Parámetros
 button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
-                      border=3, background="#D86DCD", command= root_parametros)
+                      border=3, background="#D86DCD", command=root_parametros)
 button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
 
 # button_15: Registros
