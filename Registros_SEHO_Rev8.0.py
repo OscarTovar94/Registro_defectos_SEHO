@@ -1803,6 +1803,21 @@ def defect_root():
     """ Función que abre la ventana defectos """
     # ---------- Logic root_defect
 
+    def settings_root_rd(clave):
+        """Function to load settings."""
+        try:
+            with open("C:/Registro_defectos_SEHO/root_settings_rd.ini", "r",  encoding="utf-8") as config:
+                for linea in config:
+                    if linea.startswith(clave):
+                        return linea.split("=")[1].strip()
+        except FileNotFoundError:
+            messagebox.showerror(
+                "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+        except ImportError as e:
+            messagebox.showerror(
+                "Error", f"Ocurrió un error al leer la configuración: {e}")
+        return None
+
     def root_defect_scale():
         """Funcíon para escalar root defectos"""
         # Obtener el tamaño de la pantalla
@@ -1898,12 +1913,14 @@ def defect_root():
     root_defect.grid_columnconfigure(0, weight=1)
 
     # ----- Frame's root_defect
-    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=30)
+    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=50)
     frame1_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
     frame2_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
 
     # ----- Frame0
     frame0_rd.grid_columnconfigure(0, weight=1)
+    frame0_rd.grid_columnconfigure(1, weight=1)
+    frame0_rd.grid_columnconfigure(2, weight=1)
     frame0_rd.grid_rowconfigure(0, weight=1)
 
     # ----- Frame1
@@ -1928,10 +1945,32 @@ def defect_root():
     frame2_rd.grid_rowconfigure(0, weight=1)
 
     # ----- Frame0_Row0
-    # label_rs_0: Título
+    # Cargar logo ELRAD
+    logo_elrad_rd = Image.open(settings_root_rd("LogoELRAD"))
+    logo_elrad_rd = logo_elrad_rd.resize((100, 50), Image.Resampling.LANCZOS)
+    logo_elrad_tk_rd = ImageTk.PhotoImage(logo_elrad_rd)
+
+    # Imagen ELRAD
+    label_logo_elrad_rd = tk.Label(
+        frame0_rd, image=logo_elrad_tk_rd, borderwidth=0, bg="#F2F2F2")
+    label_logo_elrad_rd.image = logo_elrad_tk_rd
+    label_logo_elrad_rd.grid(row=0, column=0, padx=0, pady=0, sticky="nw")
+
+    # label_rd_0: Titulo
     label_rd_0 = tk.Label(frame0_rd, text="Defectos SEHO",
                           fg="black", bg="#F2F2F2")
-    label_rd_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+    label_rd_0.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
+
+    # Cargar logo SEHO
+    logo_seho_rd = Image.open(settings_root_rd("LogoSEHO"))
+    logo_seho_rd = logo_seho_rd.resize((100, 50), Image.Resampling.LANCZOS)
+    logo_seho_tk_rd = ImageTk.PhotoImage(logo_seho_rd)
+
+    # Imagen SEHO como boton de cerrado
+    boton_cerrar_rd = tk.Button(frame0_rd, image=logo_seho_tk_rd,
+                                command=closed_rd, borderwidth=0, bg="#F2F2F2")
+    boton_cerrar_rd.image = logo_seho_tk_rd
+    boton_cerrar_rd.grid(row=0, column=2, padx=0, pady=0, sticky="ne")
 
     # ----- Frame1_Row0
     # label_rd_1: Modelo
