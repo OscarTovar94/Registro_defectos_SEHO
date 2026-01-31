@@ -9,6 +9,8 @@ from tkinter import ttk
 from PIL import Image, ImageTk
 import pandas as pd
 import chardet
+from tkcalendar import DateEntry
+import configparser
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
@@ -48,7 +50,7 @@ def settings_defects(clave):
 def settings_part_numbers(clave):
     """Función para cargar defectos."""
     try:
-        with open("C:/Registro_defectos_SEHO/part_numbers.ini", "r",  encoding="utf-8") as config:
+        with open("C:/Registro_defectos_SEHO/models.ini", "r",  encoding="utf-8") as config:
             for linea in config:
                 if linea.startswith(clave):
                     return linea.split("=")[1].strip()
@@ -129,7 +131,8 @@ def root_scale():
     etiquetas_parte_2 = int(11 * escala)
     bloque_2 = int(14 * escala)
     etiquetas_parte_3 = int(10 * escala)
-    bloque_3 = int(8 * escala)
+    bloque_3 = int(10 * escala)
+    bloque_4 = int(8 * escala)
 
     # --- label's
     label_0.config(font=("Arial", fuente_40, "bold"))  # Título
@@ -302,18 +305,18 @@ def root_scale():
     label_138.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#11
     label_139.config(font=("Arial", bloque_2, "bold"))  # Total Produc Part#12
     label_140.config(font=("Arial", etiquetas_parte_3, "bold"))  # TopDefect
-    label_141.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#1
-    label_142.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#2
-    label_143.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#3
-    label_144.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#4
-    label_145.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#5
-    label_146.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#6
-    label_147.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#7
-    label_148.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#8
-    label_149.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#9
-    label_150.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#10
-    label_151.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#11
-    label_152.config(font=("Arial", bloque_2, "bold"))  # TopDefect Part#12
+    label_141.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#1
+    label_142.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#2
+    label_143.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#3
+    label_144.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#4
+    label_145.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#5
+    label_146.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#6
+    label_147.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#7
+    label_148.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#8
+    label_149.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#9
+    label_150.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#10
+    label_151.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#11
+    label_152.config(font=("Arial", bloque_4, "bold"))  # TopDefect Part#12
     label_153.config(font=("Arial", etiquetas_parte_3, "bold")
                      )  # Cant.Defect Part#1
     label_154.config(font=("Arial", bloque_3, "bold"))  # Cant.pDefect Part#1
@@ -404,6 +407,7 @@ def root_scale():
     button_14.config(font=("Arial", button_ventanas, "bold"))  # Parámetros
     button_15.config(font=("Arial", button_ventanas, "bold"))  # Registros
     button_16.config(font=("Arial", button_ventanas, "bold"))  # LogFile
+    button_17.config(font=("Arial", fuente_10, "bold"))  # Actualizar
 
 
 def suma_defectos(*args):
@@ -601,7 +605,7 @@ def root_parametros():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -860,6 +864,8 @@ def root_parametros():
             """ Guarda el DataFrame modificado en el mismo archivo CSV """
             try:
                 self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+                messagebox.showinfo(
+                    "Éxito", "Datos guardados correctamente.", parent=self.root)
             except Exception as e:
                 messagebox.showerror(
                     "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
@@ -869,11 +875,12 @@ def root_parametros():
     app = CSVEditor(ventana_csv)
 
 
-def root_registros():
+def root_registros(on_close_callback=None):
     """ Función que abre la ventana secundaria para editar el CSV """
     class CSVEditor:
-        def __init__(self, root):
+        def __init__(self, root, on_close_callback=None):
             self.root = root
+            self.on_close_callback = on_close_callback
             self.root.title("Registros")
 
             def cerrar_root():
@@ -892,7 +899,7 @@ def root_registros():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -901,7 +908,7 @@ def root_registros():
 
             btn_cerrar = tk.Button(
                 btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
-                command=root.destroy)
+                command=self.cerrar_ventana)
             btn_cerrar.pack(side="right", padx=5)
 
             # Frame para la tabla con scroll
@@ -968,6 +975,11 @@ def root_registros():
             else:
                 messagebox.showerror(
                     "Error", f"No se encontró el archivo: {self.archivo_csv}", parent=self.root)
+
+        def cerrar_ventana(self):
+            if self.on_close_callback:
+                self.on_close_callback()
+            self.root.destroy()
 
         def detectar_codificacion(self, archivo):
             """ Detecta la codificación del archivo CSV """
@@ -1152,25 +1164,24 @@ def root_registros():
             """ Guarda el DataFrame modificado en el mismo archivo CSV """
             try:
                 self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+                messagebox.showinfo(
+                    "Éxito", "Datos guardados correctamente.", parent=self.root)
             except Exception as e:
                 messagebox.showerror(
                     "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
 
     # Crear ventana secundaria
     ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
-    app = CSVEditor(ventana_csv)
+    app = CSVEditor(ventana_csv, on_close_callback)
 
 
-def root_logfile():
+def root_logfile(on_close_callback=None):
     """ Función que abre la ventana secundaria para editar el CSV """
     class CSVEditor:
-        def __init__(self, root):
+        def __init__(self, root, on_close_callback=None):
             self.root = root
+            self.on_close_callback = on_close_callback
             self.root.title("LogFile")
-
-            def cerrar_root():
-                root.destroy()
-                root.protocol("WM_DELETE_WINDOW", cerrar_root)
 
             self.root.attributes("-fullscreen", True)
             self.root.attributes("-topmost", True)
@@ -1184,7 +1195,7 @@ def root_logfile():
             btn_frame.pack(fill="x", padx=10, pady=5)
 
             self.btn_guardar = tk.Button(
-                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="blue", fg="white", state=tk.DISABLED)
+                btn_frame, text="Guardar", command=self.guardar_csv, font=("Arial", 12, "bold"), bg="green", fg="white", state=tk.DISABLED)
             self.btn_guardar.pack(side="left", padx=5)
 
             label_centro = tk.Label(
@@ -1193,7 +1204,7 @@ def root_logfile():
 
             btn_cerrar = tk.Button(
                 btn_frame, text="Cerrar", bg="red", fg="white", font=("Arial", 12, "bold"),
-                command=root.destroy)
+                command=self.cerrar_ventana)
             btn_cerrar.pack(side="right", padx=5)
 
             # Frame para la tabla con scroll
@@ -1266,6 +1277,11 @@ def root_logfile():
             with open(archivo, "rb") as f:
                 result = chardet.detect(f.read())
             return result["encoding"]
+
+        def cerrar_ventana(self):
+            if self.on_close_callback:
+                self.on_close_callback()
+            self.root.destroy()
 
         def cargar_csv(self):
             """ Carga el archivo CSV y lo muestra en la tabla ordenado por fecha descendente """
@@ -1444,24 +1460,353 @@ def root_logfile():
             """ Guarda el DataFrame modificado en el mismo archivo CSV """
             try:
                 self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
+                messagebox.showinfo(
+                    "Éxito", "Datos guardados correctamente.", parent=self.root)
             except Exception as e:
                 messagebox.showerror(
                     "Error", f"No se pudo guardar el archivo CSV.\n{str(e)}", parent=self.root)
 
     # Crear ventana secundaria
     ventana_csv = tk.Toplevel()  # Se crea directamente sin necesitar root
-    app = CSVEditor(ventana_csv)
+    app = CSVEditor(ventana_csv, on_close_callback)
+
+
+def actualizar_principal():
+    calcular_defectos()
+
+
+def support_root():
+    """Función para abrir ventana de solicitud de soporte (Ingeniería, Calidad, Producción)"""
+    # ----- Variables root support
+    global root
+    # ----- Logit root support ----------------------------------------------------------------------------------------
+
+    def root_support_scale():
+        """Funcíon para escalar root soport"""
+        # Obtener el tamaño de la pantalla
+        pantalla_ancho = root_support.winfo_screenwidth()
+        pantalla_alto = root_support.winfo_screenheight()
+
+        # Calcular el factor de escala basado en una resolución de referencia (1920x1080)
+        escala_x = pantalla_ancho / 1920
+        escala_y = pantalla_alto / 1080
+        escala = min(escala_x, escala_y)
+        frame0_rs.config(padx=0 * escala, pady=0 * escala)
+        frame1_rs.config(padx=0 * escala, pady=0 * escala)
+        frame2_rs.config(padx=0 * escala, pady=0 * escala)
+        frame3_rs.config(padx=0 * escala, pady=0 * escala)
+
+        # Ajustar el tamaño de la fuente
+        fuente_8 = int(8 * escala)
+        fuente_10 = int(10 * escala)
+        fuente_12 = int(12 * escala)
+        fuente_14 = int(14 * escala)
+        fuente_16 = int(16 * escala)
+        fuente_20 = int(20 * escala)
+        fuente_22 = int(22 * escala)
+        fuente_30 = int(30 * escala)
+        fuente_40 = int(40 * escala)
+        fuente_50 = int(50 * escala)
+        fuente_70 = int(70 * escala)
+        button_support = int(40 * escala)
+
+        # ----- Label's
+        label_rs_0.config(font=("Arial", fuente_70, "bold"))  # Título
+        label_rs_1.config(font=("Arial", fuente_40, "bold")
+                          )  # Código de colores ANDON
+        label_rs_2.config(font=("Arial", fuente_20, "bold"))  # Ingeniería
+        label_rs_3.config(font=("Arial", fuente_16, "bold"))  # Ingeniería Rojo
+        label_rs_4.config(font=("Arial", fuente_20, "bold"))  # Calidad
+        label_rs_5.config(font=("Arial", fuente_16, "bold"))  # Calidad Rojo
+        label_rs_6.config(font=("Arial", fuente_20, "bold"))  # Calidad +
+        label_rs_7.config(font=("Arial", fuente_16, "bold"))  # Calidad Naranja
+        label_rs_8.config(font=("Arial", fuente_20, "bold"))  # Producción
+        label_rs_9.config(font=("Arial", fuente_16, "bold"))  # Producción Rojo
+        label_rs_10.config(font=("Arial", fuente_20, "bold"))  # Producción +
+        label_rs_11.config(font=("Arial", fuente_16, "bold")
+                           )  # Producción Verde
+        label_rs_12.config(font=("Arial", fuente_20, "bold"))  # Todos
+        label_rs_13.config(font=("Arial", fuente_16, "bold"))  # Todos Rojo
+        label_rs_14.config(font=("Arial", fuente_20, "bold"))  # Todos +
+        label_rs_15.config(font=("Arial", fuente_16, "bold"))  # Todos Naranja
+        label_rs_16.config(font=("Arial", fuente_20, "bold"))  # Todos +
+        label_rs_17.config(font=("Arial", fuente_16, "bold"))  # Todos Verde
+
+        # ----- Botton's
+        # Solicitar soporte ingeniería
+        button_rs_0.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte calidad
+        button_rs_1.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte producción
+        button_rs_2.config(font=("Arial", button_support, "bold"))
+        # Solicitar soporte todos
+        button_rs_3.config(font=("Arial", button_support, "bold"))
+        button_rs_4.config(font=("Arial", fuente_20, "bold"))  # Cerrar ventana
+
+    def closed_rs():
+        """Función para cerrar root soporte"""
+        root_support.destroy()
+
+    def ingenieria():
+        """Función para solicitar soporte de ingeniería"""
+        if button_rs_0["bg"] == "red":
+            # Cambiar a amarillo
+            button_rs_0.configure(bg="yellow")
+            button_rs_1.configure(bg="#FFC000")
+            button_rs_2.configure(bg="green")
+            button_rs_3.configure(bg="#00B0F0")
+        else:
+            # Cambiar a rojo
+            button_rs_0.configure(bg="red")
+
+    def calidad():
+        """Función para solicitar soporte de calidad"""
+        if button_rs_1["bg"] == "#FFC000":
+            # Cambiar a amarillo
+            button_rs_1.configure(bg="yellow")
+            button_rs_0.configure(bg="red")
+            button_rs_2.configure(bg="green")
+            button_rs_3.configure(bg="#00B0F0")
+        else:
+            # Cambiar a rojo
+            button_rs_1.configure(bg="#FFC000")
+
+    def produccion():
+        """Función para solicitar soporte de producción"""
+        if button_rs_2["bg"] == "green":
+            # Cambiar a amarillo
+            button_rs_2.configure(bg="yellow")
+            button_rs_0.configure(bg="red")
+            button_rs_1.configure(bg="#FFC000")
+            button_rs_3.configure(bg="#00B0F0")
+        else:
+            # Cambiar a rojo
+            button_rs_2.configure(bg="green")
+
+    def todos():
+        """Función para solicitar soporte de todos"""
+        if button_rs_3["bg"] == "#00B0F0":
+            # Cambiar a amarillo
+            button_rs_3.configure(bg="yellow")
+            button_rs_0.configure(bg="red")
+            button_rs_1.configure(bg="#FFC000")
+            button_rs_2.configure(bg="green")
+        else:
+            # Cambiar a rojo
+            button_rs_3.configure(bg="#00B0F0")
+
+    # ----- GUI root support ------------------------------------------------------------------------------------------
+    root_support = tk.Toplevel(root)
+    root_support.attributes("-topmost", True)
+    root_support.attributes("-fullscreen", True)
+    root_support.overrideredirect(False)
+    root_support.resizable(False, False)
+    root_support.configure(bg="#F2F2F2")
+
+    # ----- Acomodo de Frame's
+    root_support.grid_rowconfigure(0, weight=0)
+    root_support.grid_rowconfigure(1, weight=1)
+    root_support.grid_rowconfigure(2, weight=0)
+    root_support.grid_rowconfigure(3, weight=0)
+    root_support.grid_columnconfigure(0, weight=1)
+
+    # ----- Frame's root_defect
+    frame0_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=30)
+    frame1_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
+    frame2_rs = tk.Frame(root_support, bg="#F2F2F2",
+                         padx=0, pady=0, bd=2, relief="solid")
+    frame3_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
+
+    # ----- Frame0
+    frame0_rs.grid_columnconfigure(0, weight=1)
+    frame0_rs.grid_rowconfigure(0, weight=1)
+
+    # ----- Frame1
+    frame1_rs.grid_columnconfigure(0, weight=1)
+    frame1_rs.grid_columnconfigure(1, weight=1)
+    frame1_rs.grid_columnconfigure(2, weight=1)
+    frame1_rs.grid_columnconfigure(3, weight=1)
+    frame1_rs.grid_rowconfigure(0, weight=1)
+    for col in range(0, 4):
+        frame1_rs.grid_columnconfigure(col, weight=1, uniform="cols")
+
+    # ----- Frame2
+    frame2_rs.grid_columnconfigure(0, weight=1)
+    frame2_rs.grid_columnconfigure(1, weight=1)
+    frame2_rs.grid_columnconfigure(2, weight=1)
+    frame2_rs.grid_columnconfigure(3, weight=1)
+    frame2_rs.grid_columnconfigure(4, weight=1)
+    frame2_rs.grid_columnconfigure(5, weight=1)
+    frame2_rs.grid_columnconfigure(6, weight=1)
+    frame2_rs.grid_columnconfigure(7, weight=1)
+    frame2_rs.grid_rowconfigure(0, weight=1)
+    frame2_rs.grid_rowconfigure(1, weight=1)
+    frame2_rs.grid_rowconfigure(2, weight=1)
+    frame2_rs.grid_rowconfigure(3, weight=1)
+    frame2_rs.grid_rowconfigure(4, weight=1)
+    for col in range(0, 8):
+        frame2_rs.grid_columnconfigure(col, weight=1, uniform="cols")
+
+    # ----- Frame3
+    frame3_rs.grid_columnconfigure(0, weight=1)
+    frame3_rs.grid_rowconfigure(0, weight=1)
+
+    # ----- Frame0_Row0
+    # label_rs_0: Título
+    label_rs_0 = tk.Label(frame0_rs, text="Solicitud de soporte",
+                          fg="black", bg="#F2F2F2")
+    label_rs_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame1_Row0
+    # button_rs_0: Ingeniería
+    button_rs_0 = tk.Button(frame1_rs, text="Ingeniería", height=0, width=0,
+                            border=5, background="red", command=ingenieria)
+    button_rs_0.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    # button_rs_1: Calidad
+    button_rs_1 = tk.Button(frame1_rs, text="Calidad", height=0, width=0,
+                            border=5, background="#FFC000", command=calidad)
+    button_rs_1.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+    # button_rs_2: Producción
+    button_rs_2 = tk.Button(frame1_rs, text="Producción", height=0, width=0,
+                            border=5, background="green", command=produccion)
+    button_rs_2.grid(row=0, column=2, padx=10, pady=10, sticky="nsew")
+
+    # button_rs_3: Todos
+    button_rs_3 = tk.Button(frame1_rs, text="Todos", height=0, width=0,
+                            border=5, background="#00B0F0", command=todos)
+    button_rs_3.grid(row=0, column=3, padx=10, pady=10, sticky="nsew")
+
+    # ----- Frame2_Row0
+    # label_rs_1: Código de colores ANDON
+    label_rs_1 = tk.Label(frame2_rs, text="Código de colores ANDON",
+                          fg="black", bg="#F2F2F2")
+    label_rs_1.grid(row=0, column=1, columnspan=6,
+                    padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame2_Row1
+    # label_rs_2: Ingeniería
+    label_rs_2 = tk.Label(frame2_rs, text="Ingeniería:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_2.grid(row=1, column=1,
+                    padx=0, pady=0, sticky="nsew")
+
+    # label_rs_3: Rojo Ingeniería
+    label_rs_3 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_3.grid(row=1, column=2,
+                    padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame2_Row2
+    # label_rs_4: Calidad
+    label_rs_4 = tk.Label(frame2_rs, text="Calidad:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_4.grid(row=2, column=1,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_5: Rojo Calidad
+    label_rs_5 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_5.grid(row=2, column=2,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_6: + Calidad
+    label_rs_6 = tk.Label(frame2_rs, text="+",
+                          fg="black", bg="#F2F2F2")
+    label_rs_6.grid(row=2, column=3,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_7: Naranja Calidad
+    label_rs_7 = tk.Label(frame2_rs,
+                          fg="black", bg="#FFC000")
+    label_rs_7.grid(row=2, column=4,
+                    padx=0, pady=5, sticky="nsew")
+
+    # ----- Frame2_Row3
+    # label_rs_8: Producción
+    label_rs_8 = tk.Label(frame2_rs, text="Producción:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_8.grid(row=3, column=1,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_9: Rojo Producción
+    label_rs_9 = tk.Label(frame2_rs, text="Alarma",
+                          fg="black", bg="red")
+    label_rs_9.grid(row=3, column=2,
+                    padx=0, pady=5, sticky="nsew")
+
+    # label_rs_10: + Producción
+    label_rs_10 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_10.grid(row=3, column=3,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_11: Verde Producción
+    label_rs_11 = tk.Label(frame2_rs,
+                           fg="black", bg="#4EA72E")
+    label_rs_11.grid(row=3, column=4,
+                     padx=0, pady=5, sticky="nsew")
+
+    # ----- Frame2_Row4
+    # label_rs_12: Todos
+    label_rs_12 = tk.Label(frame2_rs, text="Todos:",
+                           fg="black", bg="#F2F2F2", anchor="e")
+    label_rs_12.grid(row=4, column=1,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_13: Rojo Todos
+    label_rs_13 = tk.Label(frame2_rs, text="Alarma",
+                           fg="black", bg="red")
+    label_rs_13.grid(row=4, column=2,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_14: + Todos
+    label_rs_14 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_14.grid(row=4, column=3,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_15: Naranja Todos
+    label_rs_15 = tk.Label(frame2_rs,
+                           fg="black", bg="#FFC000")
+    label_rs_15.grid(row=4, column=4,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_16: + Todos
+    label_rs_16 = tk.Label(frame2_rs, text="+",
+                           fg="black", bg="#F2F2F2")
+    label_rs_16.grid(row=4, column=5,
+                     padx=0, pady=5, sticky="nsew")
+
+    # label_rs_17: Verde Todos
+    label_rs_17 = tk.Label(frame2_rs,
+                           fg="black", bg="#4EA72E")
+    label_rs_17.grid(row=4, column=6,
+                     padx=0, pady=5, sticky="nsew")
+
+    # ----- Frame3_Row0
+    # button_rs_4: Cerrar_root
+    button_rs_4 = tk.Button(frame3_rs, text="Cerrar", height=0, width=20,
+                            border=5, background="red", fg="white", command=closed_rs)
+    button_rs_4.grid(row=0, column=0, padx=0, pady=10)
+
+    # ---------------------------------------------------------------------------------------------
+    frame0_rs.grid(row=0, column=0, sticky="nsew")
+    frame1_rs.grid(row=1, column=0, sticky="nsew")
+    frame2_rs.grid(row=2, column=0, sticky="nsew")
+    frame3_rs.grid(row=3, column=0, sticky="nsew")
+    root_support_scale()
 
 
 def defect_root():
     """ Función que abre la ventana defectos """
-    global root
-
     # ---------- Logic root_defect
-    def settings_defect(clave):
+
+    def settings_root_rd(clave):
         """Function to load settings."""
         try:
-            with open("C:/Registro_defectos_SEHO/defect_settings.ini", "r",  encoding="utf-8") as config:
+            with open("C:/Registro_defectos_SEHO/root_settings_rd.ini", "r",  encoding="utf-8") as config:
                 for linea in config:
                     if linea.startswith(clave):
                         return linea.split("=")[1].strip()
@@ -1483,7 +1828,9 @@ def defect_root():
         escala_x = pantalla_ancho / 1920
         escala_y = pantalla_alto / 1080
         escala = min(escala_x, escala_y)
-        root_frame0.config(padx=0 * escala, pady=0 * escala)
+        frame0_rd.config(padx=0 * escala, pady=0 * escala)
+        frame1_rd.config(padx=0 * escala, pady=0 * escala)
+        frame2_rd.config(padx=0 * escala, pady=0 * escala)
 
         # Ajustar el tamaño de la fuente
         fuente_8 = int(8 * escala)
@@ -1497,10 +1844,61 @@ def defect_root():
         fuente_40 = int(40 * escala)
         fuente_50 = int(50 * escala)
         fuente_70 = int(90 * escala)
+        menu = int(12 * escala)
 
-        label_de_0.config(font=("Arial", fuente_40, "bold"))  # Título
+        # label's
+        label_rd_0.config(font=("Arial", fuente_40, "bold"))  # Título
+        label_rd_1.config(font=("Arial", menu, "bold"))  # Modelo
+        label_rd_2.config(font=("Arial", menu, "bold"))  # Fecha
+        label_rd_3.config(font=("Arial", menu, "bold"))  # Horario
 
-    # ---------- Root Defectos
+        # menu's
+        menu_rd_1.config(font=("Arial", fuente_12, "bold"), activebackground="deep sky blue",
+                         bg="#AEAEAE", fg="black", width=15)  # Modelos
+        date_rd_1.config(font=("Arial", menu, "bold"))  # Selección Fecha
+        spinbox_rd_1.config(font=("Arial", menu, "bold"))  # Hora de inicio
+        spinbox_rd_2.config(font=("Arial", menu, "bold"))  # Minuto de inicio
+        spinbox_rd_3.config(font=("Arial", menu, "bold"))  # Periodo de inicio
+        spinbox_rd_4.config(font=("Arial", menu, "bold"))  # Hora final
+        spinbox_rd_5.config(font=("Arial", menu, "bold"))  # Minuto final
+        spinbox_rd_6.config(font=("Arial", menu, "bold"))  # Periodo final
+        button_rd_1.config(font=("Arial", menu, "bold"))  # Buscar
+
+    def settings_part_numbers_rd(clave):
+        """Función para cargar defectos."""
+        try:
+            with open("C:/Registro_defectos_SEHO/models.ini", "r",  encoding="utf-8") as config:
+                for linea in config:
+                    if linea.startswith(clave):
+                        return linea.split("=")[1].strip()
+        except FileNotFoundError:
+            messagebox.showerror(
+                "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+        except ImportError as e:
+            messagebox.showerror(
+                "Error", f"Ocurrió un error al leer la configuración: {e}")
+        return None
+
+    def closed_rd():
+        """Función para cerrar root defectos"""
+        root_defect.destroy()
+
+    # ---------- Variables root_defect
+    global root
+    model1 = settings_part_numbers_rd("Part#1")
+    model2 = settings_part_numbers_rd("Part#2")
+    model3 = settings_part_numbers_rd("Part#3")
+    model4 = settings_part_numbers_rd("Part#4")
+    model5 = settings_part_numbers_rd("Part#5")
+    model6 = settings_part_numbers_rd("Part#6")
+    model7 = settings_part_numbers_rd("Part#7")
+    model8 = settings_part_numbers_rd("Part#8")
+    model9 = settings_part_numbers_rd("Part#9")
+    model10 = settings_part_numbers_rd("Part#10")
+    model11 = settings_part_numbers_rd("Part#11")
+    model12 = settings_part_numbers_rd("Part#12")
+
+   # ----- GUI root defect ------------------------------------------------------------------------------------------
     root_defect = tk.Toplevel(root)
     root_defect.attributes("-topmost", True)
     root_defect.attributes("-fullscreen", True)
@@ -1508,23 +1906,151 @@ def defect_root():
     root_defect.resizable(False, False)
     root_defect.configure(bg="#F2F2F2")
 
-    root_defect.grid_rowconfigure(0, weight=1)
+    # ----- Acomodo de Frame's
+    root_defect.grid_rowconfigure(0, weight=0)
+    root_defect.grid_rowconfigure(1, weight=0)
+    root_defect.grid_rowconfigure(2, weight=1)
     root_defect.grid_columnconfigure(0, weight=1)
+
     # ----- Frame's root_defect
-    root_frame0 = tk.Frame(root_defect, bg="#F2F2F2")
+    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=50)
+    frame1_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
+    frame2_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
 
-    root_frame0.grid_columnconfigure(0, weight=1)
-    root_frame0.grid_rowconfigure(0, weight=0)
+    # ----- Frame0
+    frame0_rd.grid_columnconfigure(0, weight=1)
+    frame0_rd.grid_columnconfigure(1, weight=1)
+    frame0_rd.grid_columnconfigure(2, weight=1)
+    frame0_rd.grid_rowconfigure(0, weight=1)
 
-    # ------------ root_frame0_Row0
-    # label_0: Titulo
-    label_de_0 = tk.Label(root_frame0, text="Defectos SEHO",
+    # ----- Frame1
+    frame1_rd.grid_columnconfigure(0, weight=0)
+    frame1_rd.grid_columnconfigure(1, weight=0)
+    frame1_rd.grid_columnconfigure(2, weight=0)
+    frame1_rd.grid_columnconfigure(3, weight=0)
+    frame1_rd.grid_columnconfigure(4, weight=0)
+    frame1_rd.grid_columnconfigure(5, weight=0)
+    frame1_rd.grid_columnconfigure(6, weight=0)
+    frame1_rd.grid_columnconfigure(7, weight=0)
+    frame1_rd.grid_columnconfigure(8, weight=0)
+    frame1_rd.grid_columnconfigure(9, weight=0)
+    frame1_rd.grid_columnconfigure(10, weight=0)
+    frame1_rd.grid_columnconfigure(11, weight=0)
+    frame1_rd.grid_rowconfigure(0, weight=1)
+    # for col in range(0, 11):
+    # frame1_rd.grid_columnconfigure(col, weight=1, uniform="cols")
+
+    # ----- Frame2
+    frame2_rd.grid_columnconfigure(0, weight=1)
+    frame2_rd.grid_rowconfigure(0, weight=1)
+
+    # ----- Frame0_Row0
+    # Cargar logo ELRAD
+    logo_elrad_rd = Image.open(settings_root_rd("LogoELRAD"))
+    logo_elrad_rd = logo_elrad_rd.resize((100, 50), Image.Resampling.LANCZOS)
+    logo_elrad_tk_rd = ImageTk.PhotoImage(logo_elrad_rd)
+
+    # Imagen ELRAD
+    label_logo_elrad_rd = tk.Label(
+        frame0_rd, image=logo_elrad_tk_rd, borderwidth=0, bg="#F2F2F2")
+    label_logo_elrad_rd.image = logo_elrad_tk_rd
+    label_logo_elrad_rd.grid(row=0, column=0, padx=0, pady=0, sticky="nw")
+
+    # label_rd_0: Titulo
+    label_rd_0 = tk.Label(frame0_rd, text="Defectos SEHO",
                           fg="black", bg="#F2F2F2")
-    label_de_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
+    label_rd_0.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
+
+    # Cargar logo SEHO
+    logo_seho_rd = Image.open(settings_root_rd("LogoSEHO"))
+    logo_seho_rd = logo_seho_rd.resize((100, 50), Image.Resampling.LANCZOS)
+    logo_seho_tk_rd = ImageTk.PhotoImage(logo_seho_rd)
+
+    # Imagen SEHO como boton de cerrado
+    boton_cerrar_rd = tk.Button(frame0_rd, image=logo_seho_tk_rd,
+                                command=closed_rd, borderwidth=0, bg="#F2F2F2")
+    boton_cerrar_rd.image = logo_seho_tk_rd
+    boton_cerrar_rd.grid(row=0, column=2, padx=0, pady=0, sticky="ne")
+
+    # ----- Frame1_Row0
+    # label_rd_1: Modelo
+    label_rd_1 = tk.Label(frame1_rd, text="Modelo:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_1.grid(row=0, column=0, padx=(10, 0), pady=0, sticky="nsew")
+
+    # menu_rd_1: Modelos
+    opcion_seleccionada_model = tk.StringVar(frame1_rd)
+    opciones_model = [model1, model2, model3, model4, model5,
+                      model6, model7, model8, model9, model10, model11, model12]
+    opcion_seleccionada_model.set(opciones_model[0])
+    menu_rd_1 = tk.OptionMenu(
+        frame1_rd, opcion_seleccionada_model, *opciones_model)
+    menu_rd_1.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_2: Fecha
+    label_rd_2 = tk.Label(frame1_rd, text="Fecha:",
+                          fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_2.grid(row=0, column=2, padx=(10, 0), pady=0, sticky="nsew")
+
+    # date_rd_1: Selección de fecha
+    date_rd_1 = DateEntry(frame1_rd, background='darkblue',
+                          foreground='#AEAEAE', borderwidth=2, date_pattern='dd/mm/yyyy', showweeknumbers=False, state='readonly', justify="center")
+    date_rd_1.grid(row=0, column=3, padx=0, pady=0,
+                   sticky="nsew")
+
+    # spinbox_rs_1: Hora de inicio
+    hora_inicio_rd = tk.StringVar(value="6")
+    spinbox_rd_1 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_inicio_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_1.grid(row=0, column=4, padx=(10, 0), pady=0, sticky="nsew")
+
+    # spinbox_rs_2: Minuto de inicio
+    minuto_inicio_rd = tk.StringVar(value="00")
+    spinbox_rd_2 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_inicio_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_2.grid(row=0, column=5, padx=0, pady=0,
+                      sticky="nsew")
+
+    # spinbox_rs_3: Periodo de inicio
+    periodo_inicio_rd = tk.StringVar(value="AM")
+    spinbox_rd_3 = tk.Spinbox(frame1_rd,  values=("AM", "PM"), textvariable=periodo_inicio_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_3.grid(row=0, column=6, padx=0, pady=0,
+                      sticky="nsew")
+
+    # label_rd_3: Horario
+    label_rd_3 = tk.Label(frame1_rd, text="<-Horario->",
+                          fg="black", bg="#F2F2F2")
+    label_rd_3.grid(row=0, column=7, padx=3, pady=0, sticky="nsew")
+
+    # spinbox_rs_4: Hora final
+    hora_final_rd = tk.StringVar(value="11")
+    spinbox_rd_4 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_final_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_4.grid(row=0, column=8, padx=0, pady=0, sticky="nsew")
+
+    # spinbox_rs_5: Minuto final
+    minuto_final_rd = tk.StringVar(value="59")
+    spinbox_rd_5 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_final_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_5.grid(row=0, column=9, padx=0, pady=0, sticky="nsew")
+
+    # spinbox_rs_6: Periodo final
+    periodo_final_rd = tk.StringVar(value="PM")
+    spinbox_rd_6 = tk.Spinbox(frame1_rd,  values=("PM", "AM"), textvariable=periodo_final_rd,
+                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_6.grid(row=0, column=10, padx=(0, 10), pady=0,
+                      sticky="nsew")
+
+    # button_rd_1: Ingeniería
+    button_rd_1 = tk.Button(frame1_rd, text="Buscar", height=0, width=20,
+                            border=3, background="deepskyblue", command=closed_rd)
+    button_rd_1.grid(row=0, column=11, padx=5, pady=0, sticky="nsew")
 
     # ---------------------------------------------------------------------------------------------
-    root_frame0.grid(row=0, column=0, sticky="nsew")
-
+    frame0_rd.grid(row=0, column=0, sticky="nsew")
+    frame1_rd.grid(row=1, column=0, sticky="nsew")
+    frame2_rd.grid(row=2, column=0, sticky="nsew")
     root_defect_scale()
 
 
@@ -1902,8 +2428,113 @@ def calcular_defectos_totales():
                 lbl.config(fg="#E7601D", bg="#FBE7DD",
                            text=texto, bd=.5, relief="ridge", justify="center")
 
+        root.after(100,  calcular_top_defecto_por_modelo)
+
     except Exception as e:
         messagebox.showerror("Error", f"Se produjo un error: {e}")
+
+
+def calcular_top_defecto_por_modelo():
+    """Función para calcular top defectos"""
+    try:
+        # --- Leer CSV ---
+        df = pd.read_csv(csv_file, encoding="utf-8")
+        df.columns = df.columns.str.strip()
+
+        df["Fecha/Hora"] = pd.to_datetime(
+            df["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S"
+        )
+
+        # --- Leer defects.ini ---
+        defect_names = []
+        with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line or "=" not in line:
+                    continue
+                _, value = line.split("=", 1)
+                defect_names.append(value.strip())
+
+        # --- Modelos ---
+        models = [settings_part_numbers(f"Part#{i}") for i in range(1, 13)]
+
+        # --- Labels ---
+        labels_top = [
+            label_141, label_142, label_143, label_144, label_145, label_146,
+            label_147, label_148, label_149, label_150, label_151, label_152
+        ]
+
+        labels_pct = [
+            label_167, label_168, label_169, label_170, label_171, label_172,
+            label_173, label_174, label_175, label_176, label_177, label_178
+        ]
+
+        labels_cantidad = [
+            label_154, label_155, label_156, label_157, label_158, label_159,
+            label_160, label_161, label_162, label_163, label_164, label_165
+        ]
+
+        # --- Fecha ---
+        date = pd.to_datetime(
+            label_179.cget("text"),
+            format="%d/%m/%Y %H:%M:%S"
+        )
+
+        # --- Horas ---
+        hora_inicio = pd.to_datetime(
+            f"{hora_inicial.get()}:{minuto_inicial.get()} {periodo_inicial.get()}",
+            format="%I:%M %p"
+        ).time()
+
+        hora_fin = pd.to_datetime(
+            f"{hora_final.get()}:{minuto_final.get()} {periodo_final.get()}",
+            format="%I:%M %p"
+        ).time()
+
+        # ==================================================
+        #   TOP DEFECTO + PORCENTAJE
+        # ==================================================
+        for i, modelo in enumerate(models):
+
+            filtro = (
+                (df["Modelo"] == modelo) &
+                (df["Fecha/Hora"].dt.date == date.date()) &
+                (df["Fecha/Hora"].dt.time.between(hora_inicio, hora_fin))
+            )
+
+            datos = df.loc[filtro, defect_names]
+
+            if datos.empty or datos.sum().sum() == 0:
+                labels_top[i].config(text="")
+                labels_pct[i].config(text="")
+                continue
+
+            suma_defectos = datos.sum()
+
+            top_defecto = suma_defectos.idxmax()
+            top_valor = int(suma_defectos.max())
+
+            total_defectos = suma_defectos.sum()
+
+            porcentaje = (top_valor / total_defectos) * 100
+
+            # Formato del porcentaje
+            if porcentaje.is_integer():
+                texto_pct = f"{porcentaje:.0f}%"
+            else:
+                texto_pct = f"{porcentaje:.2f}%"
+
+            # --- Labels ---
+            labels_top[i].config(text=f"{top_defecto}")
+
+            labels_cantidad[i].config(text=f"{top_valor}")
+
+            labels_pct[i].config(text=texto_pct)
+
+        entry_30.focus()
+
+    except Exception as e:
+        messagebox.showerror("Error", f"Error TOP defecto: {e}")
 
 
 # ------------------------------------- GUI ---------------------------------------------------------------------------
@@ -1979,6 +2610,7 @@ Frame3.grid_columnconfigure(3, weight=0)
 Frame3.grid_columnconfigure(4, weight=0)
 Frame3.grid_columnconfigure(5, weight=0)
 Frame3.grid_columnconfigure(6, weight=0)
+Frame3.grid_columnconfigure(7, weight=0)
 Frame3.grid_rowconfigure(0, weight=1)
 # ------- Frame4
 Frame4.grid_columnconfigure(0, weight=0)
@@ -2005,7 +2637,7 @@ Frame4.grid_rowconfigure(7, weight=0)
 Frame4.grid_rowconfigure(8, weight=0)
 Frame4.grid_rowconfigure(9, weight=0)
 Frame4.grid_rowconfigure(10, weight=0)
-for col in range(1, 12):
+for col in range(1, 13):
     Frame4.grid_columnconfigure(col, weight=1, uniform="cols")
 # ------- Frame5
 Frame5.grid_columnconfigure(0, weight=1)
@@ -2496,6 +3128,10 @@ spinbox_5 = tk.Spinbox(Frame3, values=("PM", "AM"), textvariable=periodo_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
 
+# button_17: Actualizar
+button_17 = tk.Button(Frame3, text="Actualizar", height=0, width=0,
+                      border=3, background="#00B050", command=calcular_defectos)
+button_17.grid(row=0, column=7, padx=2, pady=5, sticky="nsew")
 # ------------ Frame4_Row0
 # ----- Part#1
 # label_50: Numero de parte 1
@@ -3233,37 +3869,37 @@ label_178.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
 
 # ------------ Frame5_Row0
 # Label_179: Fecha/Hora
-label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="w")
+label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="sw")
 label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 
 # button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
-                      border=3, background="yellow", command=lambda: defect_root())
+                      border=3, background="yellow", command=defect_root)
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
-                      border=3, background="red")
+                      border=3, background="red", command=support_root)
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 
 # button_14: Parámetros
 button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
-                      border=3, background="#D86DCD", command=lambda: root_parametros())
+                      border=3, background="#D86DCD", command=root_parametros)
 button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
 
 # button_15: Registros
 button_15 = tk.Button(Frame5, text="Registros", height=0, width=0,
-                      border=3, background="#0070C0", command=lambda: root_registros())
+                      border=3, background="#0070C0", command=lambda: root_registros(actualizar_principal))
 button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
 
 # button_16: LogFile
 button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
-                      border=3, background="#00B050", command=lambda: root_logfile())
+                      border=3, background="#00B050", command=lambda: root_logfile(actualizar_principal))
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
 
 # Label_180: Rev
 label_180 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
-                     fg="black", bg="#F2F2F2", anchor="e")
+                     fg="black", bg="#F2F2F2", anchor="se")
 label_180.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------

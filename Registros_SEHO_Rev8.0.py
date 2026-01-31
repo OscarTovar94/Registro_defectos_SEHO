@@ -2103,31 +2103,91 @@ part_10 = settings_part_numbers("Part#10")
 part_11 = settings_part_numbers("Part#11")
 part_12 = settings_part_numbers("Part#12")
 # ------------------------------------- LogFile -----------------------------------------------------------------------
-# Crear csv_file si no existe
-if not os.path.isfile(csv_file):
-    with open(csv_file, mode='w', newline='',  encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow([
-            'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
-            'Wave1', 'Wave2', 'Flux', 'Conveyor',
-            defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
-            defect9, defect10, defect11, defect12, defect13, defect14, defect15,
-            defect16, defect17, defect18, defect19, defect20, defect21, defect22,
-            defect23, defect24, defect25, defect26, defect27, defect28, defect29, defect30
-        ])
 
-# Crear csv_file2 si no existe
-if not os.path.isfile(csv_file2):
-    with open(csv_file2, mode='w', newline='',  encoding="utf-8") as file:
-        writer = csv.writer(file)
-        writer.writerow([
-            'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
-            'Wave1', 'Wave2', 'Flux', 'Conveyor',
-            defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
-            defect9, defect10, defect11, defect12, defect13, defect14, defect15,
-            defect16, defect17, defect18, defect19, defect20, defect21, defect22,
-            defect23, defect24, defect25, defect26, defect27, defect28, defect29, defect30
-        ])
+# Crear csv_file si no existe y actualizar encabezado
+encabezados = [
+    'Modelo', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
+    'Wave1', 'Wave2', 'Flux', 'Conveyor',
+    defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
+    defect9, defect10, defect11, defect12, defect13, defect14, defect15,
+    defect16, defect17, defect18, defect19, defect20, defect21, defect22,
+    defect23, defect24, defect25, defect26, defect27, defect28, defect29, defect30
+]
+
+
+def asegurar_csv_con_encabezado(csv_file, encabezado_nuevo):
+    """Crea el CSV si no existe y actualiza el encabezado si cambió"""
+
+    if not os.path.isfile(csv_file):
+        os.makedirs(os.path.dirname(csv_file), exist_ok=True)
+
+        with open(csv_file, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+        return
+
+    # Leer todo el archivo existente
+    with open(csv_file, mode='r', newline='', encoding="utf-8") as file:
+        reader = csv.reader(file)
+        filas = list(reader)
+
+    if not filas:
+        with open(csv_file, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+        return
+
+    encabezado_actual = filas[0]
+
+    if encabezado_actual != encabezado_nuevo:
+        datos = filas[1:]  # conservar registros existentes
+
+        with open(csv_file, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+            writer.writerows(datos)
+
+
+asegurar_csv_con_encabezado(csv_file, encabezados)
+
+# Crear csv_file2 si no existe y actualizar encabezado
+
+
+def asegurar_csv2_con_encabezado(csv_file2, encabezado_nuevo):
+    """Crea el CSV si no existe y actualiza el encabezado si cambió"""
+
+    if not os.path.isfile(csv_file2):
+        os.makedirs(os.path.dirname(csv_file2), exist_ok=True)
+
+        with open(csv_file2, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+        return
+
+    # Leer todo el archivo existente
+    with open(csv_file2, mode='r', newline='', encoding="utf-8") as file:
+        reader = csv.reader(file)
+        filas = list(reader)
+
+    if not filas:
+        with open(csv_file2, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+        return
+
+    encabezado_actual = filas[0]
+
+    if encabezado_actual != encabezado_nuevo:
+
+        datos = filas[1:]  # conservar registros existentes
+
+        with open(csv_file2, mode='w', newline='', encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerow(encabezado_nuevo)
+            writer.writerows(datos)
+
+
+asegurar_csv2_con_encabezado(csv_file2, encabezados)
 
 
 def guardar_datos(event=None):
@@ -2447,7 +2507,7 @@ def calcular_top_defecto_por_modelo():
 
         # --- Leer defects.ini ---
         defect_names = []
-        with open("defects.ini", encoding="utf-8") as f:
+        with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
                 if not line or "=" not in line:
