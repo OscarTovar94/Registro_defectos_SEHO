@@ -11,6 +11,9 @@ import pandas as pd
 import chardet
 from tkcalendar import DateEntry
 import configparser
+import serial
+import time
+import sys
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
@@ -86,7 +89,9 @@ def toggle_minimize():
 
 def cerrar_ventana():
     """Function closed root."""
+    enviar_comando_rb(b"H\r")
     root.destroy()
+    sys.exit()
 
 
 def root_scale():
@@ -1475,7 +1480,7 @@ def actualizar_principal():
     calcular_defectos()
 
 
-def support_root():
+def support_root(funcion_andon):
     """Función para abrir ventana de solicitud de soporte (Ingeniería, Calidad, Producción)"""
     # ----- Variables root support
     global root
@@ -1546,6 +1551,7 @@ def support_root():
     def closed_rs():
         """Función para cerrar root soporte"""
         root_support.destroy()
+        funcion_andon("X", root_support)
 
     def ingenieria():
         """Función para solicitar soporte de ingeniería"""
@@ -1555,9 +1561,13 @@ def support_root():
             button_rs_1.configure(bg="#FFC000")
             button_rs_2.configure(bg="green")
             button_rs_3.configure(bg="#00B0F0")
+            # funcion_andon("H", root_support)
+            # time.sleep(0.3)
+            funcion_andon("D", root_support)
         else:
             # Cambiar a rojo
             button_rs_0.configure(bg="red")
+            funcion_andon("H", root_support)
 
     def calidad():
         """Función para solicitar soporte de calidad"""
@@ -1567,9 +1577,14 @@ def support_root():
             button_rs_0.configure(bg="red")
             button_rs_2.configure(bg="green")
             button_rs_3.configure(bg="#00B0F0")
+            # funcion_andon("H", root_support)
+            # time.sleep(0.3)
+            funcion_andon("E", root_support)
+
         else:
             # Cambiar a rojo
             button_rs_1.configure(bg="#FFC000")
+            funcion_andon("H", root_support)
 
     def produccion():
         """Función para solicitar soporte de producción"""
@@ -1579,9 +1594,14 @@ def support_root():
             button_rs_0.configure(bg="red")
             button_rs_1.configure(bg="#FFC000")
             button_rs_3.configure(bg="#00B0F0")
+            # funcion_andon("H", root_support)
+            # time.sleep(0.3)
+            funcion_andon("F", root_support)
+
         else:
             # Cambiar a rojo
             button_rs_2.configure(bg="green")
+            funcion_andon("H", root_support)
 
     def todos():
         """Función para solicitar soporte de todos"""
@@ -1591,9 +1611,13 @@ def support_root():
             button_rs_0.configure(bg="red")
             button_rs_1.configure(bg="#FFC000")
             button_rs_2.configure(bg="green")
+            # funcion_andon("H", root_support)
+            # time.sleep(0.3)
+            funcion_andon("G", root_support)
         else:
             # Cambiar a rojo
             button_rs_3.configure(bg="#00B0F0")
+            funcion_andon("H", root_support)
 
     # ----- GUI root support ------------------------------------------------------------------------------------------
     root_support = tk.Toplevel(root)
@@ -2387,7 +2411,6 @@ def calcular_defectos():
             else:  # fpy == fpy_model
                 lbl.config(fg="#E7601D", bg="#FBE7DD",
                            text=texto, bd=.5, relief="ridge", justify="center")
-
         root.after(300, calcular_defectos_totales)
 
     except Exception as e:
@@ -2494,6 +2517,11 @@ def calcular_defectos_totales():
         messagebox.showerror("Error", f"Se produjo un error: {e}")
 
 
+andon_true = settings_root("ANDON")
+# Convertir a booleano
+andon_true = True if str(andon_true).lower() == "true" else False
+
+
 def calcular_top_defecto_por_modelo():
     """Función para calcular top defectos"""
     try:
@@ -2591,10 +2619,130 @@ def calcular_top_defecto_por_modelo():
 
             labels_pct[i].config(text=texto_pct)
 
+        root.after(100, fpy_andon)
         entry_30.focus()
 
     except Exception as e:
         messagebox.showerror("Error", f"Error TOP defecto: {e}")
+
+# ------------------------------------- ANDON -------------------------------------------------------------------------
+
+
+com_andon = settings_root("COM_ANDON")
+
+
+def conectar_puerto_serial_rb():
+    """Función para conectar puerto de Raspberry pi pico"""
+    if not andon_true:
+        return None
+    try:
+        puerto_serial_rb = serial.Serial(
+            com_andon, baudrate=115200, stopbits=1, parity='N', bytesize=8, timeout=1)
+        time.sleep(2)
+        return puerto_serial_rb
+    except serial.SerialException as e:
+        messagebox.showerror(
+            "Error de conexión con sistema ANDON", f"{e}")
+        cerrar_ventana()
+
+        return None
+
+
+puerto_serial = conectar_puerto_serial_rb()
+
+
+def enviar_comando_rb(comando):
+    """Función para enviar comando a Raspberry pi pico"""
+    global puerto_serial
+
+    if not andon_true:
+        return
+
+    if puerto_serial and puerto_serial.is_open:
+        try:
+            puerto_serial.write(comando)
+        except serial.SerialException as e:
+            messagebox.showerror(
+                "Error de comunicación con sistema ANDON", f"{e}")
+    else:
+        reconectar()
+
+
+def reconectar():
+    """Función para reconectar Raspberry en caso de perdida de conexión"""
+    global puerto_serial
+
+    if not andon_true:
+        return
+
+    try:
+        if puerto_serial and puerto_serial.is_open:
+            puerto_serial.close()
+    except:
+        pass
+
+    puerto_serial = conectar_puerto_serial_rb()
+
+
+def fpy_andon():
+    """Función para encender ANDON de acuerdo al FPY más bajo válido"""
+    if not andon_true:
+        return
+
+    fpy_model = float(settings_limits("FPY_MODEL"))
+
+    labels_fpy = [label_89, label_90, label_91, label_92, label_93,
+                  label_94, label_95, label_96, label_97, label_98, label_99, label_100]
+
+    valores_validos = []
+
+    for lbl in labels_fpy:
+        if lbl is None:
+            continue
+
+        texto = lbl.cget("text").strip().replace("%", "")
+
+        if texto == "":
+            continue  # 🔹 Vacío = ignorar por ahora
+
+        try:
+            numero = float(texto)
+            valores_validos.append(numero)
+        except ValueError:
+            continue
+
+    # 🔴 CASO 1: Todos están vacíos
+    if not valores_validos:
+        enviar_comando_rb(b"A\r")
+        return
+
+    # 🔹 Evaluar solo los que tienen dato
+    valor_minimo = min(valores_validos)
+
+    # ---- Decisión ANDON ----
+    if valor_minimo > fpy_model:
+        enviar_comando_rb(b"A\r")
+    elif valor_minimo < fpy_model:
+        enviar_comando_rb(b"C\r")
+    else:
+        enviar_comando_rb(b"B\r")
+
+
+def soporte_andon(comando, ventana_support=None):
+    """Envía comando al sistema ANDON"""
+    if not andon_true:
+        messagebox.showinfo("ANDON", "Sistema ANDON DESACTIVADO")
+
+        if ventana_support is not None:
+            ventana_support.destroy()   # 🔥 Cierra la ventana support
+
+        return
+
+    if comando == "X":
+        root.after(200, fpy_andon)
+    else:
+        mensaje = f"{comando}\r".encode()
+        enviar_comando_rb(mensaje)
 
 
 # ------------------------------------- GUI ---------------------------------------------------------------------------
@@ -3939,7 +4087,7 @@ button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
 
 # button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
-                      border=3, background="red", command=support_root)
+                      border=3, background="red", command=lambda: support_root(soporte_andon))
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 
 # button_14: Parámetros
