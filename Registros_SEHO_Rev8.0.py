@@ -6,14 +6,15 @@ import csv
 import os
 from datetime import datetime
 from tkinter import ttk
+import time
+import sys
+import configparser
 from PIL import Image, ImageTk
 import pandas as pd
 import chardet
 from tkcalendar import DateEntry
-import configparser
 import serial
-import time
-import sys
+
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 
