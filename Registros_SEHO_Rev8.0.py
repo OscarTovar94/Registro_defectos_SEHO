@@ -1856,6 +1856,7 @@ def defect_root():
         frame0_rd.config(padx=0 * escala, pady=0 * escala)
         frame1_rd.config(padx=0 * escala, pady=0 * escala)
         frame2_rd.config(padx=0 * escala, pady=0 * escala)
+        frame3_rd.config(padx=0 * escala, pady=0 * escala)
 
         # Ajustar el tamaño de la fuente
         fuente_8 = int(8 * escala)
@@ -1870,12 +1871,139 @@ def defect_root():
         fuente_50 = int(50 * escala)
         fuente_70 = int(90 * escala)
         menu = int(12 * escala)
+        defectos_menu = int(14 * escala)
+        defectos = int(10 * escala)
 
         # label's
         label_rd_0.config(font=("Arial", fuente_40, "bold"))  # Título
         label_rd_1.config(font=("Arial", menu, "bold"))  # Modelo
         label_rd_2.config(font=("Arial", menu, "bold"))  # Fecha
         label_rd_3.config(font=("Arial", menu, "bold"))  # Horario
+        label_rd_4.config(font=("Arial", defectos_menu, "bold"),
+                          bd=1,  relief="ridge")  # Defectos
+        label_rd_5.config(font=("Arial", defectos_menu, "bold"),
+                          bd=1,  relief="ridge")  # Cantidad
+        label_rd_6.config(font=("Arial", defectos, "bold"),
+                          bd=1,  relief="ridge")  # Defecto1
+        label_rd_7.config(font=("Arial", defectos, "bold"),
+                          bd=1,  relief="ridge")  # Defecto2
+        label_rd_8.config(font=("Arial", defectos, "bold"),
+                          bd=1,  relief="ridge")  # Defecto3
+        label_rd_9.config(font=("Arial", defectos, "bold"),
+                          bd=1,  relief="ridge")  # Defecto4
+        label_rd_10.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto5
+        label_rd_11.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto6
+        label_rd_12.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto7
+        label_rd_13.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto8
+        label_rd_14.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto9
+        label_rd_15.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto10
+        label_rd_16.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto11
+        label_rd_17.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto12
+        label_rd_18.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto13
+        label_rd_19.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto14
+        label_rd_20.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto15
+        label_rd_21.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto16
+        label_rd_22.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto17
+        label_rd_23.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto18
+        label_rd_24.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto19
+        label_rd_25.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto20
+        label_rd_26.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto21
+        label_rd_27.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto22
+        label_rd_28.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto23
+        label_rd_29.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto24
+        label_rd_30.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto25
+        label_rd_31.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto26
+        label_rd_32.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto27
+        label_rd_33.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto28
+        label_rd_34.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto29
+        label_rd_35.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Defecto30
+        label_rd_36.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto1
+        label_rd_37.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto2
+        label_rd_38.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto3
+        label_rd_39.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto4
+        label_rd_40.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto5
+        label_rd_41.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto6
+        label_rd_42.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto7
+        label_rd_43.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto8
+        label_rd_44.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto9
+        label_rd_45.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto10
+        label_rd_46.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto11
+        label_rd_47.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto12
+        label_rd_48.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto13
+        label_rd_49.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto14
+        label_rd_50.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto15
+        label_rd_51.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto16
+        label_rd_52.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto17
+        label_rd_53.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto18
+        label_rd_54.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto19
+        label_rd_55.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto20
+        label_rd_56.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto21
+        label_rd_57.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto22
+        label_rd_58.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto23
+        label_rd_59.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto24
+        label_rd_60.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto25
+        label_rd_61.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto26
+        label_rd_62.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto27
+        label_rd_63.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto28
+        label_rd_64.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto29
+        label_rd_65.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto30
+        label_rd_66.config(font=("Arial", fuente_40, "bold"))
 
         # menu's
         menu_rd_1.config(font=("Arial", fuente_12, "bold"), activebackground="deep sky blue",
@@ -1934,13 +2062,18 @@ def defect_root():
     # ----- Acomodo de Frame's
     root_defect.grid_rowconfigure(0, weight=0)
     root_defect.grid_rowconfigure(1, weight=0)
-    root_defect.grid_rowconfigure(2, weight=1)
-    root_defect.grid_columnconfigure(0, weight=1)
+    root_defect.grid_rowconfigure(2, weight=0)
+    root_defect.grid_rowconfigure(3, weight=1)
+    # root_defect.grid_rowconfigure(3, weight=1)
+    root_defect.grid_columnconfigure(0, weight=0)
+    root_defect.grid_columnconfigure(1, weight=1)
 
     # ----- Frame's root_defect
-    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=50)
+    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
     frame1_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
     frame2_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
+    frame3_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
+    frame4_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
 
     # ----- Frame0
     frame0_rd.grid_columnconfigure(0, weight=1)
@@ -1967,7 +2100,57 @@ def defect_root():
 
     # ----- Frame2
     frame2_rd.grid_columnconfigure(0, weight=1)
+    frame2_rd.grid_columnconfigure(1, weight=1)
     frame2_rd.grid_rowconfigure(0, weight=1)
+    frame2_rd.grid_rowconfigure(1, weight=1)
+    frame2_rd.grid_rowconfigure(2, weight=1)
+    frame2_rd.grid_rowconfigure(3, weight=1)
+    frame2_rd.grid_rowconfigure(4, weight=1)
+    frame2_rd.grid_rowconfigure(5, weight=1)
+    frame2_rd.grid_rowconfigure(6, weight=1)
+    frame2_rd.grid_rowconfigure(7, weight=1)
+    frame2_rd.grid_rowconfigure(8, weight=1)
+    frame2_rd.grid_rowconfigure(9, weight=1)
+    frame2_rd.grid_rowconfigure(10, weight=1)
+    frame2_rd.grid_rowconfigure(11, weight=1)
+    frame2_rd.grid_rowconfigure(12, weight=1)
+    frame2_rd.grid_rowconfigure(13, weight=1)
+    frame2_rd.grid_rowconfigure(14, weight=1)
+    frame2_rd.grid_rowconfigure(15, weight=1)
+    frame2_rd.grid_rowconfigure(16, weight=1)
+    frame2_rd.grid_rowconfigure(17, weight=1)
+    frame2_rd.grid_rowconfigure(18, weight=1)
+    frame2_rd.grid_rowconfigure(19, weight=1)
+    frame2_rd.grid_rowconfigure(20, weight=1)
+    frame2_rd.grid_rowconfigure(21, weight=1)
+    frame2_rd.grid_rowconfigure(22, weight=1)
+    frame2_rd.grid_rowconfigure(23, weight=1)
+    frame2_rd.grid_rowconfigure(24, weight=1)
+    frame2_rd.grid_rowconfigure(25, weight=1)
+    frame2_rd.grid_rowconfigure(26, weight=1)
+    frame2_rd.grid_rowconfigure(27, weight=1)
+    frame2_rd.grid_rowconfigure(28, weight=1)
+    frame2_rd.grid_rowconfigure(29, weight=1)
+    frame2_rd.grid_rowconfigure(30, weight=1)
+
+    # ----- Frame3
+    frame3_rd.grid_columnconfigure(0, weight=1)
+    frame3_rd.grid_columnconfigure(1, weight=1)
+    frame3_rd.grid_columnconfigure(2, weight=1)
+    frame3_rd.grid_columnconfigure(3, weight=1)
+    frame3_rd.grid_columnconfigure(4, weight=1)
+    frame3_rd.grid_columnconfigure(5, weight=1)
+    frame3_rd.grid_columnconfigure(6, weight=1)
+    frame3_rd.grid_columnconfigure(7, weight=1)
+    frame3_rd.grid_columnconfigure(8, weight=1)
+    frame3_rd.grid_rowconfigure(0, weight=1)
+    frame3_rd.grid_rowconfigure(1, weight=1)
+    frame3_rd.grid_rowconfigure(2, weight=1)
+    frame3_rd.grid_rowconfigure(3, weight=1)
+
+    # ----- Frame4
+    frame4_rd.grid_columnconfigure(0, weight=1)
+    frame4_rd.grid_rowconfigure(0, weight=1)
 
     # ----- Frame0_Row0
     # Cargar logo ELRAD
@@ -2072,10 +2255,287 @@ def defect_root():
                             border=3, background="deepskyblue", command=closed_rd)
     button_rd_1.grid(row=0, column=11, padx=5, pady=0, sticky="nsew")
 
+    # ----- Frame2_Row0
+    # label_rd_4: Defectos
+    label_rd_4 = tk.Label(frame2_rd, text="Defectos",
+                          fg="white", bg="#156082")
+    label_rd_4.grid(row=0, column=0, padx=0, pady=(20, 0), sticky="nsew")
+    # label_rd_5: Cantidad
+    label_rd_5 = tk.Label(frame2_rd, text="Cantidad",
+                          fg="white", bg="#156082")
+    label_rd_5.grid(row=0, column=1, padx=0, pady=(20, 0), sticky="nsew")
+
+    # ----- Frame2_Defectos
+    # label_rd_6: defect1
+    label_rd_6 = tk.Label(frame2_rd, text=defect1,
+                          fg="black", bg="#C0E6F5")
+    label_rd_6.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_7: defect2
+    label_rd_7 = tk.Label(frame2_rd, text=defect2,
+                          fg="black", bg="white")
+    label_rd_7.grid(row=2, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_8: defect3
+    label_rd_8 = tk.Label(frame2_rd, text=defect3,
+                          fg="black", bg="#C0E6F5")
+    label_rd_8.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_9: defect4
+    label_rd_9 = tk.Label(frame2_rd, text=defect4,
+                          fg="black", bg="white")
+    label_rd_9.grid(row=4, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_10: defect5
+    label_rd_10 = tk.Label(frame2_rd, text=defect5,
+                           fg="black", bg="#C0E6F5")
+    label_rd_10.grid(row=5, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_11: defect6
+    label_rd_11 = tk.Label(frame2_rd, text=defect6,
+                           fg="black", bg="white")
+    label_rd_11.grid(row=6, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_12: defect7
+    label_rd_12 = tk.Label(frame2_rd, text=defect7,
+                           fg="black", bg="#C0E6F5")
+    label_rd_12.grid(row=7, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_13: defect8
+    label_rd_13 = tk.Label(frame2_rd, text=defect8,
+                           fg="black", bg="white")
+    label_rd_13.grid(row=8, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_14: defect9
+    label_rd_14 = tk.Label(frame2_rd, text=defect9,
+                           fg="black", bg="#C0E6F5")
+    label_rd_14.grid(row=9, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_15: defect10
+    label_rd_15 = tk.Label(frame2_rd, text=defect10,
+                           fg="black", bg="white")
+    label_rd_15.grid(row=10, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_16: defect11
+    label_rd_16 = tk.Label(frame2_rd, text=defect11,
+                           fg="black", bg="#C0E6F5")
+    label_rd_16.grid(row=11, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_17: defect12
+    label_rd_17 = tk.Label(frame2_rd, text=defect12,
+                           fg="black", bg="white")
+    label_rd_17.grid(row=12, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_18: defect13
+    label_rd_18 = tk.Label(frame2_rd, text=defect13,
+                           fg="black", bg="#C0E6F5")
+    label_rd_18.grid(row=13, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_19: defect14
+    label_rd_19 = tk.Label(frame2_rd, text=defect14,
+                           fg="black", bg="white")
+    label_rd_19.grid(row=14, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_20: defect15
+    label_rd_20 = tk.Label(frame2_rd, text=defect15,
+                           fg="black", bg="#C0E6F5")
+    label_rd_20.grid(row=15, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_21: defect16
+    label_rd_21 = tk.Label(frame2_rd, text=defect16,
+                           fg="black", bg="white")
+    label_rd_21.grid(row=16, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_22: defect17
+    label_rd_22 = tk.Label(frame2_rd, text=defect17,
+                           fg="black", bg="#C0E6F5")
+    label_rd_22.grid(row=17, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_23: defect18
+    label_rd_23 = tk.Label(frame2_rd, text=defect18,
+                           fg="black", bg="white")
+    label_rd_23.grid(row=18, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_24: defect19
+    label_rd_24 = tk.Label(frame2_rd, text=defect19,
+                           fg="black", bg="#C0E6F5")
+    label_rd_24.grid(row=19, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_25: defect20
+    label_rd_25 = tk.Label(frame2_rd, text=defect20,
+                           fg="black", bg="white")
+    label_rd_25.grid(row=20, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_26: defect21
+    label_rd_26 = tk.Label(frame2_rd, text=defect21,
+                           fg="black", bg="#C0E6F5")
+    label_rd_26.grid(row=21, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_27: defect22
+    label_rd_27 = tk.Label(frame2_rd, text=defect22,
+                           fg="black", bg="white")
+    label_rd_27.grid(row=22, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_28: defect23
+    label_rd_28 = tk.Label(frame2_rd, text=defect23,
+                           fg="black", bg="#C0E6F5")
+    label_rd_28.grid(row=23, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_29: defect24
+    label_rd_29 = tk.Label(frame2_rd, text=defect24,
+                           fg="black", bg="white")
+    label_rd_29.grid(row=24, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_30: defect25
+    label_rd_30 = tk.Label(frame2_rd, text=defect25,
+                           fg="black", bg="#C0E6F5")
+    label_rd_30.grid(row=25, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_31: defect26
+    label_rd_31 = tk.Label(frame2_rd, text=defect26,
+                           fg="black", bg="white")
+    label_rd_31.grid(row=26, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_32: defect27
+    label_rd_32 = tk.Label(frame2_rd, text=defect27,
+                           fg="black", bg="#C0E6F5")
+    label_rd_32.grid(row=27, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_33: defect28
+    label_rd_33 = tk.Label(frame2_rd, text=defect28,
+                           fg="black", bg="white")
+    label_rd_33.grid(row=28, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_34: defect29
+    label_rd_34 = tk.Label(frame2_rd, text=defect29,
+                           fg="black", bg="#C0E6F5")
+    label_rd_34.grid(row=29, column=0, padx=0, pady=0, sticky="nsew")
+    # label_rd_35: defect30
+    label_rd_35 = tk.Label(frame2_rd, text=defect30,
+                           fg="black", bg="white")
+    label_rd_35.grid(row=30, column=0, padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame2_Cantidad
+    # label_rd_36: Cantidad_defect1
+    label_rd_36 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_36.grid(row=1, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_37: Cantidad_defect2
+    label_rd_37 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_37.grid(row=2, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_38: Cantidad_defect3
+    label_rd_38 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_38.grid(row=3, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_39: Cantidad_defect4
+    label_rd_39 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_39.grid(row=4, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_40: Cantidad_defect5
+    label_rd_40 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_40.grid(row=5, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_41: Cantidad_defect6
+    label_rd_41 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_41.grid(row=6, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_42: Cantidad_defect7
+    label_rd_42 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_42.grid(row=7, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_43: Cantidad_defect8
+    label_rd_43 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_43.grid(row=8, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_44: Cantidad_defect9
+    label_rd_44 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_44.grid(row=9, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_45: Cantidad_defect10
+    label_rd_45 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_45.grid(row=10, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_46: Cantidad_defect11
+    label_rd_46 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_46.grid(row=11, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_47: Cantidad_defect12
+    label_rd_47 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_47.grid(row=12, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_48: Cantidad_defect13
+    label_rd_48 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_48.grid(row=13, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_49: Cantidad_defect14
+    label_rd_49 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_49.grid(row=14, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_50: Cantidad_defect15
+    label_rd_50 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_50.grid(row=15, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_51: Cantidad_defect16
+    label_rd_51 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_51.grid(row=16, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_52: Cantidad_defect17
+    label_rd_52 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_52.grid(row=17, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_53: Cantidad_defect18
+    label_rd_53 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_53.grid(row=18, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_54: Cantidad_defect19
+    label_rd_54 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_54.grid(row=19, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_55: Cantidad_defect20
+    label_rd_55 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_55.grid(row=20, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_56: Cantidad_defect21
+    label_rd_56 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_56.grid(row=21, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_57: Cantidad_defect22
+    label_rd_57 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_57.grid(row=22, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_58: Cantidad_defect23
+    label_rd_58 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_58.grid(row=23, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_59: Cantidad_defect24
+    label_rd_59 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_59.grid(row=24, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_60: Cantidad_defect25
+    label_rd_60 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_60.grid(row=25, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_61: Cantidad_defect26
+    label_rd_61 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_61.grid(row=26, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_62: Cantidad_defect27
+    label_rd_62 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_62.grid(row=27, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_63: Cantidad_defect28
+    label_rd_63 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_63.grid(row=28, column=1, padx=0, pady=0, sticky="nsew")
+
+    # label_rd_64: Cantidad_defect29
+    label_rd_64 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="#C0E6F5")
+    label_rd_64.grid(row=29, column=1, padx=0, pady=0, sticky="nsew")
+    # label_rd_65: Cantidad_defect30
+    label_rd_65 = tk.Label(frame2_rd, text="0",
+                           fg="black", bg="white")
+    label_rd_65.grid(row=30, column=1, padx=0, pady=0, sticky="nsew")
+
+    # ----- Frame3
+
+    label_rd_66 = tk.Label(frame3_rd, textvariable=opcion_seleccionada_model,
+                           fg="black", bg="#F2CEEF")
+    label_rd_66.grid(row=0, column=0, columnspan=9,
+                     padx=50, pady=(20, 0), sticky="nsew")
+
     # ---------------------------------------------------------------------------------------------
-    frame0_rd.grid(row=0, column=0, sticky="nsew")
-    frame1_rd.grid(row=1, column=0, sticky="nsew")
-    frame2_rd.grid(row=2, column=0, sticky="nsew")
+    frame0_rd.grid(row=0, column=0, sticky="nsew", columnspan=2)
+    frame1_rd.grid(row=1, column=0, sticky="nsew", columnspan=2)
+    frame2_rd.grid(row=2, column=0, sticky="nsew", rowspan=2)
+    frame3_rd.grid(row=2, column=1, sticky="nsew")
+    frame4_rd.grid(row=3, column=1, sticky="nsew")
     root_defect_scale()
 
 
