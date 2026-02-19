@@ -1857,6 +1857,7 @@ def defect_root():
         frame1_rd.config(padx=0 * escala, pady=0 * escala)
         frame2_rd.config(padx=0 * escala, pady=0 * escala)
         frame3_rd.config(padx=0 * escala, pady=0 * escala)
+        frame4_rd.config(padx=0 * escala, pady=0 * escala)
 
         # Ajustar el tamaño de la fuente
         fuente_8 = int(8 * escala)
@@ -2003,7 +2004,12 @@ def defect_root():
                            bd=1,  relief="ridge")  # Cantidad_defecto29
         label_rd_65.config(font=("Arial", defectos, "bold"),
                            bd=1,  relief="ridge")  # Cantidad_defecto30
-        label_rd_66.config(font=("Arial", fuente_40, "bold"))
+        label_rd_66.config(font=("Arial", fuente_30, "bold"))
+        label_rd_67.config(font=("Arial", fuente_22, "bold"))
+        label_rd_68.config(font=("Arial", fuente_22, "bold"))
+        label_rd_69.config(font=("Arial", fuente_22, "bold"))
+        label_rd_70.config(font=("Arial", fuente_22, "bold"))
+        label_rd_71.config(font=("Arial", fuente_22, "bold"))
 
         # menu's
         menu_rd_1.config(font=("Arial", fuente_12, "bold"), activebackground="deep sky blue",
@@ -2140,9 +2146,6 @@ def defect_root():
     frame3_rd.grid_columnconfigure(3, weight=1)
     frame3_rd.grid_columnconfigure(4, weight=1)
     frame3_rd.grid_columnconfigure(5, weight=1)
-    frame3_rd.grid_columnconfigure(6, weight=1)
-    frame3_rd.grid_columnconfigure(7, weight=1)
-    frame3_rd.grid_columnconfigure(8, weight=1)
     frame3_rd.grid_rowconfigure(0, weight=1)
     frame3_rd.grid_rowconfigure(1, weight=1)
     frame3_rd.grid_rowconfigure(2, weight=1)
@@ -2527,8 +2530,27 @@ def defect_root():
 
     label_rd_66 = tk.Label(frame3_rd, textvariable=opcion_seleccionada_model,
                            fg="black", bg="#F2CEEF")
-    label_rd_66.grid(row=0, column=0, columnspan=9,
+    label_rd_66.grid(row=0, column=0, columnspan=6,
                      padx=50, pady=(20, 0), sticky="nsew")
+
+    label_rd_67 = tk.Label(frame3_rd, text="Defectos",
+                           fg="black", bg="#FFFFC9")
+    label_rd_67.grid(row=1, column=0,
+                     padx=(50, 0), pady=(5, 0), sticky="nsew")
+    label_rd_68 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_68.grid(row=1, column=1, padx=0, pady=(5, 0), sticky="nsew")
+
+    label_rd_69 = tk.Label(
+        frame3_rd, text="Top3 Defectos", fg="black", bg="#CAEDFB")
+    label_rd_69.grid(row=1, column=3, padx=0, pady=(5, 0), sticky="nsew")
+
+    label_rd_70 = tk.Label(
+        frame3_rd, text="Cantidad", fg="black", bg="#CAEDFB")
+    label_rd_70.grid(row=1, column=4, padx=0, pady=(5, 0), sticky="nsew")
+
+    label_rd_71 = tk.Label(
+        frame3_rd, text="%", fg="black", bg="#CAEDFB")
+    label_rd_71.grid(row=1, column=5, padx=(0, 50), pady=(5, 0), sticky="nsew")
 
     # ---------------------------------------------------------------------------------------------
     frame0_rd.grid(row=0, column=0, sticky="nsew", columnspan=2)
