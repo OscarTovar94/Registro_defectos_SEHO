@@ -14,11 +14,11 @@ import pandas as pd
 import chardet
 from tkcalendar import DateEntry
 import serial
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
-
-
 def settings_root(clave):
     """Function to load settings."""
     try:
@@ -33,6 +33,97 @@ def settings_root(clave):
         messagebox.showerror(
             "Error", f"Ocurrió un error al leer la configuración: {e}")
     return None
+
+# Ruta del segundo archivo CSV
+csv_file = settings_root("LogFile")
+csv_file2 = settings_root("Registro")
+
+# ==============================
+# CACHE GLOBAL MULTI CSV
+# ==============================
+
+df_cache = None
+defect_names_cache = None
+
+csv_files = [csv_file, csv_file2]
+
+csv_cache_mtime = {}
+
+def cargar_datos_cache():
+
+    global df_cache
+    global defect_names_cache
+    global csv_cache_mtime
+
+
+    recargar = False
+
+
+    # ==============================
+    # VERIFICAR SI CAMBIO ALGUN CSV
+    # ==============================
+
+    for file in csv_files:
+
+        mtime = os.path.getmtime(file)
+
+        if file not in csv_cache_mtime or csv_cache_mtime[file] != mtime:
+
+            csv_cache_mtime[file] = mtime
+
+            recargar = True
+
+
+    # ==============================
+    # CARGAR CSV SI CAMBIO
+    # ==============================
+
+    if df_cache is None or recargar:
+
+        lista_df = []
+
+        for file in csv_files:
+
+            df_temp = pd.read_csv(file, encoding="utf-8")
+
+            df_temp.columns = df_temp.columns.str.strip()
+
+            df_temp["Fecha/Hora"] = pd.to_datetime(
+                df_temp["Fecha/Hora"],
+                format="%d/%m/%Y %H:%M:%S"
+            )
+
+            lista_df.append(df_temp)
+
+
+        # unir todos
+
+        df_cache = pd.concat(lista_df, ignore_index=True)
+
+
+    # ==============================
+    # DEFECTOS
+    # ==============================
+
+    if defect_names_cache is None:
+
+        defect_names_cache = []
+
+        with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
+
+            for line in f:
+
+                line = line.strip()
+
+                if not line or "=" not in line:
+                    continue
+
+                _, value = line.split("=", 1)
+
+                defect_names_cache.append(value.strip())
+
+
+    return df_cache, defect_names_cache
 
 
 def settings_defects(clave):
@@ -2002,14 +2093,35 @@ def defect_root():
                            bd=1,  relief="ridge")  # Cantidad_defecto28
         label_rd_64.config(font=("Arial", defectos, "bold"),
                            bd=1,  relief="ridge")  # Cantidad_defecto29
-        label_rd_65.config(font=("Arial", defectos, "bold"),
-                           bd=1,  relief="ridge")  # Cantidad_defecto30
+        label_rd_65.config(font=("Arial", defectos, "bold"), bd=1,  relief="ridge")  # Cantidad_defecto30
         label_rd_66.config(font=("Arial", fuente_30, "bold"))
         label_rd_67.config(font=("Arial", fuente_22, "bold"))
         label_rd_68.config(font=("Arial", fuente_22, "bold"))
-        label_rd_69.config(font=("Arial", fuente_22, "bold"))
-        label_rd_70.config(font=("Arial", fuente_22, "bold"))
-        label_rd_71.config(font=("Arial", fuente_22, "bold"))
+        label_rd_69.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_70.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_71.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_72.config(font=("Arial", fuente_22, "bold"))
+        label_rd_73.config(font=("Arial", fuente_22, "bold"))
+        label_rd_74.config(font=("Arial", fuente_22, "bold"))
+        label_rd_75.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_76.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_77.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_78.config(font=("Arial", fuente_30, "bold"))
+        label_rd_79.config(font=("Arial", fuente_30, "bold"))
+        label_rd_80.config(font=("Arial", fuente_22, "bold"))
+        label_rd_81.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_82.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_83.config(font=("Arial", fuente_22, "bold"),bd=1,relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_84.config(font=("Arial", fuente_22, "bold"))
+        label_rd_85.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge", highlightbackground="black",
+                           highlightcolor="black", highlightthickness=1)
+        label_rd_86.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge", highlightbackground="black",
+                           highlightcolor="black", highlightthickness=1)
+        label_rd_87.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge", highlightbackground="black",
+                           highlightcolor="black", highlightthickness=1)
+
+
+
 
         # menu's
         menu_rd_1.config(font=("Arial", fuente_12, "bold"), activebackground="deep sky blue",
@@ -2022,6 +2134,7 @@ def defect_root():
         spinbox_rd_5.config(font=("Arial", menu, "bold"))  # Minuto final
         spinbox_rd_6.config(font=("Arial", menu, "bold"))  # Periodo final
         button_rd_1.config(font=("Arial", menu, "bold"))  # Buscar
+        button_rd_2.config(font=("Arial", menu, "bold"))
 
     def settings_part_numbers_rd(clave):
         """Función para cargar defectos."""
@@ -2041,6 +2154,685 @@ def defect_root():
     def closed_rd():
         """Función para cerrar root defectos"""
         root_defect.destroy()
+
+    def dashboard_seho():
+
+        import tkinter as tk
+        import pandas as pd
+        import matplotlib.pyplot as plt
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+        def cerra_dash():
+            win.destroy()
+
+
+        # =============================
+        # VENTANA
+        # =============================
+
+        win = tk.Toplevel()
+        win.title("Dashboard SEHO")
+        win.attributes("-fullscreen", True)
+        win.configure(bg="#1E1F22")
+        win.attributes("-topmost", True)
+
+        # GRID PRINCIPAL
+
+        win.grid_rowconfigure(0, weight=0)  # titulo
+        win.grid_rowconfigure(1, weight=1)  # graficas
+
+        win.grid_columnconfigure(0, weight=1)
+
+        # =============================
+        # FRAME PRINCIPAL
+        # =============================
+
+        frame = tk.Frame(win, bg="#1E1F22")
+
+        frame.grid(row=1, column=0, sticky="nsew")
+
+        # GRID INTERNO FRAME
+
+        for i in range(3):
+            frame.grid_columnconfigure(i, weight=1)
+
+        for i in range(4):
+            frame.grid_rowconfigure(i, weight=1)
+
+        # =============================
+        # LEER DATA
+        # =============================
+
+        df = pd.read_csv(csv_file, encoding='latin1')
+
+        df.columns = df.columns.str.strip()
+
+        df["Fecha/Hora"] = pd.to_datetime(
+            df["Fecha/Hora"],
+            format="%d/%m/%Y %H:%M:%S"
+        )
+
+        # =============================
+        # FILTRO FECHA
+        # =============================
+
+        fecha_str = date_rd_1.get()
+
+        fecha = pd.to_datetime(
+            fecha_str,
+            format="%d/%m/%Y"
+        ).date()
+
+        df = df[df["Fecha/Hora"].dt.date == fecha]
+
+        # =============================
+        # TITULO
+        # =============================
+
+        titulo = tk.Label(
+
+            win,
+
+            text=f"DASHBOARD SEHO — {fecha_str}",
+
+            font=("Arial", 18, "bold"),
+
+            bg="#1E1F22",
+
+            fg="white"
+
+        )
+
+        titulo.grid(
+
+            row=0,
+            column=0,
+            sticky="nsew",
+            pady=2
+        )
+        # =============================
+        # Cerrar
+        # =============================
+
+        button = tk.Button(win, text="X", height=0, width=5,
+                                border=3, background="red",fg="white", font=("Arial", 10, "bold"), command=cerra_dash)
+        button.grid(row=0, column=1, padx=0, pady=0, sticky="e")
+
+
+        # =============================
+        # VALIDAR
+        # =============================
+
+        if df.empty:
+            label = tk.Label(
+
+                win,
+
+                text="NO HAY DATOS",
+
+                font=("Arial", 22, "bold"),
+
+                fg="red",
+
+                bg="#1E1F22"
+
+            )
+
+            label.grid(row=1, column=0, sticky="nsew")
+
+            return
+
+        # =============================
+        # DEFECTOS
+        # =============================
+
+        defect_names = []
+
+        with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
+
+            for line in f:
+
+                if "=" in line:
+                    defect_names.append(line.split("=")[1].strip())
+
+        defectos_validos = [d for d in defect_names if d in df.columns]
+
+        # =============================
+        # CALCULOS
+        # =============================
+
+        suma_defectos = df[defectos_validos].sum()
+
+        total_defectos = suma_defectos.sum()
+
+        total_producido = df["Estandar"].sum()
+
+        if total_producido > 0:
+
+            fpy = ((total_producido - total_defectos) / total_producido) * 100
+
+        else:
+
+            fpy = 0
+
+        df["Hora"] = df["Fecha/Hora"].dt.hour
+
+        prod_hora = df.groupby("Hora")["Estandar"].sum()
+
+        top5 = suma_defectos.sort_values(ascending=False).head(5)
+
+        prod_modelo = df.groupby("Modelo")["Estandar"].sum()
+
+        plt.style.use("dark_background")
+
+        # =============================
+        # FPY
+        # =============================
+
+        fig1 = plt.Figure(figsize=(4, 3), facecolor="#1E1F22")
+
+        ax1 = fig1.add_subplot(111)
+
+        ax1.pie(
+
+            [fpy, 100 - fpy],
+
+            labels=["Bueno", "Defectos"],
+
+            autopct="%1.1f%%",
+
+            colors=["green", "red"]
+
+        )
+
+        ax1.set_title("FPY")
+
+        canvas1 = FigureCanvasTkAgg(fig1, frame)
+
+        canvas1.draw()
+
+        canvas1.get_tk_widget().grid(row=0, column=0, sticky="nsew")
+
+
+        # =============================
+        # PRODUCCION STACKED BAR
+        # =============================
+
+        fig_stack = plt.Figure(figsize=(5,2), facecolor="#1E1F22")
+
+        ax_stack = fig_stack.add_subplot(111)
+
+        # calcular buenos
+        buenos = total_producido - total_defectos
+
+        # barra bueno
+        barra_bueno = ax_stack.bar(
+
+            ["Producción"],
+
+            [buenos],
+
+            color="green",
+
+            label="Bueno"
+
+        )
+
+        # barra defectos
+        barra_defecto = ax_stack.bar(
+
+            ["Producción"],
+
+            [total_defectos],
+
+            bottom=[buenos],
+
+            color="red",
+
+            label="Defecto"
+
+        )
+
+        # TITULO
+        ax_stack.set_title("Producción Total", color="white", fontsize=12)
+
+        # leyenda
+        ax_stack.legend()
+
+        # texto dentro barras
+        porc_bueno = buenos / total_producido * 100
+        porc_defecto = total_defectos / total_producido * 100
+
+        ax_stack.bar_label(
+
+            barra_bueno,
+
+            labels=[f"{buenos} ({porc_bueno:.1f}%)"],
+
+            label_type="center"
+
+        )
+
+        ax_stack.bar_label(
+
+            barra_defecto,
+
+            labels=[f"{total_defectos} ({porc_defecto:.1f}%)"],
+
+            label_type="center"
+
+        )
+
+
+        # total arriba
+        ax_stack.text(
+
+            0,
+
+            +total_producido * 0.2,
+
+            f"Total: {int(total_producido)}",
+
+            ha="center",
+
+            color="white",
+
+            fontsize=14,
+
+            fontweight="bold"
+
+        )
+
+        # mostrar
+        canvas_stack = FigureCanvasTkAgg(fig_stack, frame)
+
+        canvas_stack.draw()
+
+        canvas_stack.get_tk_widget().grid(
+
+            row=0,
+
+            column=1,
+
+            columnspan=2,
+
+            sticky="nsew"
+
+        )
+
+        # =============================
+        # TOP
+        # =============================
+
+        fig4 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
+
+        ax4 = fig4.add_subplot(111)
+
+        top5.plot(
+            kind="barh",
+            ax=ax4,
+            color="orange"
+        )
+
+        ax4.set_title("Top Defectos")
+
+        # MOSTRAR CANTIDADES
+        for container in ax4.containers:
+            ax4.bar_label(
+                container,
+                fmt='%d',
+                color='white',
+                padding=5,
+                fontsize=10
+            )
+
+        canvas4 = FigureCanvasTkAgg(fig4, frame)
+
+        canvas4.draw()
+
+        canvas4.get_tk_widget().grid(
+            row=1,
+            column=0,
+            columnspan=3,
+            sticky="nsew"
+        )
+
+        # =============================
+        # POR HORA
+        # =============================
+
+        fig5 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
+
+        ax5 = fig5.add_subplot(111)
+
+        prod_hora.plot(
+            ax=ax5,
+            color="yellow",
+            marker="o",
+            linewidth=2
+        )
+
+        ax5.set_title("Producción por Hora")
+
+        # MOSTRAR VALORES EN CADA PUNTO
+        for x, y in zip(prod_hora.index, prod_hora.values):
+            ax5.text(
+                x,
+                y,
+                str(int(y)),
+                color="white",
+                fontsize=10,
+                ha="center",
+                va="bottom"
+            )
+
+        canvas5 = FigureCanvasTkAgg(fig5, frame)
+
+        canvas5.draw()
+
+        canvas5.get_tk_widget().grid(
+            row=2,
+            column=0,
+            columnspan=3,
+            sticky="nsew"
+        )
+
+        # =============================
+        # MODELO
+        # =============================
+
+        fig6 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
+
+        ax6 = fig6.add_subplot(111)
+
+        prod_modelo.plot(
+            kind="barh",
+            ax=ax6,
+            color="deepskyblue"
+        )
+
+        ax6.set_title("Producción por Modelo")
+
+        # MOSTRAR CANTIDAD EN BARRAS
+        for container in ax6.containers:
+            ax6.bar_label(
+                container,
+                fmt='%d',
+                color='white',
+                padding=5
+            )
+
+        canvas6 = FigureCanvasTkAgg(fig6, frame)
+
+        canvas6.draw()
+
+        canvas6.get_tk_widget().grid(
+            row=3,
+            column=0,
+            columnspan=3,
+            sticky="nsew"
+        )
+
+    def contar_defectos_por_modelo():
+        """Cuenta defectos por modelo, fecha y rango de horas"""
+        try:
+
+            # ==============================
+            # LEER CSV
+            # ==============================
+            df, defect_names = cargar_datos_cache()
+            df.columns = df.columns.str.strip()
+
+            df["Fecha/Hora"] = pd.to_datetime(
+                df["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S"
+            )
+
+            # ==============================
+            # LEER defects.ini
+            # ==============================
+            defect_names = []
+
+            with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
+
+                for line in f:
+
+                    line = line.strip()
+
+                    if not line or "=" not in line:
+                        continue
+
+                    _, value = line.split("=", 1)
+
+                    defect_names.append(value.strip())
+
+            # ==============================
+            # LABELS
+            # ==============================
+            labels_defectos = [
+                label_rd_36, label_rd_37, label_rd_38, label_rd_39, label_rd_40, label_rd_41,
+                label_rd_42, label_rd_43, label_rd_44, label_rd_45, label_rd_46, label_rd_47,
+                label_rd_48, label_rd_49, label_rd_50, label_rd_51, label_rd_52, label_rd_53,
+                label_rd_54, label_rd_55, label_rd_56, label_rd_57, label_rd_58, label_rd_59,
+                label_rd_60, label_rd_61, label_rd_62, label_rd_63, label_rd_64, label_rd_65
+            ]
+
+            # ==============================
+            # MODELO SELECCIONADO
+            # ==============================
+            modelo = opcion_seleccionada_model.get()
+
+            # ==============================
+            # FECHA
+            # ==============================
+            fecha = pd.to_datetime(date_rd_1.get(),format="%d/%m/%Y").date()
+
+            # ==============================
+            # HORAS
+            # ==============================
+            hora_inicio = pd.to_datetime(
+                f"{hora_inicio_rd.get()}:{minuto_inicio_rd.get()} {periodo_inicio_rd.get()}",
+                format="%I:%M %p"
+            ).time()
+
+            hora_fin = pd.to_datetime(
+                f"{hora_final_rd.get()}:{minuto_final_rd.get()} {periodo_final_rd.get()}",
+                format="%I:%M %p"
+            ).time()
+
+            # ==============================
+            # FILTRO
+            # ==============================
+            filtro = (
+
+                    (df["Modelo"] == modelo) &
+
+                    (df["Fecha/Hora"].dt.date == fecha) &
+
+                    (df["Fecha/Hora"].dt.time.between(hora_inicio, hora_fin))
+
+            )
+
+            datos_filtrados = df.loc[filtro]
+
+            # ==============================
+            # SUMAR DEFECTOS
+            # ==============================
+            suma_defectos = datos_filtrados[defect_names].sum()
+
+            # ==============================
+            # TOTAL PRODUCIDO
+            # ==============================
+
+            total_producido = int(datos_filtrados["Estandar"].sum())
+
+            label_rd_73.config(text=str(total_producido))
+
+            # ==============================
+            # TOTAL DEFECTOS
+            # ==============================
+
+            total_defectos = int(suma_defectos.sum())
+
+            label_rd_68.config(text=str(total_defectos))
+
+            # ==============================
+            # FPY
+            # ==============================
+            fpy = ((total_producido - total_defectos) / total_producido) * \
+                  100 if total_producido > 0 else 0
+
+            fpy_por_pallet = settings_limits("FPY_MODEL")
+            fpy_por_pallet = int(fpy_por_pallet)
+
+            if fpy == 0:
+                label_rd_79.config(fg="black", bg="#D9D9D9")
+                label_rd_79.config(text="N/A")
+            elif fpy > fpy_por_pallet:
+                label_rd_79.config(fg="green", bg="#D9F2D0")
+                label_rd_79.config(text=f"{fpy:.2f}%")
+            elif fpy < fpy_por_pallet:
+                label_rd_79.config(fg="red", bg="#FFCCCC")
+                label_rd_79.config(text=f"{fpy:.2f}%")
+            elif fpy == fpy_por_pallet:
+                label_rd_79.config(fg="#E7601D", bg="#FBE7DD")
+                label_rd_79.config(text=f"{fpy:.2f}%")
+
+            # ==============================
+            # TOP 1, 2 y 3 DEFECTOS
+            # ==============================
+
+            # FILTRAR SOLO MAYORES A 0
+            top_defectos = suma_defectos[suma_defectos > 0].sort_values(ascending=False)
+
+            # -------- TOP 1 --------
+            if len(top_defectos) >= 1:
+
+                nombre = top_defectos.index[0]
+                cantidad = int(top_defectos.iloc[0])
+                porcentaje = (cantidad / total_defectos) * 100
+
+                label_rd_75.config(text=nombre)
+                label_rd_75.config(bg="#FFD700")
+                label_rd_76.config(text=str(cantidad))
+                label_rd_76.config(bg="#FFD700")
+                label_rd_77.config(text=f"{porcentaje:.1f}%")
+                label_rd_77.config(bg="#FFD700")
+
+            else:
+
+                label_rd_75.config(text="N/A")
+                label_rd_75.config(bg="#D9D9D9")
+                label_rd_76.config(text="N/A")
+                label_rd_76.config(bg="#D9D9D9")
+                label_rd_77.config(text="N/A")
+                label_rd_77.config(bg="#D9D9D9")
+
+            # -------- TOP 2 --------
+            if len(top_defectos) >= 2:
+
+                nombre = top_defectos.index[1]
+                cantidad = int(top_defectos.iloc[1])
+                porcentaje = (cantidad / total_defectos) * 100
+
+                label_rd_81.config(text=nombre)
+                label_rd_81.config(bg="#C0C0C0")
+                label_rd_82.config(text=str(cantidad))
+                label_rd_82.config(bg="#C0C0C0")
+                label_rd_83.config(text=f"{porcentaje:.1f}%")
+                label_rd_83.config(bg="#C0C0C0")
+
+            else:
+
+                label_rd_81.config(text="N/A")
+                label_rd_81.config(bg="#F2F2F2")
+                label_rd_82.config(text="N/A")
+                label_rd_82.config(bg="#F2F2F2")
+                label_rd_83.config(text="N/A")
+                label_rd_83.config(bg="#F2F2F2")
+
+            # -------- TOP 3 --------
+            if len(top_defectos) >= 3:
+
+                nombre = top_defectos.index[2]
+                cantidad = int(top_defectos.iloc[2])
+                porcentaje = (cantidad / total_defectos) * 100
+
+                label_rd_85.config(text=nombre)
+                label_rd_85.config(bg="#CD7F32")
+                label_rd_86.config(text=str(cantidad))
+                label_rd_86.config(bg="#CD7F32")
+                label_rd_87.config(text=f"{porcentaje:.1f}%")
+                label_rd_87.config(bg="#CD7F32")
+
+            else:
+
+                label_rd_85.config(text="N/A")
+                label_rd_85.config(bg="#D9D9D9")
+                label_rd_86.config(text="N/A")
+                label_rd_86.config(bg="#D9D9D9")
+                label_rd_87.config(text="N/A")
+                label_rd_87.config(bg="#D9D9D9")
+
+            # ==============================
+            # HEATMAP DE ROJO A AMARILLO
+            # ==============================
+
+            valores = suma_defectos.values
+
+            # obtener solo los mayores a 0
+            valores_validos = [v for v in valores if v > 0]
+
+            if valores_validos:
+
+                minimo = min(valores_validos)
+                maximo = max(valores_validos)
+
+            else:
+
+                minimo = 0
+                maximo = 0
+
+            for i in range(len(labels_defectos)):
+
+                valor = int(valores[i])
+
+                # -------- CERO --------
+                if valor == 0:
+
+                    color_original = "#C0E6F5" if i % 2 == 0 else "white"
+
+                    labels_defectos[i].config(
+                        text="0",
+                        bg=color_original
+                    )
+
+                else:
+
+                    # normalizar 0 a 1
+                    if maximo == minimo:
+
+                        ratio = 1
+
+                    else:
+
+                        ratio = (valor - minimo) / (maximo - minimo)
+
+                    # convertir ratio a color
+                    rojo = 255
+                    verde = int(255 * (1 - ratio))
+                    azul = 0
+
+                    color = f'#{rojo:02x}{verde:02x}{azul:02x}'
+
+                    labels_defectos[i].config(
+                        text=str(valor),
+                        bg=color,
+                        fg="black"
+                    )
+
+        except Exception as e:
+
+            messagebox.showerror("Error", f"Error calculo de defectos: {e}")
 
     # ---------- Variables root_defect
     global root
@@ -2100,6 +2892,7 @@ def defect_root():
     frame1_rd.grid_columnconfigure(9, weight=0)
     frame1_rd.grid_columnconfigure(10, weight=0)
     frame1_rd.grid_columnconfigure(11, weight=0)
+    frame1_rd.grid_columnconfigure(12, weight=0)
     frame1_rd.grid_rowconfigure(0, weight=1)
     # for col in range(0, 11):
     # frame1_rd.grid_columnconfigure(col, weight=1, uniform="cols")
@@ -2150,6 +2943,7 @@ def defect_root():
     frame3_rd.grid_rowconfigure(1, weight=1)
     frame3_rd.grid_rowconfigure(2, weight=1)
     frame3_rd.grid_rowconfigure(3, weight=1)
+    frame3_rd.grid_rowconfigure(4, weight=1)
 
     # ----- Frame4
     frame4_rd.grid_columnconfigure(0, weight=1)
@@ -2253,10 +3047,15 @@ def defect_root():
     spinbox_rd_6.grid(row=0, column=10, padx=(0, 10), pady=0,
                       sticky="nsew")
 
-    # button_rd_1: Ingeniería
+    # button_rd_1:
     button_rd_1 = tk.Button(frame1_rd, text="Buscar", height=0, width=20,
-                            border=3, background="deepskyblue", command=closed_rd)
+                            border=3, background="deepskyblue", command=contar_defectos_por_modelo)
     button_rd_1.grid(row=0, column=11, padx=5, pady=0, sticky="nsew")
+
+    # button_rd_2:
+    button_rd_2 = tk.Button(frame1_rd, text="DASHBOARD", height=0, width=20,
+                            border=3, background="deepskyblue", command=dashboard_seho)
+    button_rd_2.grid(row=0, column=12, padx=5, pady=0, sticky="nsew")
 
     # ----- Frame2_Row0
     # label_rd_4: Defectos
@@ -2533,8 +3332,8 @@ def defect_root():
     label_rd_66.grid(row=0, column=0, columnspan=6,
                      padx=50, pady=(20, 0), sticky="nsew")
 
-    label_rd_67 = tk.Label(frame3_rd, text="Defectos",
-                           fg="black", bg="#FFFFC9")
+    label_rd_67 = tk.Label(frame3_rd, text="Defectos:",
+                           fg="black", bg="#FFFFC9", anchor="e")
     label_rd_67.grid(row=1, column=0,
                      padx=(50, 0), pady=(5, 0), sticky="nsew")
     label_rd_68 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
@@ -2552,6 +3351,62 @@ def defect_root():
         frame3_rd, text="%", fg="black", bg="#CAEDFB")
     label_rd_71.grid(row=1, column=5, padx=(0, 50), pady=(5, 0), sticky="nsew")
 
+    label_rd_72 = tk.Label(frame3_rd, text="Producido:",
+                           fg="black", bg="#FFFFC9", anchor="e")
+    label_rd_72.grid(row=2, column=0,
+                     padx=(50, 0), pady=0, sticky="nsew")
+
+    label_rd_73 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_73.grid(row=2, column=1, padx=0, pady=0, sticky="nsew")
+
+    label_rd_74 = tk.Label(frame3_rd, text="1", fg="black",bg="#F2F2F2", anchor="e")
+    label_rd_74.grid(row=2, column=2, padx=0, pady=0, sticky="nsew")
+
+    label_rd_75 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_75.grid(row=2, column=3, padx=0, pady=0, sticky="nsew")
+
+    label_rd_76 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_76.grid(row=2, column=4, padx=0, pady=0, sticky="nsew")
+
+    label_rd_77 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_77.grid(row=2, column=5, padx=(0,50), pady=0, sticky="nsew")
+
+    label_rd_78 = tk.Label(frame3_rd, text="FPY:",
+                           fg="black", bg="#FFFFC9", anchor="e")
+    label_rd_78.grid(row=3, column=0,
+                     padx=(50, 0), pady=0,rowspan=2, sticky="nsew")
+
+    label_rd_79 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_79.grid(row=3, column=1, padx=0, pady=0,rowspan=2, sticky="nsew")
+
+    label_rd_80 = tk.Label(frame3_rd, text="2", fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_80.grid(row=3, column=2, padx=0, pady=0, sticky="nsew")
+
+    label_rd_81 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_81.grid(row=3, column=3, padx=0, pady=0, sticky="nsew")
+
+    label_rd_82 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_82.grid(row=3, column=4, padx=0, pady=0, sticky="nsew")
+
+    label_rd_83 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_83.grid(row=3, column=5, padx=(0, 50), pady=0, sticky="nsew")
+
+    label_rd_84 = tk.Label(frame3_rd, text="3", fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_84.grid(row=4, column=2, padx=0, pady=0, sticky="nsew")
+
+    label_rd_85 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_85.grid(row=4, column=3, padx=0, pady=0, sticky="nsew")
+
+    label_rd_86 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_86.grid(row=4, column=4, padx=0, pady=0, sticky="nsew")
+
+    label_rd_87 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_87.grid(row=4, column=5, padx=(0,50), pady=0, sticky="nsew")
+
+
+
+
+
     # ---------------------------------------------------------------------------------------------
     frame0_rd.grid(row=0, column=0, sticky="nsew", columnspan=2)
     frame1_rd.grid(row=1, column=0, sticky="nsew", columnspan=2)
@@ -2562,9 +3417,6 @@ def defect_root():
 
 
 # ------------------------------------- Variables ---------------------------------------------------------------------
-# Ruta del segundo archivo CSV
-csv_file = settings_root("LogFile")
-csv_file2 = settings_root("Registro")
 # Defectos
 defect1 = settings_defects("defect1")
 defect2 = settings_defects("defect2")
@@ -3009,7 +3861,7 @@ def calcular_top_defecto_por_modelo():
     """Función para calcular top defectos"""
     try:
         # --- Leer CSV ---
-        df = pd.read_csv(csv_file, encoding="utf-8")
+        df, defect_names = cargar_datos_cache()
         df.columns = df.columns.str.strip()
 
         df["Fecha/Hora"] = pd.to_datetime(
@@ -3775,7 +4627,7 @@ label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
 
 # ------------ Frame3_Row0
 # Horarios iniciales
-hora_inicial = tk.StringVar(value="6")
+hora_inicial = tk.StringVar(value="12")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
 
