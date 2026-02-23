@@ -16,6 +16,8 @@ from tkcalendar import DateEntry
 import serial
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import io
+import matplotlib.colors as mcolors
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
@@ -37,6 +39,7 @@ def settings_root(clave):
 # Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
 csv_file2 = settings_root("Registro")
+guardando_en_progreso = False
 
 # ==============================
 # CACHE GLOBAL MULTI CSV
@@ -769,7 +772,7 @@ def root_parametros():
 
             # Estilos para filas alternadas
             self.tree.tag_configure(
-                "evenrow", background="#F2F2F2")  # Gris claro
+                "evenrow", background=color_1)  # Gris claro
             self.tree.tag_configure("oddrow", background="white")     # Blanco
 
             # Cargar el CSV al abrir el programa
@@ -1063,7 +1066,7 @@ def root_registros(on_close_callback=None):
 
             # Estilos para filas alternadas
             self.tree.tag_configure(
-                "evenrow", background="#F2F2F2")  # Gris claro
+                "evenrow", background=color_1)  # Gris claro
             self.tree.tag_configure("oddrow", background="white")     # Blanco
 
             # Cargar el CSV al abrir el programa
@@ -1359,7 +1362,7 @@ def root_logfile(on_close_callback=None):
 
             # Estilos para filas alternadas
             self.tree.tag_configure(
-                "evenrow", background="#F2F2F2")  # Gris claro
+                "evenrow", background=color_1)  # Gris claro
             self.tree.tag_configure("oddrow", background="white")     # Blanco
 
             # Cargar el CSV al abrir el programa
@@ -1717,7 +1720,7 @@ def support_root(funcion_andon):
     root_support.attributes("-fullscreen", True)
     root_support.overrideredirect(False)
     root_support.resizable(False, False)
-    root_support.configure(bg="#F2F2F2")
+    root_support.configure(bg=color_1)
 
     # ----- Acomodo de Frame's
     root_support.grid_rowconfigure(0, weight=0)
@@ -1727,11 +1730,11 @@ def support_root(funcion_andon):
     root_support.grid_columnconfigure(0, weight=1)
 
     # ----- Frame's root_defect
-    frame0_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=30)
-    frame1_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
-    frame2_rs = tk.Frame(root_support, bg="#F2F2F2",
+    frame0_rs = tk.Frame(root_support, bg=color_1, padx=0, pady=30)
+    frame1_rs = tk.Frame(root_support, bg=color_1, padx=0, pady=0)
+    frame2_rs = tk.Frame(root_support, bg=color_1,
                          padx=0, pady=0, bd=2, relief="solid")
-    frame3_rs = tk.Frame(root_support, bg="#F2F2F2", padx=0, pady=0)
+    frame3_rs = tk.Frame(root_support, bg=color_1, padx=0, pady=0)
 
     # ----- Frame0
     frame0_rs.grid_columnconfigure(0, weight=1)
@@ -1770,7 +1773,7 @@ def support_root(funcion_andon):
     # ----- Frame0_Row0
     # label_rs_0: Título
     label_rs_0 = tk.Label(frame0_rs, text="Solicitud de soporte",
-                          fg="black", bg="#F2F2F2")
+                          fg="black", bg=color_1)
     label_rs_0.grid(row=0, column=0, padx=0, pady=0, sticky="nsew")
 
     # ----- Frame1_Row0
@@ -1797,14 +1800,14 @@ def support_root(funcion_andon):
     # ----- Frame2_Row0
     # label_rs_1: Código de colores ANDON
     label_rs_1 = tk.Label(frame2_rs, text="Código de colores ANDON",
-                          fg="black", bg="#F2F2F2")
+                          fg="black", bg=color_1)
     label_rs_1.grid(row=0, column=1, columnspan=6,
                     padx=0, pady=0, sticky="nsew")
 
     # ----- Frame2_Row1
     # label_rs_2: Ingeniería
     label_rs_2 = tk.Label(frame2_rs, text="Ingeniería:",
-                          fg="black", bg="#F2F2F2", anchor="e")
+                          fg="black", bg=color_1, anchor="e")
     label_rs_2.grid(row=1, column=1,
                     padx=0, pady=0, sticky="nsew")
 
@@ -1817,7 +1820,7 @@ def support_root(funcion_andon):
     # ----- Frame2_Row2
     # label_rs_4: Calidad
     label_rs_4 = tk.Label(frame2_rs, text="Calidad:",
-                          fg="black", bg="#F2F2F2", anchor="e")
+                          fg="black", bg=color_1, anchor="e")
     label_rs_4.grid(row=2, column=1,
                     padx=0, pady=5, sticky="nsew")
 
@@ -1829,7 +1832,7 @@ def support_root(funcion_andon):
 
     # label_rs_6: + Calidad
     label_rs_6 = tk.Label(frame2_rs, text="+",
-                          fg="black", bg="#F2F2F2")
+                          fg="black", bg=color_1)
     label_rs_6.grid(row=2, column=3,
                     padx=0, pady=5, sticky="nsew")
 
@@ -1842,7 +1845,7 @@ def support_root(funcion_andon):
     # ----- Frame2_Row3
     # label_rs_8: Producción
     label_rs_8 = tk.Label(frame2_rs, text="Producción:",
-                          fg="black", bg="#F2F2F2", anchor="e")
+                          fg="black", bg=color_1, anchor="e")
     label_rs_8.grid(row=3, column=1,
                     padx=0, pady=5, sticky="nsew")
 
@@ -1854,7 +1857,7 @@ def support_root(funcion_andon):
 
     # label_rs_10: + Producción
     label_rs_10 = tk.Label(frame2_rs, text="+",
-                           fg="black", bg="#F2F2F2")
+                           fg="black", bg=color_1)
     label_rs_10.grid(row=3, column=3,
                      padx=0, pady=5, sticky="nsew")
 
@@ -1867,7 +1870,7 @@ def support_root(funcion_andon):
     # ----- Frame2_Row4
     # label_rs_12: Todos
     label_rs_12 = tk.Label(frame2_rs, text="Todos:",
-                           fg="black", bg="#F2F2F2", anchor="e")
+                           fg="black", bg=color_1, anchor="e")
     label_rs_12.grid(row=4, column=1,
                      padx=0, pady=5, sticky="nsew")
 
@@ -1879,7 +1882,7 @@ def support_root(funcion_andon):
 
     # label_rs_14: + Todos
     label_rs_14 = tk.Label(frame2_rs, text="+",
-                           fg="black", bg="#F2F2F2")
+                           fg="black", bg=color_1)
     label_rs_14.grid(row=4, column=3,
                      padx=0, pady=5, sticky="nsew")
 
@@ -1891,7 +1894,7 @@ def support_root(funcion_andon):
 
     # label_rs_16: + Todos
     label_rs_16 = tk.Label(frame2_rs, text="+",
-                           fg="black", bg="#F2F2F2")
+                           fg="black", bg=color_1)
     label_rs_16.grid(row=4, column=5,
                      padx=0, pady=5, sticky="nsew")
 
@@ -2156,431 +2159,293 @@ def defect_root():
         root_defect.destroy()
 
     def dashboard_seho():
-
-        import tkinter as tk
-        import pandas as pd
-        import matplotlib.pyplot as plt
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-
-        def cerra_dash():
-            win.destroy()
-
-
-        # =============================
-        # VENTANA
-        # =============================
-
-        win = tk.Toplevel()
-        win.title("Dashboard SEHO")
-        win.attributes("-fullscreen", True)
-        win.configure(bg="#1E1F22")
-        win.attributes("-topmost", True)
-
-        # GRID PRINCIPAL
-
-        win.grid_rowconfigure(0, weight=0)  # titulo
-        win.grid_rowconfigure(1, weight=1)  # graficas
-
-        win.grid_columnconfigure(0, weight=1)
-
-        # =============================
-        # FRAME PRINCIPAL
-        # =============================
-
-        frame = tk.Frame(win, bg="#1E1F22")
-
-        frame.grid(row=1, column=0, sticky="nsew")
-
-        # GRID INTERNO FRAME
-
-        for i in range(3):
-            frame.grid_columnconfigure(i, weight=1)
-
-        for i in range(4):
-            frame.grid_rowconfigure(i, weight=1)
-
-        # =============================
-        # LEER DATA
-        # =============================
-
-        df = pd.read_csv(csv_file, encoding='latin1')
-
-        df.columns = df.columns.str.strip()
-
-        df["Fecha/Hora"] = pd.to_datetime(
-            df["Fecha/Hora"],
-            format="%d/%m/%Y %H:%M:%S"
-        )
-
-        # =============================
-        # FILTRO FECHA
-        # =============================
-
-        fecha_str = date_rd_1.get()
-
-        fecha = pd.to_datetime(
-            fecha_str,
-            format="%d/%m/%Y"
-        ).date()
-
-        df = df[df["Fecha/Hora"].dt.date == fecha]
-
-        # =============================
-        # TITULO
-        # =============================
-
-        titulo = tk.Label(
-
-            win,
-
-            text=f"DASHBOARD SEHO — {fecha_str}",
-
-            font=("Arial", 18, "bold"),
-
-            bg="#1E1F22",
-
-            fg="white"
-
-        )
-
-        titulo.grid(
-
-            row=0,
-            column=0,
-            sticky="nsew",
-            pady=2
-        )
-        # =============================
-        # Cerrar
-        # =============================
-
-        button = tk.Button(win, text="X", height=0, width=5,
-                                border=3, background="red",fg="white", font=("Arial", 10, "bold"), command=cerra_dash)
-        button.grid(row=0, column=1, padx=0, pady=0, sticky="e")
-
-
-        # =============================
-        # VALIDAR
-        # =============================
-
-        if df.empty:
-            label = tk.Label(
-
-                win,
-
-                text="NO HAY DATOS",
-
-                font=("Arial", 22, "bold"),
-
-                fg="red",
-
-                bg="#1E1F22"
-
-            )
-
-            label.grid(row=1, column=0, sticky="nsew")
-
-            return
-
-        # =============================
-        # DEFECTOS
-        # =============================
-
-        defect_names = []
-
-        with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
-
-            for line in f:
-
-                if "=" in line:
-                    defect_names.append(line.split("=")[1].strip())
-
-        defectos_validos = [d for d in defect_names if d in df.columns]
-
-        # =============================
-        # CALCULOS
-        # =============================
-
-        suma_defectos = df[defectos_validos].sum()
-
-        total_defectos = suma_defectos.sum()
-
-        total_producido = df["Estandar"].sum()
-
-        if total_producido > 0:
-
-            fpy = ((total_producido - total_defectos) / total_producido) * 100
-
-        else:
-
-            fpy = 0
-
-        df["Hora"] = df["Fecha/Hora"].dt.hour
-
-        prod_hora = df.groupby("Hora")["Estandar"].sum()
-
-        top5 = suma_defectos.sort_values(ascending=False).head(5)
-
-        prod_modelo = df.groupby("Modelo")["Estandar"].sum()
-
-        plt.style.use("dark_background")
-
-        # =============================
-        # FPY
-        # =============================
-
-        fig1 = plt.Figure(figsize=(4, 3), facecolor="#1E1F22")
-
-        ax1 = fig1.add_subplot(111)
-
-        ax1.pie(
-
-            [fpy, 100 - fpy],
-
-            labels=["Bueno", "Defectos"],
-
-            autopct="%1.1f%%",
-
-            colors=["green", "red"]
-
-        )
-
-        ax1.set_title("FPY")
-
-        canvas1 = FigureCanvasTkAgg(fig1, frame)
-
-        canvas1.draw()
-
-        canvas1.get_tk_widget().grid(row=0, column=0, sticky="nsew")
-
-
-        # =============================
-        # PRODUCCION STACKED BAR
-        # =============================
-
-        fig_stack = plt.Figure(figsize=(5,2), facecolor="#1E1F22")
-
-        ax_stack = fig_stack.add_subplot(111)
-
-        # calcular buenos
-        buenos = total_producido - total_defectos
-
-        # barra bueno
-        barra_bueno = ax_stack.bar(
-
-            ["Producción"],
-
-            [buenos],
-
-            color="green",
-
-            label="Bueno"
-
-        )
-
-        # barra defectos
-        barra_defecto = ax_stack.bar(
-
-            ["Producción"],
-
-            [total_defectos],
-
-            bottom=[buenos],
-
-            color="red",
-
-            label="Defecto"
-
-        )
-
-        # TITULO
-        ax_stack.set_title("Producción Total", color="white", fontsize=12)
-
-        # leyenda
-        ax_stack.legend()
-
-        # texto dentro barras
-        porc_bueno = buenos / total_producido * 100
-        porc_defecto = total_defectos / total_producido * 100
-
-        ax_stack.bar_label(
-
-            barra_bueno,
-
-            labels=[f"{buenos} ({porc_bueno:.1f}%)"],
-
-            label_type="center"
-
-        )
-
-        ax_stack.bar_label(
-
-            barra_defecto,
-
-            labels=[f"{total_defectos} ({porc_defecto:.1f}%)"],
-
-            label_type="center"
-
-        )
-
-
-        # total arriba
-        ax_stack.text(
-
-            0,
-
-            +total_producido * 0.2,
-
-            f"Total: {int(total_producido)}",
-
-            ha="center",
-
-            color="white",
-
-            fontsize=14,
-
-            fontweight="bold"
-
-        )
-
-        # mostrar
-        canvas_stack = FigureCanvasTkAgg(fig_stack, frame)
-
-        canvas_stack.draw()
-
-        canvas_stack.get_tk_widget().grid(
-
-            row=0,
-
-            column=1,
-
-            columnspan=2,
-
-            sticky="nsew"
-
-        )
-
-        # =============================
-        # TOP
-        # =============================
-
-        fig4 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
-
-        ax4 = fig4.add_subplot(111)
-
-        top5.plot(
-            kind="barh",
-            ax=ax4,
-            color="orange"
-        )
-
-        ax4.set_title("Top Defectos")
-
-        # MOSTRAR CANTIDADES
-        for container in ax4.containers:
-            ax4.bar_label(
-                container,
-                fmt='%d',
-                color='white',
-                padding=5,
-                fontsize=10
-            )
-
-        canvas4 = FigureCanvasTkAgg(fig4, frame)
-
-        canvas4.draw()
-
-        canvas4.get_tk_widget().grid(
-            row=1,
-            column=0,
-            columnspan=3,
-            sticky="nsew"
-        )
-
-        # =============================
-        # POR HORA
-        # =============================
-
-        fig5 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
-
-        ax5 = fig5.add_subplot(111)
-
-        prod_hora.plot(
-            ax=ax5,
-            color="yellow",
-            marker="o",
-            linewidth=2
-        )
-
-        ax5.set_title("Producción por Hora")
-
-        # MOSTRAR VALORES EN CADA PUNTO
-        for x, y in zip(prod_hora.index, prod_hora.values):
-            ax5.text(
-                x,
-                y,
-                str(int(y)),
-                color="white",
-                fontsize=10,
-                ha="center",
-                va="bottom"
-            )
-
-        canvas5 = FigureCanvasTkAgg(fig5, frame)
-
-        canvas5.draw()
-
-        canvas5.get_tk_widget().grid(
-            row=2,
-            column=0,
-            columnspan=3,
-            sticky="nsew"
-        )
-
-        # =============================
-        # MODELO
-        # =============================
-
-        fig6 = plt.Figure(figsize=(5, 3), facecolor="#1E1F22")
-
-        ax6 = fig6.add_subplot(111)
-
-        prod_modelo.plot(
-            kind="barh",
-            ax=ax6,
-            color="deepskyblue"
-        )
-
-        ax6.set_title("Producción por Modelo")
-
-        # MOSTRAR CANTIDAD EN BARRAS
-        for container in ax6.containers:
-            ax6.bar_label(
-                container,
-                fmt='%d',
-                color='white',
-                padding=5
-            )
-
-        canvas6 = FigureCanvasTkAgg(fig6, frame)
-
-        canvas6.draw()
-
-        canvas6.get_tk_widget().grid(
-            row=3,
-            column=0,
-            columnspan=3,
-            sticky="nsew"
-        )
+        """Dashboard interactivo con KPIs de calidad y emojis de estado"""
+        try:
+            def cerrar_dash():
+                win.destroy()
+
+            # ==========================================
+            # 1. CONFIGURACIÓN DE VENTANA (MODO DASHBOARD)
+            # ==========================================
+            win = tk.Toplevel()
+            win.title("Dashboard de Control SEHO")
+            win.attributes("-fullscreen", True)
+            win.configure(bg="#0F111A")  # Fondo oscuro elegante
+            win.attributes("-topmost", True)
+
+            # Header con Título y Botón
+            header = tk.Frame(win, bg="#1A1C26", height=60)
+            header.pack(side="top", fill="x")
+
+            fecha_str = date_rd_1.get()
+            tk.Label(header, text=f"DASHBOARD OPERATIVO — {fecha_str}",
+                     font=("Segoe UI", 22, "bold"), bg="#1A1C26", fg="#00D4FF").pack(side="left", padx=20)
+
+            tk.Button(header, text="SALIR (X)", font=("Arial", 12, "bold"), bg="#E74C3C",
+                      fg="white", command=cerrar_dash, relief="flat", padx=25).pack(side="right", padx=20, pady=10)
+
+            # ==========================================
+            # 2. PROCESAMIENTO DE DATOS (EVITAR DUPLICADOS)
+            # ==========================================
+            df_raw, _ = cargar_datos_cache()
+            df = df_raw.drop_duplicates().copy()  # Limpieza de duplicados
+            df.columns = df.columns.str.strip()
+            df["Fecha/Hora"] = pd.to_datetime(df["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
+
+            # Filtro de fecha actual de la UI
+            fecha_dt = pd.to_datetime(fecha_str, format="%d/%m/%Y").date()
+            df = df[df["Fecha/Hora"].dt.date == fecha_dt]
+
+            if df.empty:
+                tk.Label(win, text="⚠️ NO HAY DATOS PARA LA FECHA SELECCIONADA",
+                         font=("Segoe UI", 24), bg="#0F111A", fg="#555").pack(expand=True)
+                return
+
+            # ==========================================
+            # 3. CÁLCULOS DE KPIs Y LÍMITES
+            # ==========================================
+            # Cargar nombres de defectos
+            defect_names = []
+            with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
+                defect_names = [line.split("=")[1].strip() for line in f if "=" in line]
+
+            defectos_validos = [d for d in defect_names if d in df.columns]
+
+            # Totales principales
+            total_producido = int(df["Estandar"].sum())
+            suma_defectos = df[defectos_validos].sum()
+            total_defectos = int(suma_defectos.sum())
+            buenos = total_producido - total_defectos
+            fpy = (buenos / total_producido * 100) if total_producido > 0 else 0
+
+            # Obtener Meta desde el .ini
+            try:
+                fpy_meta = int(settings_limits("FPY_MODEL"))
+            except:
+                fpy_meta = 95
+
+            # Lógica de Emojis y Colores
+            if fpy > fpy_meta:
+                estado, emoji, color_kpi = "BUENO", "😊", "#2ECC71"  # Verde
+            elif fpy == fpy_meta:
+                estado, emoji, color_kpi = "REGULAR", "😐", "#F1C40F"  # Amarillo
+            else:
+                estado, emoji, color_kpi = "CRÍTICO", "😟", "#E74C3C"  # Rojo
+
+            # ==========================================
+            # 4. CONTENEDOR PRINCIPAL DE GRÁFICAS
+            # ==========================================
+            plt.style.use("dark_background")
+            main_container = tk.Frame(win, bg="#0F111A")
+            main_container.pack(fill="both", expand=True, padx=10, pady=5)
+
+            main_container.columnconfigure(0, weight=1)
+            main_container.columnconfigure(1, weight=1)
+            for i in range(3): main_container.rowconfigure(i, weight=1)
+
+            # --- GRÁFICA 1: DONA FPY (CON EMOJI) ---
+            fig1 = plt.Figure(figsize=(5, 5), facecolor="#0F111A")
+            ax1 = fig1.add_subplot(111)
+            ax1.pie([fpy, max(0, 100 - fpy)], colors=[color_kpi, "#2A2D3E"],
+                    startangle=90, wedgeprops={'width': 0.35, 'edgecolor': '#0F111A'})
+
+            # Textos centrales (Emoji y FPY)
+            ax1.text(0, 0.2, emoji, ha='center', va='center', fontsize=50)
+            ax1.text(0, -0.2, f"{fpy:.1f}%", ha='center', va='center', fontsize=18, fontweight='bold')
+            ax1.text(0, -0.45, f"STATUS: {estado}", ha='center', va='center', fontsize=6, color=color_kpi,
+                     fontweight='bold')
+            ax1.set_title(f"Calidad vs Meta ({fpy_meta}%)", pad=5)
+
+            FigureCanvasTkAgg(fig1, main_container).get_tk_widget().grid(row=0, column=0, sticky="nsew", padx=5)
+
+            # --- GRÁFICA 2: PRODUCCIÓN TOTAL (PRO STACKED BAR) ---
+            fig2 = plt.Figure(figsize=(5, 3), facecolor="#0F111A")
+            ax2 = fig2.add_subplot(111)
+
+            # Colores más "Pro" (Verde Esmeralda y Rojo Coral)
+            color_ok = "#00FF87"  # Verde Neón
+            color_ng = "#FF4646"  # Rojo Vibrante
+
+            # Calcular porcentajes
+            porc_ok = (buenos / total_producido * 100) if total_producido > 0 else 0
+            porc_ng = (total_defectos / total_producido * 100) if total_producido > 0 else 0
+
+            # Crear las barras
+            ax2.bar(["Estado"], [buenos], color=color_ok, label="OK", width=0.6)
+            ax2.bar(["Estado"], [total_defectos], bottom=[buenos], color=color_ng, label="Defectos", width=0.6)
+
+            # Título con el gran total
+            ax2.set_title(f"PRODUCCIÓN TOTAL: {total_producido}", fontsize=12, color='white', fontweight='bold', pad=5)
+
+            # Etiquetas internas con Cantidad y Porcentaje
+            # Texto para BUENOS
+            if buenos > 0:
+                ax2.text(0, buenos / 2, f"{int(buenos)}\n({porc_ok:.1f}%)",
+                         ha='center', va='center', color='#0F111A', fontweight='bold', fontsize=8)
+
+            # Texto para DEFECTOS
+            if total_defectos > 0:
+                ax2.text(0, buenos + (total_defectos / 2), f"{int(total_defectos)}\n({porc_ng:.1f}%)",
+                         ha='center', va='center', color='white', fontweight='bold', fontsize=8)
+
+            # Estética Pro: Quitar bordes y ajustar leyenda
+            #ax2.legend(frameon=False, loc='upper right', labelcolor='white')
+            ax2.spines['top'].set_visible(False)
+            ax2.spines['right'].set_visible(False)
+            ax2.spines['left'].set_color('#2A2D3E')
+            ax2.spines['bottom'].set_color('#2A2D3E')
+            ax2.tick_params(colors='white')
+
+            FigureCanvasTkAgg(fig2, main_container).get_tk_widget().grid(row=0, column=1, sticky="nsew", padx=5)
+
+            # --- GRÁFICA 3: PARETO TOP 5 DEFECTOS ---
+            top5 = suma_defectos.sort_values(ascending=True).tail(5)
+
+            fig3 = plt.Figure(figsize=(6, 4), facecolor="#0F111A")
+            ax3 = fig3.add_subplot(111)
+
+            # Dibujar la gráfica
+            top5.plot(kind="barh", ax=ax3, color="#F1C40F", width=0.7)
+
+            # AJUSTE 1: Reducir tamaño de letra de las etiquetas del eje Y (los nombres)
+            ax3.tick_params(axis='y', labelsize=9, colors='white')
+
+            # AJUSTE 2: Título y etiquetas
+            ax3.set_title("Top 5 Defectos", fontsize=12, color='white', pad=10)
+
+            # AJUSTE 3: Espacio extra a la derecha para que el número no se corte
+            max_val = top5.max() if not top5.empty else 10
+            ax3.set_xlim(0, max_val * 1.2)
+
+            for i, v in enumerate(top5):
+                ax3.text(v + (max_val * 0.02), i, str(int(v)),
+                         va='center', color='white', fontweight='bold', fontsize=9)
+
+            # LA CLAVE: Ajustar el diseño para que no se corten los nombres largos
+            fig3.tight_layout()
+
+            FigureCanvasTkAgg(fig3, main_container).get_tk_widget().grid(row=1, column=0, sticky="nsew", padx=5)
+
+            # --- GRÁFICA 4: RENDIMIENTO POR HORA (ÁREA CON ETIQUETAS) ---
+            df["Hora"] = df["Fecha/Hora"].dt.hour
+            prod_hora = df.groupby("Hora")["Estandar"].sum()
+
+            fig4 = plt.Figure(figsize=(6, 4), facecolor="#0F111A")
+            ax4 = fig4.add_subplot(111)
+
+            # Dibujamos la línea y el área
+            ax4.plot(prod_hora.index, prod_hora.values, color="#00D4FF",
+                     marker="o", markersize=8, linewidth=2, zorder=2)
+            ax4.fill_between(prod_hora.index, prod_hora.values, color="#00D4FF", alpha=0.1)
+
+            # AJUSTE DE RANGO: Damos un 15% más de espacio arriba para que el número más alto no se corte
+            if not prod_hora.empty:
+                ax4.set_ylim(0, prod_hora.max() * 1.15)
+
+            # AÑADIR NÚMEROS EN CADA BOLITA
+            for x, y in zip(prod_hora.index, prod_hora.values):
+                ax4.text(x, y + (prod_hora.max() * 0.03),  # Desplazamos el número un 3% arriba del valor
+                         f'{int(y)}',
+                         ha='center',
+                         va='bottom',
+                         color='white',
+                         fontsize=10,
+                         fontweight='bold',
+                         # Añadimos un pequeño borde/fondo oscuro para que resalte sobre cualquier línea
+                         bbox=dict(facecolor='#0F111A', alpha=0.6, edgecolor='none', pad=1))
+
+            ax4.set_title("Producción por Hora", fontsize=12, color='white')
+            ax4.set_xticks(prod_hora.index)
+            ax4.tick_params(axis='both', colors='white')
+
+            # Quitar bordes innecesarios
+            ax4.spines['top'].set_visible(False)
+            ax4.spines['right'].set_visible(False)
+
+            FigureCanvasTkAgg(fig4, main_container).get_tk_widget().grid(row=1, column=1, sticky="nsew", padx=5)
+
+            # --- GRÁFICA 5: PRODUCCIÓN POR MODELO (OPTIMIZADA PARA BARRAS PEQUEÑAS) ---
+            resumen_modelos = df.groupby("Modelo").agg({"Estandar": "sum"}).copy()
+            resumen_modelos["Defectos"] = df.groupby("Modelo")[defectos_validos].sum().sum(axis=1)
+            resumen_modelos["Buenos"] = resumen_modelos["Estandar"] - resumen_modelos["Defectos"]
+
+            fig5 = plt.Figure(figsize=(10, 4), facecolor="#0F111A")
+            ax5 = fig5.add_subplot(111)
+
+            modelos = resumen_modelos.index
+            buenos_val = resumen_modelos["Buenos"]
+            defectos_val = resumen_modelos["Defectos"]
+            totales = resumen_modelos["Estandar"]
+
+            # Colores Neón para combinar con el resto del dashboard
+            color_ok = "#00FF87"
+            color_ng = "#FF4646"
+
+            ax5.bar(modelos, buenos_val, color=color_ok, label="Buenos")
+            ax5.bar(modelos, defectos_val, bottom=buenos_val, color=color_ng, label="Malos")
+
+            # Ajustar el límite superior para que los totales no se corten
+            if not totales.empty:
+                ax5.set_ylim(0, totales.max() * 1.2)
+
+            for i in range(len(modelos)):
+                total = totales.iloc[i]
+                b = buenos_val.iloc[i]
+                d = defectos_val.iloc[i]
+
+                if total > 0:
+                    porc_b = (b / total) * 100
+                    porc_d = (d / total) * 100
+
+                    # --- Lógica para BUENOS ---
+                    # Si la barra es muy pequeña (menor al 15% del total max), no ponemos porcentaje, solo el número
+                    if b > 0:
+                        txt_b = f"{int(b)}\n({porc_b:.1f}%)" if b > (totales.max() * 0.1) else f"{int(b)}"
+                        ax5.text(i, b / 2, txt_b, ha='center', va='center',
+                                 color='#0F111A', fontsize=8, fontweight='bold')
+
+                    # --- Lógica para MALOS (Defectos) ---
+                    if d > 0:
+                        # Si el área roja es muy delgada, ponemos el texto arriba del total con una flecha o color distinto
+                        if d < (totales.max() * 0.08):
+                            # Barra muy pequeña: Texto pequeño justo arriba de la barra roja
+                            ax5.text(i, b + d + (totales.max() * 0.01), f"NG:{int(d)}",
+                                     ha='center', va='bottom', color=color_ng, fontsize=7, fontweight='bold')
+                        else:
+                            # Barra normal: Texto dentro
+                            ax5.text(i, b + (d / 2), f"{int(d)}\n({porc_d:.1f}%)",
+                                     ha='center', va='center', color='white', fontsize=8, fontweight='bold')
+
+                    # --- TOTAL (Siempre arriba) ---
+                    ax5.text(i, total + (totales.max() * 0.05), f"TOT: {int(total)}",
+                             ha='center', va='bottom', color='#00D4FF', fontsize=9, fontweight='bold')
+
+            ax5.set_title("PRODUCCIÓN POR MODELO", fontsize=12, color="white", pad=5)
+            ax5.tick_params(axis='x', colors='white', labelsize=8)
+            ax5.tick_params(axis='y', colors='white')
+            ax5.spines['top'].set_visible(False)
+            ax5.spines['right'].set_visible(False)
+
+            # Ajustar leyenda para que no estorbe
+            #ax5.legend(frameon=False, labelcolor='white', loc='upper right', fontsize=8)
+
+            fig5.tight_layout()
+            FigureCanvasTkAgg(fig5, main_container).get_tk_widget().grid(row=2, column=0, columnspan=2, sticky="nsew",
+                                                                         pady=10)
+
+        except Exception as e:
+            messagebox.showerror("Error Dashboard", f"No se pudo cargar la dashboard: {e}")
 
     def contar_defectos_por_modelo():
-        """Cuenta defectos por modelo, fecha y rango de horas"""
+        """Cuenta defectos por modelo, fecha y rango de horas - CORREGIDA (Evita conteo doble)"""
         try:
+            # ==============================
+            # LEER CSV Y LIMPIAR DUPLICADOS
+            # ==============================
+            df_original, _ = cargar_datos_cache()
+            # Creamos una copia y eliminamos duplicados exactos para evitar contar doble
+            df = df_original.drop_duplicates().copy()
 
-            # ==============================
-            # LEER CSV
-            # ==============================
-            df, defect_names = cargar_datos_cache()
             df.columns = df.columns.str.strip()
 
             df["Fecha/Hora"] = pd.to_datetime(
@@ -2591,22 +2456,16 @@ def defect_root():
             # LEER defects.ini
             # ==============================
             defect_names = []
-
             with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
-
                 for line in f:
-
                     line = line.strip()
-
                     if not line or "=" not in line:
                         continue
-
                     _, value = line.split("=", 1)
-
                     defect_names.append(value.strip())
 
             # ==============================
-            # LABELS
+            # LABELS (Referencia a tus etiquetas de la UI)
             # ==============================
             labels_defectos = [
                 label_rd_36, label_rd_37, label_rd_38, label_rd_39, label_rd_40, label_rd_41,
@@ -2617,18 +2476,11 @@ def defect_root():
             ]
 
             # ==============================
-            # MODELO SELECCIONADO
+            # OBTENER FILTROS DE LA UI
             # ==============================
             modelo = opcion_seleccionada_model.get()
+            fecha = pd.to_datetime(date_rd_1.get(), format="%d/%m/%Y").date()
 
-            # ==============================
-            # FECHA
-            # ==============================
-            fecha = pd.to_datetime(date_rd_1.get(),format="%d/%m/%Y").date()
-
-            # ==============================
-            # HORAS
-            # ==============================
             hora_inicio = pd.to_datetime(
                 f"{hora_inicio_rd.get()}:{minuto_inicio_rd.get()} {periodo_inicio_rd.get()}",
                 format="%I:%M %p"
@@ -2640,199 +2492,210 @@ def defect_root():
             ).time()
 
             # ==============================
-            # FILTRO
+            # APLICAR FILTRO
             # ==============================
             filtro = (
-
                     (df["Modelo"] == modelo) &
-
                     (df["Fecha/Hora"].dt.date == fecha) &
-
-                    (df["Fecha/Hora"].dt.time.between(hora_inicio, hora_fin))
-
+                    (df["Fecha/Hora"].dt.time >= hora_inicio) &
+                    (df["Fecha/Hora"].dt.time <= hora_fin)
             )
 
             datos_filtrados = df.loc[filtro]
 
             # ==============================
-            # SUMAR DEFECTOS
+            # SUMAR DEFECTOS Y PRODUCIDO
             # ==============================
+            # Sumamos sobre los datos ya filtrados y sin duplicados
             suma_defectos = datos_filtrados[defect_names].sum()
-
-            # ==============================
-            # TOTAL PRODUCIDO
-            # ==============================
-
             total_producido = int(datos_filtrados["Estandar"].sum())
-
-            label_rd_73.config(text=str(total_producido))
-
-            # ==============================
-            # TOTAL DEFECTOS
-            # ==============================
-
             total_defectos = int(suma_defectos.sum())
 
+            # Actualizar labels principales
+            label_rd_73.config(text=str(total_producido))
             label_rd_68.config(text=str(total_defectos))
 
             # ==============================
             # FPY
             # ==============================
-            fpy = ((total_producido - total_defectos) / total_producido) * \
-                  100 if total_producido > 0 else 0
+            fpy = ((total_producido - total_defectos) / total_producido) * 100 if total_producido > 0 else 0
+            fpy_por_pallet = int(settings_limits("FPY_MODEL"))
 
-            fpy_por_pallet = settings_limits("FPY_MODEL")
-            fpy_por_pallet = int(fpy_por_pallet)
-
-            if fpy == 0:
-                label_rd_79.config(fg="black", bg="#D9D9D9")
-                label_rd_79.config(text="N/A")
-            elif fpy > fpy_por_pallet:
-                label_rd_79.config(fg="green", bg="#D9F2D0")
-                label_rd_79.config(text=f"{fpy:.2f}%")
-            elif fpy < fpy_por_pallet:
-                label_rd_79.config(fg="red", bg="#FFCCCC")
-                label_rd_79.config(text=f"{fpy:.2f}%")
-            elif fpy == fpy_por_pallet:
-                label_rd_79.config(fg="#E7601D", bg="#FBE7DD")
-                label_rd_79.config(text=f"{fpy:.2f}%")
+            if total_producido == 0:
+                label_rd_79.config(text="N/A", fg="black", bg=color_3)
+            else:
+                if fpy > fpy_por_pallet:
+                    label_rd_79.config(text=f"{fpy:.2f}%", fg="green", bg="#D9F2D0")
+                elif fpy < fpy_por_pallet:
+                    label_rd_79.config(text=f"{fpy:.2f}%", fg="red", bg="#FFCCCC")
+                else:
+                    label_rd_79.config(text=f"{fpy:.2f}%", fg="#E7601D", bg="#FBE7DD")
 
             # ==============================
-            # TOP 1, 2 y 3 DEFECTOS
+            # TOP DEFECTOS (1, 2 y 3)
             # ==============================
-
-            # FILTRAR SOLO MAYORES A 0
             top_defectos = suma_defectos[suma_defectos > 0].sort_values(ascending=False)
 
-            # -------- TOP 1 --------
-            if len(top_defectos) >= 1:
+            # Lógica para llenar los Top Labels (simplificada para evitar repetición)
+            def actualizar_top(label_nom, label_cant, label_porc, index, color):
+                if len(top_defectos) > index:
+                    nombre = top_defectos.index[index]
+                    cant = int(top_defectos.iloc[index])
+                    porc = (cant / total_defectos * 100) if total_defectos > 0 else 0
+                    label_nom.config(text=nombre, bg=color)
+                    label_cant.config(text=str(cant), bg=color)
+                    label_porc.config(text=f"{porc:.1f}%", bg=color)
+                else:
+                    label_nom.config(text="N/A", bg=color_3)
+                    label_cant.config(text="N/A", bg=color_3)
+                    label_porc.config(text="N/A", bg=color_3)
 
-                nombre = top_defectos.index[0]
-                cantidad = int(top_defectos.iloc[0])
-                porcentaje = (cantidad / total_defectos) * 100
-
-                label_rd_75.config(text=nombre)
-                label_rd_75.config(bg="#FFD700")
-                label_rd_76.config(text=str(cantidad))
-                label_rd_76.config(bg="#FFD700")
-                label_rd_77.config(text=f"{porcentaje:.1f}%")
-                label_rd_77.config(bg="#FFD700")
-
-            else:
-
-                label_rd_75.config(text="N/A")
-                label_rd_75.config(bg="#D9D9D9")
-                label_rd_76.config(text="N/A")
-                label_rd_76.config(bg="#D9D9D9")
-                label_rd_77.config(text="N/A")
-                label_rd_77.config(bg="#D9D9D9")
-
-            # -------- TOP 2 --------
-            if len(top_defectos) >= 2:
-
-                nombre = top_defectos.index[1]
-                cantidad = int(top_defectos.iloc[1])
-                porcentaje = (cantidad / total_defectos) * 100
-
-                label_rd_81.config(text=nombre)
-                label_rd_81.config(bg="#C0C0C0")
-                label_rd_82.config(text=str(cantidad))
-                label_rd_82.config(bg="#C0C0C0")
-                label_rd_83.config(text=f"{porcentaje:.1f}%")
-                label_rd_83.config(bg="#C0C0C0")
-
-            else:
-
-                label_rd_81.config(text="N/A")
-                label_rd_81.config(bg="#F2F2F2")
-                label_rd_82.config(text="N/A")
-                label_rd_82.config(bg="#F2F2F2")
-                label_rd_83.config(text="N/A")
-                label_rd_83.config(bg="#F2F2F2")
-
-            # -------- TOP 3 --------
-            if len(top_defectos) >= 3:
-
-                nombre = top_defectos.index[2]
-                cantidad = int(top_defectos.iloc[2])
-                porcentaje = (cantidad / total_defectos) * 100
-
-                label_rd_85.config(text=nombre)
-                label_rd_85.config(bg="#CD7F32")
-                label_rd_86.config(text=str(cantidad))
-                label_rd_86.config(bg="#CD7F32")
-                label_rd_87.config(text=f"{porcentaje:.1f}%")
-                label_rd_87.config(bg="#CD7F32")
-
-            else:
-
-                label_rd_85.config(text="N/A")
-                label_rd_85.config(bg="#D9D9D9")
-                label_rd_86.config(text="N/A")
-                label_rd_86.config(bg="#D9D9D9")
-                label_rd_87.config(text="N/A")
-                label_rd_87.config(bg="#D9D9D9")
+            actualizar_top(label_rd_75, label_rd_76, label_rd_77, 0, "#FFD700")  # Top 1
+            actualizar_top(label_rd_81, label_rd_82, label_rd_83, 1, "#C0C0C0")  # Top 2
+            actualizar_top(label_rd_85, label_rd_86, label_rd_87, 2, "#CD7F32")  # Top 3
 
             # ==============================
-            # HEATMAP DE ROJO A AMARILLO
+            # HEATMAP DE DEFECTOS
             # ==============================
-
             valores = suma_defectos.values
-
-            # obtener solo los mayores a 0
             valores_validos = [v for v in valores if v > 0]
-
-            if valores_validos:
-
-                minimo = min(valores_validos)
-                maximo = max(valores_validos)
-
-            else:
-
-                minimo = 0
-                maximo = 0
+            minimo = min(valores_validos) if valores_validos else 0
+            maximo = max(valores_validos) if valores_validos else 0
 
             for i in range(len(labels_defectos)):
-
                 valor = int(valores[i])
-
-                # -------- CERO --------
                 if valor == 0:
-
-                    color_original = "#C0E6F5" if i % 2 == 0 else "white"
-
-                    labels_defectos[i].config(
-                        text="0",
-                        bg=color_original
-                    )
-
+                    color_bg = "#C0E6F5" if i % 2 == 0 else "white"
+                    labels_defectos[i].config(text="0", bg=color_bg, fg="black")
                 else:
-
-                    # normalizar 0 a 1
-                    if maximo == minimo:
-
-                        ratio = 1
-
-                    else:
-
-                        ratio = (valor - minimo) / (maximo - minimo)
-
-                    # convertir ratio a color
-                    rojo = 255
+                    ratio = (valor - minimo) / (maximo - minimo) if maximo != minimo else 1
+                    # De Amarillo (255, 255, 0) a Rojo (255, 0, 0)
                     verde = int(255 * (1 - ratio))
-                    azul = 0
+                    color_hex = f'#ff{verde:02x}00'
+                    labels_defectos[i].config(text=str(valor), bg=color_hex, fg="black")
 
-                    color = f'#{rojo:02x}{verde:02x}{azul:02x}'
-
-                    labels_defectos[i].config(
-                        text=str(valor),
-                        bg=color,
-                        fg="black"
-                    )
+            # LLAMAR A LA TABLA DE PALLETS
+            crear_tabla_pallets()
 
         except Exception as e:
-
             messagebox.showerror("Error", f"Error calculo de defectos: {e}")
+
+    def crear_tabla_pallets():
+        try:
+            # 1. Limpiar el frame completamente antes de empezar
+            for widget in frame4_rd.winfo_children():
+                widget.destroy()
+
+            frame_tabla = tk.Frame(frame4_rd, bg=frame4_rd.cget("bg"))
+            frame_tabla.grid(row=0, column=0, padx=50, pady=30, sticky="nsew")
+            frame_tabla.grid_columnconfigure(0, weight=1)
+            frame_tabla.grid_rowconfigure(0, weight=1)
+
+            # 2. Leer archivos (con el fix de cierre de archivo para evitar bloqueos)
+            with open("C:/Registro_defectos_SEHO/Parameters.csv", "r", encoding="utf-8") as f:
+                df_params = pd.read_csv(io.StringIO(f.read()))
+
+            # IMPORTANTE: Asegúrate de que cargar_datos_cache no esté duplicando filas
+            df_log, _ = cargar_datos_cache()
+
+            # ELIMINAR DUPLICADOS SI EXISTEN (Esto evita el conteo doble)
+            df_log = df_log.drop_duplicates()
+
+            # 3. Preparar Filtros
+            modelo_sel = opcion_seleccionada_model.get()
+            fecha_sel = pd.to_datetime(date_rd_1.get(), format="%d/%m/%Y").date()
+            h_ini = pd.to_datetime(f"{hora_inicio_rd.get()}:{minuto_inicio_rd.get()} {periodo_inicio_rd.get()}",
+                                   format="%I:%M %p").time()
+            h_fin = pd.to_datetime(f"{hora_final_rd.get()}:{minuto_final_rd.get()} {periodo_final_rd.get()}",
+                                   format="%I:%M %p").time()
+
+            # 4. Aplicar Filtro Estricto
+            df_log["Fecha/Hora"] = pd.to_datetime(df_log["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
+
+            mask = (
+                    (df_log["Modelo"] == modelo_sel) &
+                    (df_log["Fecha/Hora"].dt.date == fecha_sel) &
+                    (df_log["Fecha/Hora"].dt.time >= h_ini) &
+                    (df_log["Fecha/Hora"].dt.time <= h_fin)
+            )
+            df_filtrado = df_log.loc[mask].copy()
+
+            # 5. Configurar Tabla y Estilos
+            style = ttk.Style()
+            style.theme_use("clam")
+            style.configure("Treeview.Heading", font=('Segoe UI', 12, 'bold'), background="#2C3E50", foreground="white")
+            style.configure("Treeview", font=('Segoe UI', 10, 'bold'), rowheight=25)
+            columnas = ("Pallet", "V/SEHO", "Defectos", "Producido", "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
+            tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings")
+
+
+            for col in columnas:
+                tabla.heading(col, text=col)
+                tabla.column(col, width=100, anchor="center")
+
+            scrollbar = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
+            tabla.configure(yscrollcommand=scrollbar.set)
+            tabla.grid(row=0, column=0, sticky="nsew")
+            scrollbar.grid(row=0, column=1, sticky="ns")
+
+            # 6. Procesar y Colorear
+            todos_los_pallets = sorted(df_params[df_params.iloc[:, 1] == modelo_sel].iloc[:, 0].unique())
+
+            defect_names = []
+            with open("C:/Registro_defectos_SEHO/defects.ini", "r", encoding="utf-8") as f:
+                for line in f:
+                    if "=" in line: defect_names.append(line.split("=")[1].strip())
+
+            fpy_valores = []
+            resultados_finales = []
+
+            for p_id in todos_los_pallets:
+                # Filtramos por Pallet sobre el DF ya filtrado por tiempo
+                df_p = df_filtrado[df_filtrado["Pallet"] == p_id]
+
+                if not df_p.empty:
+                    # Usamos sum() pero asegurándonos de que no haya filas repetidas
+                    v_seho = len(df_p)
+                    producido = int(df_p["Estandar"].sum())
+                    suma_def = df_p[defect_names].sum()
+                    total_def = int(suma_def.sum())
+                    fpy_v = ((producido - total_def) / producido * 100) if producido > 0 else 0
+
+                    # Top Defecto
+                    top = suma_def[suma_def > 0].sort_values(ascending=False)
+                    t_nom, t_can, t_por = (
+                    top.index[0], int(top.iloc[0]), f"{(top.iloc[0] / total_def * 100):.1f}%") if not top.empty else (
+                    "N/A", 0, "0%")
+
+                    fpy_valores.append(fpy_v)
+                    resultados_finales.append({
+                        "data": (p_id, v_seho, total_def, producido, f"{fpy_v:.2f}%", t_nom, t_can, t_por),
+                        "fpy": fpy_v, "activo": True
+                    })
+                else:
+                    resultados_finales.append({"data": (p_id, "-", "-", "-", "-", "-", "-", "-"), "activo": False})
+
+            # 7. Insertar con el degradado corregido
+            f_min, f_max = (min(fpy_valores), max(fpy_valores)) if fpy_valores else (0, 0)
+
+            for i, res in enumerate(resultados_finales):
+                if res["activo"]:
+                    ratio = (res["fpy"] - f_min) / (f_max - f_min) if f_max != f_min else 1
+                    # Color pastel dinámico
+                    r, g, b = (1.0, 0.8 + (ratio * 0.2), 0.8) if ratio < 0.5 else (
+                    1.0 - ((ratio - 0.5) * 0.2), 1.0, 0.8 + ((ratio - 0.5) * 0.2))
+                    color_hex = mcolors.to_hex((r, g, b))
+
+                    tag_id = f"tag_{i}"
+                    tabla.tag_configure(tag_id, background=color_hex)
+                    tabla.insert("", "end", values=res["data"], tags=(tag_id,))
+                else:
+                    tabla.tag_configure('inactivo', background="#F5F5F5", foreground="#95A5A6")
+                    tabla.insert("", "end", values=res["data"], tags=('inactivo',))
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error en conteo: {e}")
+
 
     # ---------- Variables root_defect
     global root
@@ -2855,7 +2718,7 @@ def defect_root():
     root_defect.attributes("-fullscreen", True)
     root_defect.overrideredirect(False)
     root_defect.resizable(False, False)
-    root_defect.configure(bg="#F2F2F2")
+    root_defect.configure(bg=color_1)
 
     # ----- Acomodo de Frame's
     root_defect.grid_rowconfigure(0, weight=0)
@@ -2867,11 +2730,11 @@ def defect_root():
     root_defect.grid_columnconfigure(1, weight=1)
 
     # ----- Frame's root_defect
-    frame0_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
-    frame1_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
-    frame2_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
-    frame3_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
-    frame4_rd = tk.Frame(root_defect, bg="#F2F2F2", padx=0, pady=0)
+    frame0_rd = tk.Frame(root_defect, bg=color_1, padx=0, pady=0)
+    frame1_rd = tk.Frame(root_defect, bg=color_1, padx=0, pady=0)
+    frame2_rd = tk.Frame(root_defect, bg=color_1, padx=0, pady=0)
+    frame3_rd = tk.Frame(root_defect, bg=color_1, padx=0, pady=0)
+    frame4_rd = tk.Frame(root_defect, bg=color_1, padx=0, pady=0)
 
     # ----- Frame0
     frame0_rd.grid_columnconfigure(0, weight=1)
@@ -2957,13 +2820,13 @@ def defect_root():
 
     # Imagen ELRAD
     label_logo_elrad_rd = tk.Label(
-        frame0_rd, image=logo_elrad_tk_rd, borderwidth=0, bg="#F2F2F2")
+        frame0_rd, image=logo_elrad_tk_rd, borderwidth=0, bg=color_1)
     label_logo_elrad_rd.image = logo_elrad_tk_rd
     label_logo_elrad_rd.grid(row=0, column=0, padx=0, pady=0, sticky="nw")
 
     # label_rd_0: Titulo
     label_rd_0 = tk.Label(frame0_rd, text="Defectos SEHO",
-                          fg="black", bg="#F2F2F2")
+                          fg="black", bg=color_1)
     label_rd_0.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
 
     # Cargar logo SEHO
@@ -2973,14 +2836,14 @@ def defect_root():
 
     # Imagen SEHO como boton de cerrado
     boton_cerrar_rd = tk.Button(frame0_rd, image=logo_seho_tk_rd,
-                                command=closed_rd, borderwidth=0, bg="#F2F2F2")
+                                command=closed_rd, borderwidth=0, bg=color_1)
     boton_cerrar_rd.image = logo_seho_tk_rd
     boton_cerrar_rd.grid(row=0, column=2, padx=0, pady=0, sticky="ne")
 
     # ----- Frame1_Row0
     # label_rd_1: Modelo
     label_rd_1 = tk.Label(frame1_rd, text="Modelo:",
-                          fg="black", bg="#F2F2F2", anchor="e")
+                          fg="black", bg=color_1, anchor="e")
     label_rd_1.grid(row=0, column=0, padx=(10, 0), pady=0, sticky="nsew")
 
     # menu_rd_1: Modelos
@@ -2994,7 +2857,7 @@ def defect_root():
 
     # label_rd_2: Fecha
     label_rd_2 = tk.Label(frame1_rd, text="Fecha:",
-                          fg="black", bg="#F2F2F2", anchor="e")
+                          fg="black", bg=color_1, anchor="e")
     label_rd_2.grid(row=0, column=2, padx=(10, 0), pady=0, sticky="nsew")
 
     # date_rd_1: Selección de fecha
@@ -3025,7 +2888,7 @@ def defect_root():
 
     # label_rd_3: Horario
     label_rd_3 = tk.Label(frame1_rd, text="<-Horario->",
-                          fg="black", bg="#F2F2F2")
+                          fg="black", bg=color_1)
     label_rd_3.grid(row=0, column=7, padx=3, pady=0, sticky="nsew")
 
     # spinbox_rs_4: Hora final
@@ -3336,7 +3199,7 @@ def defect_root():
                            fg="black", bg="#FFFFC9", anchor="e")
     label_rd_67.grid(row=1, column=0,
                      padx=(50, 0), pady=(5, 0), sticky="nsew")
-    label_rd_68 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_68 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_68.grid(row=1, column=1, padx=0, pady=(5, 0), sticky="nsew")
 
     label_rd_69 = tk.Label(
@@ -3356,19 +3219,19 @@ def defect_root():
     label_rd_72.grid(row=2, column=0,
                      padx=(50, 0), pady=0, sticky="nsew")
 
-    label_rd_73 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_73 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_73.grid(row=2, column=1, padx=0, pady=0, sticky="nsew")
 
-    label_rd_74 = tk.Label(frame3_rd, text="1", fg="black",bg="#F2F2F2", anchor="e")
+    label_rd_74 = tk.Label(frame3_rd, text="1", fg="black",bg=color_1, anchor="e")
     label_rd_74.grid(row=2, column=2, padx=0, pady=0, sticky="nsew")
 
-    label_rd_75 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_75 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_75.grid(row=2, column=3, padx=0, pady=0, sticky="nsew")
 
-    label_rd_76 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_76 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_76.grid(row=2, column=4, padx=0, pady=0, sticky="nsew")
 
-    label_rd_77 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_77 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_77.grid(row=2, column=5, padx=(0,50), pady=0, sticky="nsew")
 
     label_rd_78 = tk.Label(frame3_rd, text="FPY:",
@@ -3376,31 +3239,31 @@ def defect_root():
     label_rd_78.grid(row=3, column=0,
                      padx=(50, 0), pady=0,rowspan=2, sticky="nsew")
 
-    label_rd_79 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_79 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
     label_rd_79.grid(row=3, column=1, padx=0, pady=0,rowspan=2, sticky="nsew")
 
-    label_rd_80 = tk.Label(frame3_rd, text="2", fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_80 = tk.Label(frame3_rd, text="2", fg="black", bg=color_1, anchor="e")
     label_rd_80.grid(row=3, column=2, padx=0, pady=0, sticky="nsew")
 
-    label_rd_81 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_81 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
     label_rd_81.grid(row=3, column=3, padx=0, pady=0, sticky="nsew")
 
-    label_rd_82 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_82 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
     label_rd_82.grid(row=3, column=4, padx=0, pady=0, sticky="nsew")
 
-    label_rd_83 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#F2F2F2")
+    label_rd_83 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
     label_rd_83.grid(row=3, column=5, padx=(0, 50), pady=0, sticky="nsew")
 
-    label_rd_84 = tk.Label(frame3_rd, text="3", fg="black", bg="#F2F2F2", anchor="e")
+    label_rd_84 = tk.Label(frame3_rd, text="3", fg="black", bg=color_1, anchor="e")
     label_rd_84.grid(row=4, column=2, padx=0, pady=0, sticky="nsew")
 
-    label_rd_85 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_85 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_85.grid(row=4, column=3, padx=0, pady=0, sticky="nsew")
 
-    label_rd_86 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_86 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_86.grid(row=4, column=4, padx=0, pady=0, sticky="nsew")
 
-    label_rd_87 = tk.Label(frame3_rd, text="N/A", fg="black", bg="#D9D9D9")
+    label_rd_87 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_87.grid(row=4, column=5, padx=(0,50), pady=0, sticky="nsew")
 
 
@@ -3461,6 +3324,10 @@ part_9 = settings_part_numbers("Part#9")
 part_10 = settings_part_numbers("Part#10")
 part_11 = settings_part_numbers("Part#11")
 part_12 = settings_part_numbers("Part#12")
+# Colores:
+color_1 = "#F2F2F2"
+color_2 = "#A6A6A6"
+color_3 = "#D9D9D9"
 # ------------------------------------- LogFile -----------------------------------------------------------------------
 
 # Crear csv_file si no existe y actualizar encabezado
@@ -3550,104 +3417,77 @@ asegurar_csv2_con_encabezado(csv_file2, encabezados)
 
 
 def guardar_datos(event=None):
-    """Función para guardar registros en csv"""
+    """Función para guardar registros en csv de forma segura"""
+    global guardando_en_progreso
+
+    # Si ya se está ejecutando un guardado, ignorar nuevas peticiones
+    if guardando_en_progreso:
+        return
+
     try:
-        dat1 = label_36.cget("text").strip() or "0"  # Modelo
-        dat2 = entry_30.get().strip() or "0"  # Pallet
-        dat3 = label_34.cget("text").strip() or "0"  # Defectos
-        dat4 = label_38.cget("text").strip() or "0"  # Estandar
-        dat5 = label_179.cget("text").strip() or "0"  # Fecha/Hora
-        dat6 = label_40.cget("text").strip() or "0"  # FPY
-        dat7 = label_42.cget("text").strip() or "0"  # Wave 1
-        dat8 = label_44.cget("text").strip() or "0"  # Wave 2
-        dat9 = label_46.cget("text").strip() or "0"  # Flux
-        dat10 = label_48.cget("text").strip() or "0"  # Conveyor
-        dat11 = entry_0.get().strip() or "0"  # Defect1
-        dat12 = entry_1.get().strip() or "0"  # Defect2
-        dat13 = entry_2.get().strip() or "0"  # Defect3
-        dat14 = entry_3.get().strip() or "0"  # Defect4
-        dat15 = entry_4.get().strip() or "0"  # Defect5
-        dat16 = entry_5.get().strip() or "0"  # Defect6
-        dat17 = entry_6.get().strip() or "0"  # Defect7
-        dat18 = entry_7.get().strip() or "0"  # Defect8
-        dat19 = entry_8.get().strip() or "0"  # Defect9
-        dat20 = entry_9.get().strip() or "0"  # Defect10
-        dat21 = entry_10.get().strip() or "0"  # Defect11
-        dat22 = entry_11.get().strip() or "0"  # Defect12
-        dat23 = entry_12.get().strip() or "0"  # Defect13
-        dat24 = entry_13.get().strip() or "0"  # Defect14
-        dat25 = entry_14.get().strip() or "0"  # Defect15
-        dat26 = entry_15.get().strip() or "0"  # Defect16
-        dat27 = entry_16.get().strip() or "0"  # Defect17
-        dat28 = entry_17.get().strip() or "0"  # Defect18
-        dat29 = entry_18.get().strip() or "0"  # Defect19
-        dat30 = entry_19.get().strip() or "0"  # Defect20
-        dat31 = entry_20.get().strip() or "0"  # Defect21
-        dat32 = entry_21.get().strip() or "0"  # Defect22
-        dat33 = entry_22.get().strip() or "0"  # Defect23
-        dat34 = entry_23.get().strip() or "0"  # Defect24
-        dat35 = entry_24.get().strip() or "0"  # Defect25
-        dat36 = entry_25.get().strip() or "0"  # Defect26
-        dat37 = entry_26.get().strip() or "0"  # Defect27
-        dat38 = entry_27.get().strip() or "0"  # Defect28
-        dat39 = entry_28.get().strip() or "0"  # Defect29
-        dat40 = entry_29.get().strip() or "0"  # Defect30
+        guardando_en_progreso = True
 
-        if dat1 and dat2 and dat3 and dat4 and dat5 and dat6 and dat7 and dat8 and dat9 and dat10 and dat11 and\
-                dat12 and dat13 and dat14 and dat15 and dat16 and dat17 and dat18 and dat19 and dat20 and dat21 and\
-                dat22 and dat23 and dat24 and dat25 and dat26 and dat27 and dat28 and dat29 and dat30 and dat31 and\
-                dat32 and dat33 and dat34 and dat35 and dat36 and dat37 and dat38 and dat39 and dat40:
-            with open(csv_file, mode='a', newline='') as file:
+        # 1. Recolectar datos de forma limpia
+        # Usamos una lista para que sea más fácil de manejar y leer
+        datos = [
+            label_36.cget("text").strip() or "0",  # Modelo
+            entry_30.get().strip() or "0",  # Pallet
+            label_34.cget("text").strip() or "0",  # Defectos
+            label_38.cget("text").strip() or "0",  # Estandar
+            label_179.cget("text").strip() or "0",  # Fecha/Hora
+            label_40.cget("text").strip() or "0",  # FPY
+            label_42.cget("text").strip() or "0",  # Wave 1
+            label_44.cget("text").strip() or "0",  # Wave 2
+            label_46.cget("text").strip() or "0",  # Flux
+            label_48.cget("text").strip() or "0"  # Conveyor
+        ]
+
+        # Agregar los 30 defectos de los entries (entry_0 a entry_29)
+        entries_defectos = [
+            entry_0, entry_1, entry_2, entry_3, entry_4, entry_5, entry_6, entry_7, entry_8, entry_9,
+            entry_10, entry_11, entry_12, entry_13, entry_14, entry_15, entry_16, entry_17, entry_18, entry_19,
+            entry_20, entry_21, entry_22, entry_23, entry_24, entry_25, entry_26, entry_27, entry_28, entry_29
+        ]
+
+        for entry in entries_defectos:
+            datos.append(entry.get().strip() or "0")
+
+        # 2. Validación: Verificar que el Pallet y Modelo no estén vacíos
+        # (dat1 y dat2 en tu código original)
+        if not datos[0] or datos[1] == "0" or datos[1] == "":
+            messagebox.showwarning("Atención", "El número de Pallet es obligatorio.")
+            guardando_en_progreso = False
+            return
+
+        # 3. Escritura en archivos (Usando context manager 'with' para cierre automático)
+        archivos = [csv_file, csv_file2]
+        for ruta in archivos:
+            with open(ruta, mode='a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
-                writer.writerow([dat1, dat2, dat3, dat4, dat5, dat6, dat7, dat8, dat9, dat10, dat11,
-                                 dat12, dat13, dat14, dat15, dat16, dat17, dat18, dat19, dat20, dat21,
-                                 dat22, dat23, dat24, dat25, dat26, dat27, dat28, dat29, dat30, dat31,
-                                 dat32, dat33, dat34, dat35, dat36, dat37, dat38, dat39, dat40])
+                writer.writerow(datos)
 
-            with open(csv_file2, mode='a', newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow([dat1, dat2, dat3, dat4, dat5, dat6, dat7, dat8, dat9, dat10, dat11,
-                                 dat12, dat13, dat14, dat15, dat16, dat17, dat18, dat19, dat20, dat21,
-                                 dat22, dat23, dat24, dat25, dat26, dat27, dat28, dat29, dat30, dat31,
-                                 dat32, dat33, dat34, dat35, dat36, dat37, dat38, dat39, dat40])
+        # 4. Limpieza de la interfaz
+        for entry in entries_defectos:
+            entry.delete(0, tk.END)
 
-            # Limpiar las entradas
-            entry_0.delete(0, tk.END)  # Defect1
-            entry_1.delete(0, tk.END)  # Defect2
-            entry_2.delete(0, tk.END)  # Defect3
-            entry_3.delete(0, tk.END)  # Defect4
-            entry_4.delete(0, tk.END)  # Defect5
-            entry_5.delete(0, tk.END)  # Defect6
-            entry_6.delete(0, tk.END)  # Defect7
-            entry_7.delete(0, tk.END)  # Defect8
-            entry_8.delete(0, tk.END)  # Defect9
-            entry_9.delete(0, tk.END)  # Defect10
-            entry_10.delete(0, tk.END)  # Defect11
-            entry_11.delete(0, tk.END)  # Defect12
-            entry_12.delete(0, tk.END)  # Defect13
-            entry_13.delete(0, tk.END)  # Defect14
-            entry_14.delete(0, tk.END)  # Defect15
-            entry_15.delete(0, tk.END)  # Defect16
-            entry_16.delete(0, tk.END)  # Defect17
-            entry_17.delete(0, tk.END)  # Defect18
-            entry_18.delete(0, tk.END)  # Defect19
-            entry_19.delete(0, tk.END)  # Defect20
-            entry_20.delete(0, tk.END)  # Defect21
-            entry_21.delete(0, tk.END)  # Defect22
-            entry_22.delete(0, tk.END)  # Defect23
-            entry_23.delete(0, tk.END)  # Defect24
-            entry_24.delete(0, tk.END)  # Defect25
-            entry_25.delete(0, tk.END)  # Defect26
-            entry_26.delete(0, tk.END)  # Defect27
-            entry_27.delete(0, tk.END)  # Defect28
-            entry_28.delete(0, tk.END)  # Defect29
-            entry_29.delete(0, tk.END)  # Defect30
-            entry_30.delete(0, tk.END)  # Pallet
-            label_34.config(text="")  # Defectos
-            root.after(300, calcular_defectos)
+        entry_30.delete(0, tk.END)  # Limpiar Pallet
+        label_34.config(text="")  # Limpiar label Defectos
+
+        # 5. Forzar actualización de caché y cálculos
+        # Esto asegura que la tabla que acabas de hacer vea el dato nuevo de inmediato
+        if 'actualizar_cache' in globals():  # Si tienes una función para refrescar caché
+            cargar_datos_cache()
+
+        root.after(300, calcular_defectos)
+
+        # Pequeño mensaje de confirmación (opcional)
+        # print(f"Datos guardados correctamente: Pallet {datos[1]}")
+
     except Exception as e:
-        messagebox.showerror("Error", f"Se produjo un error: {e}")
-
+        messagebox.showerror("Error", f"No se pudo guardar: {e}")
+    finally:
+        # Importante: liberar el bloqueo siempre, ocurra error o no
+        guardando_en_progreso = False
 
 data_logfile = pd.read_csv(csv_file, encoding='latin1')
 data_register = pd.read_csv(csv_file2, encoding='latin1')
@@ -3736,7 +3576,7 @@ def calcular_defectos():
             # ---- Colores según FPY ----
             if fpy == 0:
                 lbl.config(text="", fg="black",
-                           bg="#F2F2F2", bd=0, relief="flat")
+                           bg=color_1, bd=0, relief="flat")
             elif fpy > fpy_model:
                 lbl.config(fg="green", bg="#D9F2D0",
                            text=texto, bd=.5, relief="ridge", justify="center")
@@ -3835,7 +3675,7 @@ def calcular_defectos_totales():
             # ---- Colores según FPY ----
             if fpy == 0:
                 lbl.config(text="", fg="black",
-                           bg="#F2F2F2", bd=0, relief="flat")
+                           bg=color_1, bd=0, relief="flat")
             elif fpy > fpy_model:
                 lbl.config(fg="green", bg="#D9F2D0",
                            text=texto, bd=.5, relief="ridge", justify="center")
@@ -4084,7 +3924,7 @@ def soporte_andon(comando, ventana_support=None):
 root = tk.Tk()
 root.attributes("-topmost", True)
 root.attributes("-fullscreen", True)
-root.configure(bg="#F2F2F2")
+root.configure(bg=color_1)
 # ------- grid
 root.grid_rowconfigure(0, weight=0)
 root.grid_rowconfigure(1, weight=0)
@@ -4094,12 +3934,12 @@ root.grid_rowconfigure(4, weight=1)
 root.grid_rowconfigure(5, weight=0)
 root.grid_columnconfigure(0, weight=1)
 # ------- Frame
-Frame0 = tk.Frame(root, bg="#F2F2F2")
-Frame1 = tk.Frame(root, bg="#F2F2F2")
-Frame2 = tk.Frame(root, bg="#F2F2F2")
-Frame3 = tk.Frame(root, bg="#F2F2F2")
-Frame4 = tk.Frame(root, bg="#F2F2F2")
-Frame5 = tk.Frame(root, bg="#F2F2F2")
+Frame0 = tk.Frame(root, bg=color_1)
+Frame1 = tk.Frame(root, bg=color_1)
+Frame2 = tk.Frame(root, bg=color_1)
+Frame3 = tk.Frame(root, bg=color_1)
+Frame4 = tk.Frame(root, bg=color_1)
+Frame5 = tk.Frame(root, bg=color_1)
 # ------- Frame0
 Frame0.grid_columnconfigure(0, weight=1)
 Frame0.grid_columnconfigure(1, weight=1)
@@ -4199,12 +4039,12 @@ logo_elrad_tk = ImageTk.PhotoImage(logo_elrad)
 
 # Imagen ELRAD como botón de minimizar
 boton_minimizar = tk.Button(Frame0, image=logo_elrad_tk,
-                            command=toggle_minimize, borderwidth=0, bg="#F2F2F2")
+                            command=toggle_minimize, borderwidth=0, bg=color_1)
 boton_minimizar.grid(row=0, column=0, padx=0, pady=0, sticky="nw")
 
 # label_0: Titulo
 label_0 = tk.Label(Frame0, text="Registro de defectos SEHO",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_0.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
 
 # Cargar logo SEHO
@@ -4215,7 +4055,7 @@ logo_seho_tk = ImageTk.PhotoImage(logo_seho)
 
 # Imagen SEHO como boton de cerrado
 boton_cerrar = tk.Button(Frame0, image=logo_seho_tk,
-                         command=cerrar_ventana, borderwidth=0, bg="#F2F2F2")
+                         command=cerrar_ventana, borderwidth=0, bg=color_1)
 boton_cerrar.grid(row=0, column=2, padx=0, pady=0, sticky="ne")
 
 # ------------ Frame1_Row0
@@ -4228,1221 +4068,835 @@ label_1.grid(row=0, column=0, columnspan=10, padx=0, pady=0, sticky="nsew")
 # ----- Defecto 1
 # label_2: Defacto 1
 label_2 = tk.Label(Frame1, text=f"{defect1}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_2.grid(row=1, column=0, padx=0, pady=0, sticky="e")
 
 # entry_0: Defecto 1
-entry_0 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_0 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_0.grid(row=1, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 2
 # label_3: Defacto 2
 label_3 = tk.Label(Frame1, text=f"{defect2}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_3.grid(row=1, column=2, padx=0, pady=0, sticky="e")
 
 # entry_1: Defecto 2
-entry_1 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_1 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_1.grid(row=1, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 3
 # label_4: Defacto 3
 label_4 = tk.Label(Frame1, text=f"{defect3}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_4.grid(row=1, column=4, padx=0, pady=0, sticky="e")
 
 # entry_2: Defecto 3
-entry_2 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_2 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_2.grid(row=1, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 4
 # label_5: Defacto 4
 label_5 = tk.Label(Frame1, text=f"{defect4}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_5.grid(row=1, column=6, padx=0, pady=0, sticky="e")
 
 # entry_3: Defecto 4
-entry_3 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_3 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_3.grid(row=1, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 5
 # label_6: Defacto 5
 label_6 = tk.Label(Frame1, text=f"{defect5}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_6.grid(row=1, column=8, padx=0, pady=0, sticky="e")
 
 # entry_4: Defecto 5
-entry_4 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_4 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_4.grid(row=1, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row2
 # ----- Defecto 6
 # label_7: Defacto 6
 label_7 = tk.Label(Frame1, text=f"{defect6}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_7.grid(row=2, column=0, padx=0, pady=0, sticky="e")
 
 # entry_5: Defecto 6
-entry_5 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_5 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_5.grid(row=2, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 7
 # label_8: Defacto 7
 label_8 = tk.Label(Frame1, text=f"{defect7}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_8.grid(row=2, column=2, padx=0, pady=0, sticky="e")
 
 # entry_6: Defecto 7
-entry_6 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_6 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_6.grid(row=2, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 8
 # label_9: Defacto 8
 label_9 = tk.Label(Frame1, text=f"{defect8}:",
-                   fg="black", bg="#F2F2F2")
+                   fg="black", bg=color_1)
 label_9.grid(row=2, column=4, padx=0, pady=0, sticky="e")
 
 # entry_7: Defecto 8
-entry_7 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_7 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_7.grid(row=2, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 9
 # label_10: Defacto 9
 label_10 = tk.Label(Frame1, text=f"{defect9}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_10.grid(row=2, column=6, padx=0, pady=0, sticky="e")
 
 # entry_8: Defecto 9
-entry_8 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_8 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_8.grid(row=2, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 10
 # label_11: Defacto 10
 label_11 = tk.Label(Frame1, text=f"{defect10}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_11.grid(row=2, column=8, padx=0, pady=0, sticky="e")
 
 # entry_9: Defecto 10
-entry_9 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_9 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_9.grid(row=2, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row3
 # ----- Defecto 11
 # label_12: Defacto 11
 label_12 = tk.Label(Frame1, text=f"{defect11}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_12.grid(row=3, column=0, padx=0, pady=0, sticky="e")
 
 # entry_10: Defecto 11
-entry_10 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_10 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_10.grid(row=3, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 12
 # label_13: Defacto 12
 label_13 = tk.Label(Frame1, text=f"{defect12}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_13.grid(row=3, column=2, padx=0, pady=0, sticky="e")
 
 # entry_11: Defecto 12
-entry_11 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_11 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_11.grid(row=3, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 13
 # label_14: Defacto 13
 label_14 = tk.Label(Frame1, text=f"{defect13}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_14.grid(row=3, column=4, padx=0, pady=0, sticky="e")
 
 # entry_12: Defecto 13
-entry_12 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_12 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_12.grid(row=3, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 14
 # label_15: Defacto 14
 label_15 = tk.Label(Frame1, text=f"{defect14}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_15.grid(row=3, column=6, padx=0, pady=0, sticky="e")
 
 # entry_13: Defecto 14
-entry_13 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_13 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_13.grid(row=3, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 15
 # label_16: Defacto 15
 label_16 = tk.Label(Frame1, text=f"{defect15}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_16.grid(row=3, column=8, padx=0, pady=0, sticky="e")
 
 # entry_14: Defecto 15
-entry_14 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_14 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_14.grid(row=3, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row4
 # ----- Defecto 16
 # label_17: Defacto 16
 label_17 = tk.Label(Frame1, text=f"{defect16}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_17.grid(row=4, column=0, padx=0, pady=0, sticky="e")
 
 # entry_15: Defecto 16
-entry_15 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_15 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_15.grid(row=4, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 17
 # label_18: Defacto 17
 label_18 = tk.Label(Frame1, text=f"{defect17}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_18.grid(row=4, column=2, padx=0, pady=0, sticky="e")
 
 # entry_16: Defecto 17
-entry_16 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_16 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_16.grid(row=4, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 18
 # label_19: Defacto 18
 label_19 = tk.Label(Frame1, text=f"{defect18}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_19.grid(row=4, column=4, padx=0, pady=0, sticky="e")
 
 # entry_17: Defecto 18
-entry_17 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_17 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_17.grid(row=4, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 19
 # label_20: Defacto 19
 label_20 = tk.Label(Frame1, text=f"{defect19}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_20.grid(row=4, column=6, padx=0, pady=0, sticky="e")
 
 # entry_18: Defecto 19
-entry_18 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_18 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_18.grid(row=4, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 20
 # label_21: Defacto 20
 label_21 = tk.Label(Frame1, text=f"{defect20}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_21.grid(row=4, column=8, padx=0, pady=0, sticky="e")
 
 # entry_19: Defecto 20
-entry_19 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_19 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_19.grid(row=4, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row5
 # ----- Defecto 21
 # label_22: Defacto 21
 label_22 = tk.Label(Frame1, text=f"{defect21}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_22.grid(row=5, column=0, padx=0, pady=0, sticky="e")
 
 # entry_20: Defecto 21
-entry_20 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_20 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_20.grid(row=5, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 22
 # label_23: Defacto 22
 label_23 = tk.Label(Frame1, text=f"{defect22}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_23.grid(row=5, column=2, padx=0, pady=0, sticky="e")
 
 # entry_21: Defecto 22
-entry_21 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_21 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_21.grid(row=5, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 23
 # label_24: Defacto 23
 label_24 = tk.Label(Frame1, text=f"{defect23}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_24.grid(row=5, column=4, padx=0, pady=0, sticky="e")
 
 # entry_22: Defecto 23
-entry_22 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_22 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_22.grid(row=5, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 24
 # label_25: Defacto 24
 label_25 = tk.Label(Frame1, text=f"{defect24}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_25.grid(row=5, column=6, padx=0, pady=0, sticky="e")
 
 # entry_23: Defecto 24
-entry_23 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_23 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_23.grid(row=5, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 25
 # label_26: Defacto 25
 label_26 = tk.Label(Frame1, text=f"{defect25}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_26.grid(row=5, column=8, padx=0, pady=0, sticky="e")
 
 # entry_24: Defecto 25
-entry_24 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_24 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_24.grid(row=5, column=9, padx=0, pady=0, sticky="w")
 
 # ------------ Frame1_Row6
 # ----- Defecto 26
 # label_27: Defacto 26
 label_27 = tk.Label(Frame1, text=f"{defect26}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_27.grid(row=6, column=0, padx=0, pady=0, sticky="e")
 
 # entry_25: Defecto 26
-entry_25 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_25 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_25.grid(row=6, column=1, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 27
 # label_28: Defacto 27
 label_28 = tk.Label(Frame1, text=f"{defect27}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_28.grid(row=6, column=2, padx=0, pady=0, sticky="e")
 
 # entry_26: Defecto 27
-entry_26 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_26 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_26.grid(row=6, column=3, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 28
 # label_29: Defacto 28
 label_29 = tk.Label(Frame1, text=f"{defect28}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_29.grid(row=6, column=4, padx=0, pady=0, sticky="e")
 
 # entry_27: Defecto 28
-entry_27 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_27 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_27.grid(row=6, column=5, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 29
 # label_30: Defacto 29
 label_30 = tk.Label(Frame1, text=f"{defect29}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_30.grid(row=6, column=6, padx=0, pady=0, sticky="e")
 
 # entry_28: Defecto 29
-entry_28 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_28 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_28.grid(row=6, column=7, padx=0, pady=0, sticky="w")
 
 # ----- Defecto 30
 # label_31: Defacto 30
 label_31 = tk.Label(Frame1, text=f"{defect30}:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_31.grid(row=6, column=8, padx=0, pady=0, sticky="e")
 
 # entry_29: Defecto 30
-entry_29 = tk.Entry(Frame1, width=5, bg="#A6A6A6", justify="center")
+entry_29 = tk.Entry(Frame1, width=5, bg=color_2, justify="center")
 entry_29.grid(row=6, column=9, padx=0, pady=0, sticky="w")
-
-# ------------ Frame1_Row7
-
-# label_32: Número de pallet
 label_32 = tk.Label(Frame1, text="Número de pallet:",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_32.grid(row=7, column=0, padx=0, columnspan=10, pady=0, sticky="s")
-
-# ------------ Frame1_Row8
-# entry_30: Pallet
 entry_30 = tk.Entry(Frame1, width=25, justify="center",
                     background="springgreen", border=3)
 entry_30.grid(row=8, column=0, columnspan=10, padx=0, pady=0, sticky="n")
 entry_30.focus()
-
-# ------------ Frame2_Row0
-# label_33: Defectos
 label_33 = tk.Label(Frame2, text="Defectos:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_33.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
-
-# label_34: Defectos_Resultado
 label_34 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_34.grid(row=0, column=1, padx=0, pady=5, sticky="nsew")
-
-# label_35: Modelo
 label_35 = tk.Label(Frame2, text="Modelo:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_35.grid(row=0, column=2, padx=0, pady=5, sticky="nsew")
-
-# label_36: Modelo_Resultado
 label_36 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_36.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
-
-# label_37: Estandar
 label_37 = tk.Label(Frame2, text="Estandar:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_37.grid(row=0, column=4, padx=0, pady=5, sticky="nsew")
-
-# label_38: Estandar_Resultado
 label_38 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_38.grid(row=0, column=5, padx=0, pady=5, sticky="nsew")
-
-# label_39: FPY pallet
 label_39 = tk.Label(Frame2, text="FPY pallet:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_39.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
-
-# label_40: FPY pallet_Resultado
 label_40 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_40.grid(row=0, column=7, padx=0, pady=5, sticky="nsew")
-
-# label_41: Wave 1
 label_41 = tk.Label(Frame2, text="Wave 1:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_41.grid(row=0, column=8, padx=0, pady=5, sticky="nsew")
-
-# label_42: Wave 1_Resultado
 label_42 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_42.grid(row=0, column=9, padx=0, pady=5, sticky="nsew")
-
-# label_43: Wave 2
 label_43 = tk.Label(Frame2, text="Wave 2:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_43.grid(row=0, column=10, padx=0, pady=5, sticky="nsew")
-
-# label_44: Wave 2_Resultado
 label_44 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_44.grid(row=0, column=11, padx=0, pady=5, sticky="nsew")
-
-# label_45: Flux
 label_45 = tk.Label(Frame2, text="Flux:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_45.grid(row=0, column=12, padx=0, pady=5, sticky="nsew")
-
-# label_46: Flux_Resultado
 label_46 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_46.grid(row=0, column=13, padx=0, pady=5, sticky="nsew")
-
-# label_47: Conveyor
 label_47 = tk.Label(Frame2, text="Conveyor:",
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_47.grid(row=0, column=14, padx=0, pady=5, sticky="nsew")
-
-# label_48: Conveyor_Resultado
 label_48 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
-
-# ------------ Frame3_Row0
-# Horarios iniciales
 hora_inicial = tk.StringVar(value="12")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
-
-# spinbox_0: Hora inicial
 spinbox_0 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_inicial,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_0.grid(row=0, column=0, padx=2, pady=5, sticky="nsew")
-
-# spinbox_1: Minuto inicial
 spinbox_1 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_inicial,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_1.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
-
-# spinbox_2: Periodo inicial
 spinbox_2 = tk.Spinbox(Frame3, values=("AM", "PM"), textvariable=periodo_inicial,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_2.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
-
-# label_49: Horario
 label_49 = tk.Label(Frame3, text="<- Horario ->",
-                    fg="black", bg="#F2F2F2")
+                    fg="black", bg=color_1)
 label_49.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
-
-# Horarios finales
 hora_final = tk.StringVar(value="11")
 minuto_final = tk.StringVar(value="30")
 periodo_final = tk.StringVar(value="PM")
-
-# spinbox_3: Hora final
 spinbox_3 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_3.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
-
-# spinbox_4: Minuto final
 spinbox_4 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_4.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
-
-# spinbox_5: Periodo final
 spinbox_5 = tk.Spinbox(Frame3, values=("PM", "AM"), textvariable=periodo_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
 spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
-
-# button_17: Actualizar
 button_17 = tk.Button(Frame3, text="Actualizar", height=0, width=0,
                       border=3, background="#00B050", command=calcular_defectos)
 button_17.grid(row=0, column=7, padx=2, pady=5, sticky="nsew")
-# ------------ Frame4_Row0
-# ----- Part#1
-# label_50: Numero de parte 1
 label_50 = tk.Label(Frame4, text=part_1,
                     fg="black")
 label_50.grid(row=0, column=1, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#2
-# label_51: Numero de parte 2
 label_51 = tk.Label(Frame4, text=part_2,
                     fg="black")
 label_51.grid(row=0, column=2, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#3
-# label_52: Numero de parte 3
 label_52 = tk.Label(Frame4, text=part_3,
                     fg="black")
 label_52.grid(row=0, column=3, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#4
-# label_53: Numero de parte 4
 label_53 = tk.Label(Frame4, text=part_4,
                     fg="black")
 label_53.grid(row=0, column=4, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#5
-# label_54: Numero de parte 5
 label_54 = tk.Label(Frame4, text=part_5,
                     fg="black")
 label_54.grid(row=0, column=5, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#6
-# label_55: Numero de parte 6
 label_55 = tk.Label(Frame4, text=part_6,
                     fg="black")
 label_55.grid(row=0, column=6, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#7
-# label_56: Numero de parte 7
 label_56 = tk.Label(Frame4, text=part_7,
                     fg="black")
 label_56.grid(row=0, column=7, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#8
-# label_57: Numero de parte 8
 label_57 = tk.Label(Frame4, text=part_8,
                     fg="black")
 label_57.grid(row=0, column=8, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#9
-# label_58: Numero de parte 9
 label_58 = tk.Label(Frame4, text=part_9,
                     fg="black")
 label_58.grid(row=0, column=9, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#10
-# label_59: Numero de parte 10
 label_59 = tk.Label(Frame4, text=part_10,
                     fg="black")
 label_59.grid(row=0, column=10, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#11
-# label_60: Numero de parte 11
 label_60 = tk.Label(Frame4, text=part_11,
                     fg="black")
 label_60.grid(row=0, column=11, padx=0, pady=0, sticky="nsew")
-
-# ----- Part#12
-# label_61: Numero de parte 12
 label_61 = tk.Label(Frame4, text=part_12,
                     fg="black")
 label_61.grid(row=0, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row1
-
-# label_62: Defectos
 label_62 = tk.Label(Frame4, text="Defectos:",
                     fg="black", bg="#FFFFC9", anchor="e")
 label_62.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_63: Defectos Part#1
 label_63 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_63.grid(row=1, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_64: Defectos Part#2
 label_64 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_64.grid(row=1, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_65: Defectos Part#3
 label_65 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_65.grid(row=1, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_66: Defectos Part#4
 label_66 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_66.grid(row=1, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_67: Defectos Part#5
 label_67 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_67.grid(row=1, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_68: Defectos Part#6
 label_68 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_68.grid(row=1, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_69: Defectos Part#7
 label_69 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_69.grid(row=1, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_70: Defectos Part#8
 label_70 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_70.grid(row=1, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_71: Defectos Part#9
 label_71 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_71.grid(row=1, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_72: Defectos Part#10
 label_72 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_72.grid(row=1, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_73: Defectos Part#11
 label_73 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_73.grid(row=1, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_74: Defectos Part#12
 label_74 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_74.grid(row=1, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row2
-
-# label_75: Producido
 label_75 = tk.Label(Frame4, text="Producido:",
                     fg="black", bg="#FFFFC9", anchor="e")
 label_75.grid(row=2, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_76: Producido Part#1
 label_76 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_76.grid(row=2, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_77: Producido Part#2
 label_77 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_77.grid(row=2, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_78: Producido Part#3
 label_78 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_78.grid(row=2, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_79: Producido Part#4
 label_79 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_79.grid(row=2, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_80: Producido Part#5
 label_80 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_80.grid(row=2, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_81: Producido Part#6
 label_81 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_81.grid(row=2, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_82: Producido Part#7
 label_82 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_82.grid(row=2, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_83: Producido Part#8
 label_83 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_83.grid(row=2, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_84: Producido Part#9
 label_84 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_84.grid(row=2, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_85: Producido Part#10
 label_85 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_85.grid(row=2, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_86: Producido Part#11
 label_86 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_86.grid(row=2, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_87: Producido Part#12
 label_87 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_87.grid(row=2, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row3
-
-# label_88: FPY
 label_88 = tk.Label(Frame4, text="FPY:",
                     fg="black", bg="#FFFFC9", anchor="e")
 label_88.grid(row=3, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_89: FPY Part#1
 label_89 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_89.grid(row=3, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_90: FPY Part#2
 label_90 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_90.grid(row=3, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_91: FPY Part#3
 label_91 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_91.grid(row=3, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_92: FPY Part#4
 label_92 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_92.grid(row=3, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_93: FPY Part#5
 label_93 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_93.grid(row=3, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_94: FPY Part#6
 label_94 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_94.grid(row=3, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_95: FPY Part#7
 label_95 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_95.grid(row=3, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_96: FPY Part#8
 label_96 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_96.grid(row=3, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_97: FPY Part#9
 label_97 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_97.grid(row=3, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_98: FPY Part#10
 label_98 = tk.Label(Frame4,
-                    fg="black", bg="#D9D9D9")
+                    fg="black", bg=color_3)
 label_98.grid(row=3, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_99: FPY Part#11
 label_99 = tk.Label(Frame4,
-                    fg="black", bg="#A6A6A6")
+                    fg="black", bg=color_2)
 label_99.grid(row=3, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_100: FPY Part#12
 label_100 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_100.grid(row=3, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row4
-# button_0: Reset Part#1
 button_0 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_1, "Reset"))
 button_0.grid(row=4, column=1, padx=0, pady=0, sticky="nsew")
-
-# button_1: Reset Part#2
 button_1 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_2, "Reset"))
 button_1.grid(row=4, column=2, padx=0, pady=0, sticky="nsew")
-
-# button_2: Reset Part#3
 button_2 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_3, "Reset"))
 button_2.grid(row=4, column=3, padx=0, pady=0, sticky="nsew")
-
-# button_3: Reset Part#4
 button_3 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_4, "Reset"))
 button_3.grid(row=4, column=4, padx=0, pady=0, sticky="nsew")
-
-# button_4: Reset Part#5
 button_4 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_5, "Reset"))
 button_4.grid(row=4, column=5, padx=0, pady=0, sticky="nsew")
-
-# button_5: Reset Part#6
 button_5 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_6, "Reset"))
 button_5.grid(row=4, column=6, padx=0, pady=0, sticky="nsew")
-
-# button_6: Reset Part#7
 button_6 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_7, "Reset"))
 button_6.grid(row=4, column=7, padx=0, pady=0, sticky="nsew")
-
-# button_7: Reset Part#8
 button_7 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_8, "Reset"))
 button_7.grid(row=4, column=8, padx=0, pady=0, sticky="nsew")
-
-# button_8: Reset Part#9
 button_8 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_9, "Reset"))
 button_8.grid(row=4, column=9, padx=0, pady=0, sticky="nsew")
-
-# button_9: Reset Part#10
 button_9 = tk.Button(Frame4, text="Reset", height=0, width=0,
                      border=3, background="deepskyblue", command=lambda: reset(part_10, "Reset"))
 button_9.grid(row=4, column=10, padx=0, pady=0, sticky="nsew")
-
-# button_10: Reset Part#11
 button_10 = tk.Button(Frame4, text="Reset", height=0, width=0,
                       border=3, background="deepskyblue", command=lambda: reset(part_11, "Reset"))
 button_10.grid(row=4, column=11, padx=0, pady=0, sticky="nsew")
-
-# button_11: Reset Part#12
 button_11 = tk.Button(Frame4, text="Reset", height=0, width=0,
                       border=3, background="deepskyblue", command=lambda: reset(part_12, "Reset"))
 button_11.grid(row=4, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row5
-
-# label_101: FPY Total
 label_101 = tk.Label(Frame4, text="FPY Total:",
                      fg="black", bg="#CAEDFB", anchor="e")
 label_101.grid(row=5, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_102: FPY Total Part#1
 label_102 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_102.grid(row=5, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_103: FPY Total Part#2
 label_103 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_103.grid(row=5, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_104: FPY Total Part#3
 label_104 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_104.grid(row=5, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_105: FPY Total Part#4
 label_105 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_105.grid(row=5, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_106: FPY Total Part#5
 label_106 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_106.grid(row=5, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_107: FPY Total Part#6
 label_107 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_107.grid(row=5, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_108: FPY Total Part#7
 label_108 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_108.grid(row=5, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_109: FPY Total Part#8
 label_109 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_109.grid(row=5, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_110: FPY Total Part#9
 label_110 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_110.grid(row=5, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_111: FPY Total Part#10
 label_111 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_111.grid(row=5, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_112: FPY Total Part#11
 label_112 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_112.grid(row=5, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_113: FPY Total Part#12
 label_113 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_113.grid(row=5, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row6
 # label_114: Total Defect:
 label_114 = tk.Label(Frame4, text="Total Defect:",
                      fg="black", bg="#CAEDFB", anchor="e")
 label_114.grid(row=6, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_115: Total Defect Part#1
 label_115 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_115.grid(row=6, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_116: Total Defect Part#2
 label_116 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_116.grid(row=6, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_117: Total Defect Part#3
 label_117 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_117.grid(row=6, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_118: Total Defect Part#4
 label_118 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_118.grid(row=6, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_119: Total Defect Part#5
 label_119 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_119.grid(row=6, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_120: Total Defect Part#6
 label_120 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_120.grid(row=6, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_121: Total Defect Part#7
 label_121 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_121.grid(row=6, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_122: Total Defect Part#8
 label_122 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_122.grid(row=6, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_123: Total Defect Part#9
 label_123 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_123.grid(row=6, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_124: Total Defect Part#10
 label_124 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_124.grid(row=6, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_125: Total Defect Part#11
 label_125 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_125.grid(row=6, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_126: Total Defect Part#12
 label_126 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_126.grid(row=6, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row7
-# label_127: Total Produc
 label_127 = tk.Label(Frame4, text="Total Produc:",
                      fg="black", bg="#CAEDFB", anchor="e")
 label_127.grid(row=7, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_128: Total Produc Part#1
 label_128 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_128.grid(row=7, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_129: Total Produc Part#2
 label_129 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_129.grid(row=7, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_130: Total Produc Part#3
 label_130 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_130.grid(row=7, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_131: Total Produc Part#4
 label_131 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_131.grid(row=7, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_132: Total Produc Part#5
 label_132 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_132.grid(row=7, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_133: Total Produc Part#6
 label_133 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_133.grid(row=7, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_134: Total Produc Part#7
 label_134 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_134.grid(row=7, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_135: Total Produc Part#8
 label_135 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_135.grid(row=7, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_136: Total Produc Part#9
 label_136 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_136.grid(row=7, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_137: Total Produc Part#10
 label_137 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_137.grid(row=7, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_138: Total Produc Part#11
 label_138 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_138.grid(row=7, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_139: Total Produc Part#12
 label_139 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_139.grid(row=7, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row8
-
-# label_140: TopDefect
 label_140 = tk.Label(Frame4, text="TopDefect:",
                      fg="black", bg="#FBE2D5", anchor="e")
 label_140.grid(row=8, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_141: TopDefect Part#1
 label_141 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_141.grid(row=8, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_142: TopDefect Part#2
 label_142 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_142.grid(row=8, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_143: TopDefect Part#3
 label_143 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_143.grid(row=8, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_144: TopDefect Part#4
 label_144 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_144.grid(row=8, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_145: TopDefect Part#5
 label_145 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_145.grid(row=8, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_146: TopDefect Part#6
 label_146 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_146.grid(row=8, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_147: TopDefect Part#7
 label_147 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_147.grid(row=8, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_148: TopDefect Part#8
 label_148 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_148.grid(row=8, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_149: TopDefect Part#9
 label_149 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_149.grid(row=8, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_150: TopDefect Part#10
 label_150 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_150.grid(row=8, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_151: TopDefect Part#11
 label_151 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_151.grid(row=8, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_152: TopDefect Part#12
 label_152 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_152.grid(row=8, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row9
-
-# label_153: Cant.Defect
 label_153 = tk.Label(Frame4, text="Cant.Defect:",
                      fg="black", bg="#FBE2D5", anchor="e")
 label_153.grid(row=9, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_154: Cant.Defect Part#1
 label_154 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_154.grid(row=9, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_155: Cant.Defect Part#2
 label_155 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_155.grid(row=9, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_156: Cant.Defect Part#3
 label_156 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_156.grid(row=9, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_157: Cant.Defect Part#4
 label_157 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_157.grid(row=9, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_158: Cant.Defect Part#5
 label_158 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_158.grid(row=9, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_159: Cant.Defect Part#6
 label_159 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_159.grid(row=9, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_160: Cant.Defect Part#7
 label_160 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_160.grid(row=9, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_161: Cant.Defect Part#8
 label_161 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_161.grid(row=9, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_162: Cant.Defect Part#9
 label_162 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_162.grid(row=9, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_163: Cant.Defect Part#10
 label_163 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_163.grid(row=9, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_164: Cant.Defect Part#11
 label_164 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_164.grid(row=9, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_165: Cant.Defect Part#12
 label_165 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_165.grid(row=9, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame4_Row10
-
-# label_166: %Defect
 label_166 = tk.Label(Frame4, text="%Defect:",
                      fg="black", bg="#FBE2D5", anchor="e")
 label_166.grid(row=10, column=0, padx=0, pady=0, sticky="nsew")
-
-# label_167: %Defect Part#1
 label_167 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_167.grid(row=10, column=1, padx=0, pady=0, sticky="nsew")
-
-# label_168: %Defect Part#2
 label_168 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_168.grid(row=10, column=2, padx=0, pady=0, sticky="nsew")
-
-# label_169: %Defect Part#3
 label_169 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_169.grid(row=10, column=3, padx=0, pady=0, sticky="nsew")
-
-# label_170: %Defect Part#4
 label_170 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_170.grid(row=10, column=4, padx=0, pady=0, sticky="nsew")
-
-# label_171: %Defect Part#5
 label_171 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_171.grid(row=10, column=5, padx=0, pady=0, sticky="nsew")
-
-# label_172: %Defect Part#6
 label_172 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_172.grid(row=10, column=6, padx=0, pady=0, sticky="nsew")
-
-# label_173: %Defect Part#7
 label_173 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_173.grid(row=10, column=7, padx=0, pady=0, sticky="nsew")
-
-# label_174: %Defect Part#8
 label_174 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_174.grid(row=10, column=8, padx=0, pady=0, sticky="nsew")
-
-# label_175: %Defect Part#9
 label_175 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_175.grid(row=10, column=9, padx=0, pady=0, sticky="nsew")
-
-# label_176: %Defect Part#10
 label_176 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_176.grid(row=10, column=10, padx=0, pady=0, sticky="nsew")
-
-# label_177: %Defect Part#11
 label_177 = tk.Label(Frame4,
-                     fg="black", bg="#A6A6A6")
+                     fg="black", bg=color_2)
 label_177.grid(row=10, column=11, padx=0, pady=0, sticky="nsew")
-
-# label_178: %Defect Part#12
 label_178 = tk.Label(Frame4,
-                     fg="black", bg="#D9D9D9")
+                     fg="black", bg=color_3)
 label_178.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
-
-# ------------ Frame5_Row0
-# Label_179: Fecha/Hora
-label_179 = tk.Label(Frame5, fg="black", bg="#F2F2F2", anchor="sw")
+label_179 = tk.Label(Frame5, fg="black", bg=color_1, anchor="sw")
 label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
-
-# button_12: Defectos
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
                       border=3, background="yellow", command=defect_root)
 button_12.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
-
-# button_13: Soporte
 button_13 = tk.Button(Frame5, text="Soporte", height=0, width=0,
                       border=3, background="red", command=lambda: support_root(soporte_andon))
 button_13.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
-
-# button_14: Parámetros
 button_14 = tk.Button(Frame5, text="Parámetros", height=0, width=0,
                       border=3, background="#D86DCD", command=root_parametros)
 button_14.grid(row=0, column=3, padx=2, pady=5, sticky="nsew")
-
-# button_15: Registros
 button_15 = tk.Button(Frame5, text="Registros", height=0, width=0,
                       border=3, background="#0070C0", command=lambda: root_registros(actualizar_principal))
 button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
-
-# button_16: LogFile
 button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
                       border=3, background="#00B050", command=lambda: root_logfile(actualizar_principal))
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
-
-# Label_180: Rev
 label_180 = tk.Label(Frame5, text="Registros SEHO Rev8.0 (By: Oscar Tovar)",
-                     fg="black", bg="#F2F2F2", anchor="se")
+                     fg="black", bg=color_1, anchor="se")
 label_180.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -5489,5 +4943,5 @@ Frame5.grid(row=5, column=0, sticky="nsew")
 if __name__ == "__main__":
     actualizar_fecha_hora()
     root_scale()
-    root.after(500, calcular_defectos)
+    root.after(1000, calcular_defectos)
     root.mainloop()
