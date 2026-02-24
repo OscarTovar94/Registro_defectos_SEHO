@@ -1,0 +1,1 @@
+pyinstaller --onedir --noconsole --clean --icon=SEHO.ico Registros_SEHO_Rev8.0.py

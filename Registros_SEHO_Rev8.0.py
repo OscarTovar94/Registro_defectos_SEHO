@@ -18,9 +18,23 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import io
 import matplotlib.colors as mcolors
+import socket
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
+def bloquear_instancia():
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        sock.bind(("127.0.0.1", 65432))  # Puerto único
+    except socket.error:
+        messagebox.showinfo("El programa ya está abierto.")
+        print("El programa ya está abierto.")
+        sys.exit()
+
+
+bloquear_instancia()
+
+
 def settings_root(clave):
     """Function to load settings."""
     try:
@@ -35,6 +49,7 @@ def settings_root(clave):
         messagebox.showerror(
             "Error", f"Ocurrió un error al leer la configuración: {e}")
     return None
+
 
 # Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
@@ -52,15 +67,14 @@ csv_files = [csv_file, csv_file2]
 
 csv_cache_mtime = {}
 
+
 def cargar_datos_cache():
 
     global df_cache
     global defect_names_cache
     global csv_cache_mtime
 
-
     recargar = False
-
 
     # ==============================
     # VERIFICAR SI CAMBIO ALGUN CSV
@@ -75,7 +89,6 @@ def cargar_datos_cache():
             csv_cache_mtime[file] = mtime
 
             recargar = True
-
 
     # ==============================
     # CARGAR CSV SI CAMBIO
@@ -98,11 +111,9 @@ def cargar_datos_cache():
 
             lista_df.append(df_temp)
 
-
         # unir todos
 
         df_cache = pd.concat(lista_df, ignore_index=True)
-
 
     # ==============================
     # DEFECTOS
@@ -124,7 +135,6 @@ def cargar_datos_cache():
                 _, value = line.split("=", 1)
 
                 defect_names_cache.append(value.strip())
-
 
     return df_cache, defect_names_cache
 
@@ -2096,25 +2106,35 @@ def defect_root():
                            bd=1,  relief="ridge")  # Cantidad_defecto28
         label_rd_64.config(font=("Arial", defectos, "bold"),
                            bd=1,  relief="ridge")  # Cantidad_defecto29
-        label_rd_65.config(font=("Arial", defectos, "bold"), bd=1,  relief="ridge")  # Cantidad_defecto30
+        label_rd_65.config(font=("Arial", defectos, "bold"),
+                           bd=1,  relief="ridge")  # Cantidad_defecto30
         label_rd_66.config(font=("Arial", fuente_30, "bold"))
         label_rd_67.config(font=("Arial", fuente_22, "bold"))
         label_rd_68.config(font=("Arial", fuente_22, "bold"))
-        label_rd_69.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_70.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_71.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_69.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_70.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_71.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
         label_rd_72.config(font=("Arial", fuente_22, "bold"))
         label_rd_73.config(font=("Arial", fuente_22, "bold"))
         label_rd_74.config(font=("Arial", fuente_22, "bold"))
-        label_rd_75.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_76.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_77.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_75.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_76.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_77.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
         label_rd_78.config(font=("Arial", fuente_30, "bold"))
         label_rd_79.config(font=("Arial", fuente_30, "bold"))
         label_rd_80.config(font=("Arial", fuente_22, "bold"))
-        label_rd_81.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_82.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
-        label_rd_83.config(font=("Arial", fuente_22, "bold"),bd=1,relief="ridge",highlightbackground="black",highlightcolor="black",highlightthickness=1)
+        label_rd_81.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_82.config(font=("Arial", fuente_22, "bold"), bd=1,  relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
+        label_rd_83.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge",
+                           highlightbackground="black", highlightcolor="black", highlightthickness=1)
         label_rd_84.config(font=("Arial", fuente_22, "bold"))
         label_rd_85.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge", highlightbackground="black",
                            highlightcolor="black", highlightthickness=1)
@@ -2122,9 +2142,6 @@ def defect_root():
                            highlightcolor="black", highlightthickness=1)
         label_rd_87.config(font=("Arial", fuente_22, "bold"), bd=1, relief="ridge", highlightbackground="black",
                            highlightcolor="black", highlightthickness=1)
-
-
-
 
         # menu's
         menu_rd_1.config(font=("Arial", fuente_12, "bold"), activebackground="deep sky blue",
@@ -2190,7 +2207,8 @@ def defect_root():
             df_raw, _ = cargar_datos_cache()
             df = df_raw.drop_duplicates().copy()  # Limpieza de duplicados
             df.columns = df.columns.str.strip()
-            df["Fecha/Hora"] = pd.to_datetime(df["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
+            df["Fecha/Hora"] = pd.to_datetime(df["Fecha/Hora"],
+                                              format="%d/%m/%Y %H:%M:%S")
 
             # Filtro de fecha actual de la UI
             fecha_dt = pd.to_datetime(fecha_str, format="%d/%m/%Y").date()
@@ -2207,7 +2225,8 @@ def defect_root():
             # Cargar nombres de defectos
             defect_names = []
             with open("C:/Registro_defectos_SEHO/defects.ini", encoding="utf-8") as f:
-                defect_names = [line.split("=")[1].strip() for line in f if "=" in line]
+                defect_names = [line.split("=")[1].strip()
+                                for line in f if "=" in line]
 
             defectos_validos = [d for d in defect_names if d in df.columns]
 
@@ -2216,7 +2235,8 @@ def defect_root():
             suma_defectos = df[defectos_validos].sum()
             total_defectos = int(suma_defectos.sum())
             buenos = total_producido - total_defectos
-            fpy = (buenos / total_producido * 100) if total_producido > 0 else 0
+            fpy = (buenos / total_producido *
+                   100) if total_producido > 0 else 0
 
             # Obtener Meta desde el .ini
             try:
@@ -2241,7 +2261,8 @@ def defect_root():
 
             main_container.columnconfigure(0, weight=1)
             main_container.columnconfigure(1, weight=1)
-            for i in range(3): main_container.rowconfigure(i, weight=1)
+            for i in range(3):
+                main_container.rowconfigure(i, weight=1)
 
             # --- GRÁFICA 1: DONA FPY (CON EMOJI) ---
             fig1 = plt.Figure(figsize=(5, 5), facecolor="#0F111A")
@@ -2251,12 +2272,14 @@ def defect_root():
 
             # Textos centrales (Emoji y FPY)
             ax1.text(0, 0.2, emoji, ha='center', va='center', fontsize=50)
-            ax1.text(0, -0.2, f"{fpy:.1f}%", ha='center', va='center', fontsize=18, fontweight='bold')
+            ax1.text(0, -0.2, f"{fpy:.1f}%", ha='center',
+                     va='center', fontsize=18, fontweight='bold')
             ax1.text(0, -0.45, f"STATUS: {estado}", ha='center', va='center', fontsize=6, color=color_kpi,
                      fontweight='bold')
             ax1.set_title(f"Calidad vs Meta ({fpy_meta}%)", pad=5)
 
-            FigureCanvasTkAgg(fig1, main_container).get_tk_widget().grid(row=0, column=0, sticky="nsew", padx=5)
+            FigureCanvasTkAgg(fig1, main_container).get_tk_widget().grid(
+                row=0, column=0, sticky="nsew", padx=5)
 
             # --- GRÁFICA 2: PRODUCCIÓN TOTAL (PRO STACKED BAR) ---
             fig2 = plt.Figure(figsize=(5, 3), facecolor="#0F111A")
@@ -2267,15 +2290,20 @@ def defect_root():
             color_ng = "#FF4646"  # Rojo Vibrante
 
             # Calcular porcentajes
-            porc_ok = (buenos / total_producido * 100) if total_producido > 0 else 0
-            porc_ng = (total_defectos / total_producido * 100) if total_producido > 0 else 0
+            porc_ok = (buenos / total_producido *
+                       100) if total_producido > 0 else 0
+            porc_ng = (total_defectos / total_producido *
+                       100) if total_producido > 0 else 0
 
             # Crear las barras
-            ax2.bar(["Estado"], [buenos], color=color_ok, label="OK", width=0.6)
-            ax2.bar(["Estado"], [total_defectos], bottom=[buenos], color=color_ng, label="Defectos", width=0.6)
+            ax2.bar(["Estado"], [buenos], color=color_ok,
+                    label="OK", width=0.6)
+            ax2.bar(["Estado"], [total_defectos], bottom=[buenos],
+                    color=color_ng, label="Defectos", width=0.6)
 
             # Título con el gran total
-            ax2.set_title(f"PRODUCCIÓN TOTAL: {total_producido}", fontsize=12, color='white', fontweight='bold', pad=5)
+            ax2.set_title(f"PRODUCCIÓN TOTAL: {total_producido}",
+                          fontsize=12, color='white', fontweight='bold', pad=5)
 
             # Etiquetas internas con Cantidad y Porcentaje
             # Texto para BUENOS
@@ -2289,14 +2317,15 @@ def defect_root():
                          ha='center', va='center', color='white', fontweight='bold', fontsize=8)
 
             # Estética Pro: Quitar bordes y ajustar leyenda
-            #ax2.legend(frameon=False, loc='upper right', labelcolor='white')
+            # ax2.legend(frameon=False, loc='upper right', labelcolor='white')
             ax2.spines['top'].set_visible(False)
             ax2.spines['right'].set_visible(False)
             ax2.spines['left'].set_color('#2A2D3E')
             ax2.spines['bottom'].set_color('#2A2D3E')
             ax2.tick_params(colors='white')
 
-            FigureCanvasTkAgg(fig2, main_container).get_tk_widget().grid(row=0, column=1, sticky="nsew", padx=5)
+            FigureCanvasTkAgg(fig2, main_container).get_tk_widget().grid(
+                row=0, column=1, sticky="nsew", padx=5)
 
             # --- GRÁFICA 3: PARETO TOP 5 DEFECTOS ---
             top5 = suma_defectos.sort_values(ascending=True).tail(5)
@@ -2324,7 +2353,8 @@ def defect_root():
             # LA CLAVE: Ajustar el diseño para que no se corten los nombres largos
             fig3.tight_layout()
 
-            FigureCanvasTkAgg(fig3, main_container).get_tk_widget().grid(row=1, column=0, sticky="nsew", padx=5)
+            FigureCanvasTkAgg(fig3, main_container).get_tk_widget().grid(
+                row=1, column=0, sticky="nsew", padx=5)
 
             # --- GRÁFICA 4: RENDIMIENTO POR HORA (ÁREA CON ETIQUETAS) ---
             df["Hora"] = df["Fecha/Hora"].dt.hour
@@ -2336,7 +2366,8 @@ def defect_root():
             # Dibujamos la línea y el área
             ax4.plot(prod_hora.index, prod_hora.values, color="#00D4FF",
                      marker="o", markersize=8, linewidth=2, zorder=2)
-            ax4.fill_between(prod_hora.index, prod_hora.values, color="#00D4FF", alpha=0.1)
+            ax4.fill_between(prod_hora.index, prod_hora.values,
+                             color="#00D4FF", alpha=0.1)
 
             # AJUSTE DE RANGO: Damos un 15% más de espacio arriba para que el número más alto no se corte
             if not prod_hora.empty:
@@ -2362,12 +2393,16 @@ def defect_root():
             ax4.spines['top'].set_visible(False)
             ax4.spines['right'].set_visible(False)
 
-            FigureCanvasTkAgg(fig4, main_container).get_tk_widget().grid(row=1, column=1, sticky="nsew", padx=5)
+            FigureCanvasTkAgg(fig4, main_container).get_tk_widget().grid(
+                row=1, column=1, sticky="nsew", padx=5)
 
             # --- GRÁFICA 5: PRODUCCIÓN POR MODELO (OPTIMIZADA PARA BARRAS PEQUEÑAS) ---
-            resumen_modelos = df.groupby("Modelo").agg({"Estandar": "sum"}).copy()
-            resumen_modelos["Defectos"] = df.groupby("Modelo")[defectos_validos].sum().sum(axis=1)
-            resumen_modelos["Buenos"] = resumen_modelos["Estandar"] - resumen_modelos["Defectos"]
+            resumen_modelos = df.groupby("Modelo").agg(
+                {"Estandar": "sum"}).copy()
+            resumen_modelos["Defectos"] = df.groupby(
+                "Modelo")[defectos_validos].sum().sum(axis=1)
+            resumen_modelos["Buenos"] = resumen_modelos["Estandar"] - \
+                resumen_modelos["Defectos"]
 
             fig5 = plt.Figure(figsize=(10, 4), facecolor="#0F111A")
             ax5 = fig5.add_subplot(111)
@@ -2382,7 +2417,8 @@ def defect_root():
             color_ng = "#FF4646"
 
             ax5.bar(modelos, buenos_val, color=color_ok, label="Buenos")
-            ax5.bar(modelos, defectos_val, bottom=buenos_val, color=color_ng, label="Malos")
+            ax5.bar(modelos, defectos_val, bottom=buenos_val,
+                    color=color_ng, label="Malos")
 
             # Ajustar el límite superior para que los totales no se corten
             if not totales.empty:
@@ -2400,7 +2436,8 @@ def defect_root():
                     # --- Lógica para BUENOS ---
                     # Si la barra es muy pequeña (menor al 15% del total max), no ponemos porcentaje, solo el número
                     if b > 0:
-                        txt_b = f"{int(b)}\n({porc_b:.1f}%)" if b > (totales.max() * 0.1) else f"{int(b)}"
+                        txt_b = f"{int(b)}\n({porc_b:.1f}%)" if b > (
+                            totales.max() * 0.1) else f"{int(b)}"
                         ax5.text(i, b / 2, txt_b, ha='center', va='center',
                                  color='#0F111A', fontsize=8, fontweight='bold')
 
@@ -2420,21 +2457,23 @@ def defect_root():
                     ax5.text(i, total + (totales.max() * 0.05), f"TOT: {int(total)}",
                              ha='center', va='bottom', color='#00D4FF', fontsize=9, fontweight='bold')
 
-            ax5.set_title("PRODUCCIÓN POR MODELO", fontsize=12, color="white", pad=5)
+            ax5.set_title("PRODUCCIÓN POR MODELO",
+                          fontsize=12, color="white", pad=5)
             ax5.tick_params(axis='x', colors='white', labelsize=8)
             ax5.tick_params(axis='y', colors='white')
             ax5.spines['top'].set_visible(False)
             ax5.spines['right'].set_visible(False)
 
             # Ajustar leyenda para que no estorbe
-            #ax5.legend(frameon=False, labelcolor='white', loc='upper right', fontsize=8)
+            # ax5.legend(frameon=False, labelcolor='white', loc='upper right', fontsize=8)
 
             fig5.tight_layout()
             FigureCanvasTkAgg(fig5, main_container).get_tk_widget().grid(row=2, column=0, columnspan=2, sticky="nsew",
                                                                          pady=10)
 
         except Exception as e:
-            messagebox.showerror("Error Dashboard", f"No se pudo cargar la dashboard: {e}")
+            messagebox.showerror(
+                "Error Dashboard", f"No se pudo cargar la dashboard: {e}")
 
     def contar_defectos_por_modelo():
         """Cuenta defectos por modelo, fecha y rango de horas - CORREGIDA (Evita conteo doble)"""
@@ -2495,10 +2534,10 @@ def defect_root():
             # APLICAR FILTRO
             # ==============================
             filtro = (
-                    (df["Modelo"] == modelo) &
-                    (df["Fecha/Hora"].dt.date == fecha) &
-                    (df["Fecha/Hora"].dt.time >= hora_inicio) &
-                    (df["Fecha/Hora"].dt.time <= hora_fin)
+                (df["Modelo"] == modelo) &
+                (df["Fecha/Hora"].dt.date == fecha) &
+                (df["Fecha/Hora"].dt.time >= hora_inicio) &
+                (df["Fecha/Hora"].dt.time <= hora_fin)
             )
 
             datos_filtrados = df.loc[filtro]
@@ -2518,30 +2557,36 @@ def defect_root():
             # ==============================
             # FPY
             # ==============================
-            fpy = ((total_producido - total_defectos) / total_producido) * 100 if total_producido > 0 else 0
+            fpy = ((total_producido - total_defectos) /
+                   total_producido) * 100 if total_producido > 0 else 0
             fpy_por_pallet = int(settings_limits("FPY_MODEL"))
 
             if total_producido == 0:
                 label_rd_79.config(text="N/A", fg="black", bg=color_3)
             else:
                 if fpy > fpy_por_pallet:
-                    label_rd_79.config(text=f"{fpy:.2f}%", fg="green", bg="#D9F2D0")
+                    label_rd_79.config(
+                        text=f"{fpy:.2f}%", fg="green", bg="#D9F2D0")
                 elif fpy < fpy_por_pallet:
-                    label_rd_79.config(text=f"{fpy:.2f}%", fg="red", bg="#FFCCCC")
+                    label_rd_79.config(
+                        text=f"{fpy:.2f}%", fg="red", bg="#FFCCCC")
                 else:
-                    label_rd_79.config(text=f"{fpy:.2f}%", fg="#E7601D", bg="#FBE7DD")
+                    label_rd_79.config(
+                        text=f"{fpy:.2f}%", fg="#E7601D", bg="#FBE7DD")
 
             # ==============================
             # TOP DEFECTOS (1, 2 y 3)
             # ==============================
-            top_defectos = suma_defectos[suma_defectos > 0].sort_values(ascending=False)
+            top_defectos = suma_defectos[suma_defectos > 0].sort_values(
+                ascending=False)
 
             # Lógica para llenar los Top Labels (simplificada para evitar repetición)
             def actualizar_top(label_nom, label_cant, label_porc, index, color):
                 if len(top_defectos) > index:
                     nombre = top_defectos.index[index]
                     cant = int(top_defectos.iloc[index])
-                    porc = (cant / total_defectos * 100) if total_defectos > 0 else 0
+                    porc = (cant / total_defectos *
+                            100) if total_defectos > 0 else 0
                     label_nom.config(text=nombre, bg=color)
                     label_cant.config(text=str(cant), bg=color)
                     label_porc.config(text=f"{porc:.1f}%", bg=color)
@@ -2550,9 +2595,12 @@ def defect_root():
                     label_cant.config(text="N/A", bg=color_3)
                     label_porc.config(text="N/A", bg=color_3)
 
-            actualizar_top(label_rd_75, label_rd_76, label_rd_77, 0, "#FFD700")  # Top 1
-            actualizar_top(label_rd_81, label_rd_82, label_rd_83, 1, "#C0C0C0")  # Top 2
-            actualizar_top(label_rd_85, label_rd_86, label_rd_87, 2, "#CD7F32")  # Top 3
+            actualizar_top(label_rd_75, label_rd_76,
+                           label_rd_77, 0, "#FFD700")  # Top 1
+            actualizar_top(label_rd_81, label_rd_82,
+                           label_rd_83, 1, "#C0C0C0")  # Top 2
+            actualizar_top(label_rd_85, label_rd_86,
+                           label_rd_87, 2, "#CD7F32")  # Top 3
 
             # ==============================
             # HEATMAP DE DEFECTOS
@@ -2566,13 +2614,16 @@ def defect_root():
                 valor = int(valores[i])
                 if valor == 0:
                     color_bg = "#C0E6F5" if i % 2 == 0 else "white"
-                    labels_defectos[i].config(text="0", bg=color_bg, fg="black")
+                    labels_defectos[i].config(
+                        text="0", bg=color_bg, fg="black")
                 else:
-                    ratio = (valor - minimo) / (maximo - minimo) if maximo != minimo else 1
+                    ratio = (valor - minimo) / (maximo -
+                                                minimo) if maximo != minimo else 1
                     # De Amarillo (255, 255, 0) a Rojo (255, 0, 0)
                     verde = int(255 * (1 - ratio))
                     color_hex = f'#ff{verde:02x}00'
-                    labels_defectos[i].config(text=str(valor), bg=color_hex, fg="black")
+                    labels_defectos[i].config(
+                        text=str(valor), bg=color_hex, fg="black")
 
             # LLAMAR A LA TABLA DE PALLETS
             crear_tabla_pallets()
@@ -2603,48 +2654,56 @@ def defect_root():
 
             # 3. Preparar Filtros
             modelo_sel = opcion_seleccionada_model.get()
-            fecha_sel = pd.to_datetime(date_rd_1.get(), format="%d/%m/%Y").date()
+            fecha_sel = pd.to_datetime(
+                date_rd_1.get(), format="%d/%m/%Y").date()
             h_ini = pd.to_datetime(f"{hora_inicio_rd.get()}:{minuto_inicio_rd.get()} {periodo_inicio_rd.get()}",
                                    format="%I:%M %p").time()
             h_fin = pd.to_datetime(f"{hora_final_rd.get()}:{minuto_final_rd.get()} {periodo_final_rd.get()}",
                                    format="%I:%M %p").time()
 
             # 4. Aplicar Filtro Estricto
-            df_log["Fecha/Hora"] = pd.to_datetime(df_log["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
+            df_log["Fecha/Hora"] = pd.to_datetime(
+                df_log["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
 
             mask = (
-                    (df_log["Modelo"] == modelo_sel) &
-                    (df_log["Fecha/Hora"].dt.date == fecha_sel) &
-                    (df_log["Fecha/Hora"].dt.time >= h_ini) &
-                    (df_log["Fecha/Hora"].dt.time <= h_fin)
+                (df_log["Modelo"] == modelo_sel) &
+                (df_log["Fecha/Hora"].dt.date == fecha_sel) &
+                (df_log["Fecha/Hora"].dt.time >= h_ini) &
+                (df_log["Fecha/Hora"].dt.time <= h_fin)
             )
             df_filtrado = df_log.loc[mask].copy()
 
             # 5. Configurar Tabla y Estilos
             style = ttk.Style()
             style.theme_use("clam")
-            style.configure("Treeview.Heading", font=('Segoe UI', 12, 'bold'), background="#2C3E50", foreground="white")
-            style.configure("Treeview", font=('Segoe UI', 10, 'bold'), rowheight=25)
-            columnas = ("Pallet", "V/SEHO", "Defectos", "Producido", "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
-            tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings")
-
+            style.configure("Treeview.Heading", font=(
+                'Segoe UI', 12, 'bold'), background="#2C3E50", foreground="white")
+            style.configure("Treeview", font=(
+                'Segoe UI', 10, 'bold'), rowheight=25)
+            columnas = ("Pallet", "V/SEHO", "Defectos", "Producido",
+                        "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
+            tabla = ttk.Treeview(
+                frame_tabla, columns=columnas, show="headings")
 
             for col in columnas:
                 tabla.heading(col, text=col)
                 tabla.column(col, width=100, anchor="center")
 
-            scrollbar = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
+            scrollbar = ttk.Scrollbar(
+                frame_tabla, orient="vertical", command=tabla.yview)
             tabla.configure(yscrollcommand=scrollbar.set)
             tabla.grid(row=0, column=0, sticky="nsew")
             scrollbar.grid(row=0, column=1, sticky="ns")
 
             # 6. Procesar y Colorear
-            todos_los_pallets = sorted(df_params[df_params.iloc[:, 1] == modelo_sel].iloc[:, 0].unique())
+            todos_los_pallets = sorted(
+                df_params[df_params.iloc[:, 1] == modelo_sel].iloc[:, 0].unique())
 
             defect_names = []
             with open("C:/Registro_defectos_SEHO/defects.ini", "r", encoding="utf-8") as f:
                 for line in f:
-                    if "=" in line: defect_names.append(line.split("=")[1].strip())
+                    if "=" in line:
+                        defect_names.append(line.split("=")[1].strip())
 
             fpy_valores = []
             resultados_finales = []
@@ -2659,13 +2718,14 @@ def defect_root():
                     producido = int(df_p["Estandar"].sum())
                     suma_def = df_p[defect_names].sum()
                     total_def = int(suma_def.sum())
-                    fpy_v = ((producido - total_def) / producido * 100) if producido > 0 else 0
+                    fpy_v = ((producido - total_def) / producido *
+                             100) if producido > 0 else 0
 
                     # Top Defecto
                     top = suma_def[suma_def > 0].sort_values(ascending=False)
                     t_nom, t_can, t_por = (
-                    top.index[0], int(top.iloc[0]), f"{(top.iloc[0] / total_def * 100):.1f}%") if not top.empty else (
-                    "N/A", 0, "0%")
+                        top.index[0], int(top.iloc[0]), f"{(top.iloc[0] / total_def * 100):.1f}%") if not top.empty else (
+                        "N/A", 0, "0%")
 
                     fpy_valores.append(fpy_v)
                     resultados_finales.append({
@@ -2673,29 +2733,33 @@ def defect_root():
                         "fpy": fpy_v, "activo": True
                     })
                 else:
-                    resultados_finales.append({"data": (p_id, "-", "-", "-", "-", "-", "-", "-"), "activo": False})
+                    resultados_finales.append(
+                        {"data": (p_id, "-", "-", "-", "-", "-", "-", "-"), "activo": False})
 
             # 7. Insertar con el degradado corregido
-            f_min, f_max = (min(fpy_valores), max(fpy_valores)) if fpy_valores else (0, 0)
+            f_min, f_max = (min(fpy_valores), max(
+                fpy_valores)) if fpy_valores else (0, 0)
 
             for i, res in enumerate(resultados_finales):
                 if res["activo"]:
-                    ratio = (res["fpy"] - f_min) / (f_max - f_min) if f_max != f_min else 1
+                    ratio = (res["fpy"] - f_min) / \
+                        (f_max - f_min) if f_max != f_min else 1
                     # Color pastel dinámico
                     r, g, b = (1.0, 0.8 + (ratio * 0.2), 0.8) if ratio < 0.5 else (
-                    1.0 - ((ratio - 0.5) * 0.2), 1.0, 0.8 + ((ratio - 0.5) * 0.2))
+                        1.0 - ((ratio - 0.5) * 0.2), 1.0, 0.8 + ((ratio - 0.5) * 0.2))
                     color_hex = mcolors.to_hex((r, g, b))
 
                     tag_id = f"tag_{i}"
                     tabla.tag_configure(tag_id, background=color_hex)
                     tabla.insert("", "end", values=res["data"], tags=(tag_id,))
                 else:
-                    tabla.tag_configure('inactivo', background="#F5F5F5", foreground="#95A5A6")
-                    tabla.insert("", "end", values=res["data"], tags=('inactivo',))
+                    tabla.tag_configure(
+                        'inactivo', background="#F5F5F5", foreground="#95A5A6")
+                    tabla.insert(
+                        "", "end", values=res["data"], tags=('inactivo',))
 
         except Exception as e:
             messagebox.showerror("Error", f"Error en conteo: {e}")
-
 
     # ---------- Variables root_defect
     global root
@@ -3222,7 +3286,8 @@ def defect_root():
     label_rd_73 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
     label_rd_73.grid(row=2, column=1, padx=0, pady=0, sticky="nsew")
 
-    label_rd_74 = tk.Label(frame3_rd, text="1", fg="black",bg=color_1, anchor="e")
+    label_rd_74 = tk.Label(frame3_rd, text="1",
+                           fg="black", bg=color_1, anchor="e")
     label_rd_74.grid(row=2, column=2, padx=0, pady=0, sticky="nsew")
 
     label_rd_75 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
@@ -3232,17 +3297,18 @@ def defect_root():
     label_rd_76.grid(row=2, column=4, padx=0, pady=0, sticky="nsew")
 
     label_rd_77 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
-    label_rd_77.grid(row=2, column=5, padx=(0,50), pady=0, sticky="nsew")
+    label_rd_77.grid(row=2, column=5, padx=(0, 50), pady=0, sticky="nsew")
 
     label_rd_78 = tk.Label(frame3_rd, text="FPY:",
                            fg="black", bg="#FFFFC9", anchor="e")
     label_rd_78.grid(row=3, column=0,
-                     padx=(50, 0), pady=0,rowspan=2, sticky="nsew")
+                     padx=(50, 0), pady=0, rowspan=2, sticky="nsew")
 
     label_rd_79 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
-    label_rd_79.grid(row=3, column=1, padx=0, pady=0,rowspan=2, sticky="nsew")
+    label_rd_79.grid(row=3, column=1, padx=0, pady=0, rowspan=2, sticky="nsew")
 
-    label_rd_80 = tk.Label(frame3_rd, text="2", fg="black", bg=color_1, anchor="e")
+    label_rd_80 = tk.Label(frame3_rd, text="2",
+                           fg="black", bg=color_1, anchor="e")
     label_rd_80.grid(row=3, column=2, padx=0, pady=0, sticky="nsew")
 
     label_rd_81 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
@@ -3254,7 +3320,8 @@ def defect_root():
     label_rd_83 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_1)
     label_rd_83.grid(row=3, column=5, padx=(0, 50), pady=0, sticky="nsew")
 
-    label_rd_84 = tk.Label(frame3_rd, text="3", fg="black", bg=color_1, anchor="e")
+    label_rd_84 = tk.Label(frame3_rd, text="3",
+                           fg="black", bg=color_1, anchor="e")
     label_rd_84.grid(row=4, column=2, padx=0, pady=0, sticky="nsew")
 
     label_rd_85 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
@@ -3264,11 +3331,7 @@ def defect_root():
     label_rd_86.grid(row=4, column=4, padx=0, pady=0, sticky="nsew")
 
     label_rd_87 = tk.Label(frame3_rd, text="N/A", fg="black", bg=color_3)
-    label_rd_87.grid(row=4, column=5, padx=(0,50), pady=0, sticky="nsew")
-
-
-
-
+    label_rd_87.grid(row=4, column=5, padx=(0, 50), pady=0, sticky="nsew")
 
     # ---------------------------------------------------------------------------------------------
     frame0_rd.grid(row=0, column=0, sticky="nsew", columnspan=2)
@@ -3455,7 +3518,8 @@ def guardar_datos(event=None):
         # 2. Validación: Verificar que el Pallet y Modelo no estén vacíos
         # (dat1 y dat2 en tu código original)
         if not datos[0] or datos[1] == "0" or datos[1] == "":
-            messagebox.showwarning("Atención", "El número de Pallet es obligatorio.")
+            messagebox.showwarning(
+                "Atención", "El número de Pallet es obligatorio.")
             guardando_en_progreso = False
             return
 
@@ -3488,6 +3552,7 @@ def guardar_datos(event=None):
     finally:
         # Importante: liberar el bloqueo siempre, ocurra error o no
         guardando_en_progreso = False
+
 
 data_logfile = pd.read_csv(csv_file, encoding='latin1')
 data_register = pd.read_csv(csv_file2, encoding='latin1')
@@ -4424,7 +4489,7 @@ label_47.grid(row=0, column=14, padx=0, pady=5, sticky="nsew")
 label_48 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
-hora_inicial = tk.StringVar(value="12")
+hora_inicial = tk.StringVar(value="6")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
 spinbox_0 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_inicial,
@@ -4439,8 +4504,8 @@ spinbox_2.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
 label_49 = tk.Label(Frame3, text="<- Horario ->",
                     fg="black", bg=color_1)
 label_49.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
-hora_final = tk.StringVar(value="11")
-minuto_final = tk.StringVar(value="30")
+hora_final = tk.StringVar(value="3")
+minuto_final = tk.StringVar(value="00")
 periodo_final = tk.StringVar(value="PM")
 spinbox_3 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_final,
                        wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
