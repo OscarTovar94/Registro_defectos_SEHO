@@ -2930,23 +2930,37 @@ def defect_root():
     date_rd_1.grid(row=0, column=3, padx=0, pady=0,
                    sticky="nsew")
 
+    # Configuración de estilo para que no se vea "viejo"
+    style = ttk.Style()
+    # Usar 'default' permite personalizar más colores
+    style.theme_use('default')
+    style.configure("Custom.TCombobox", fieldbackground="white",
+                    foreground="black", padding=2)
+
+    # Horas con formato 1, 2, 12...
+    horas_vals_rd = [str(i) for i in range(1, 13)]
+    # Minutos con formato 00, 01, 02...
+    minutos_vals_rd = [f"{i:02d}" for i in range(60)]
+    # Opciones de periodo
+    lista_periodos_rd = ["AM", "PM"]
+
     # spinbox_rs_1: Hora de inicio
     hora_inicio_rd = tk.StringVar(value="6")
-    spinbox_rd_1 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_1 = ttk.Combobox(frame1_rd, values=horas_vals_rd, style="Custom.TCombobox", textvariable=hora_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_1.grid(row=0, column=4, padx=(10, 0), pady=0, sticky="nsew")
 
     # spinbox_rs_2: Minuto de inicio
     minuto_inicio_rd = tk.StringVar(value="00")
-    spinbox_rd_2 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_2 = ttk.Combobox(frame1_rd, values=minutos_vals_rd, style="Custom.TCombobox", textvariable=minuto_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_2.grid(row=0, column=5, padx=0, pady=0,
                       sticky="nsew")
 
     # spinbox_rs_3: Periodo de inicio
     periodo_inicio_rd = tk.StringVar(value="AM")
-    spinbox_rd_3 = tk.Spinbox(frame1_rd,  values=("AM", "PM"), textvariable=periodo_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_3 = ttk.Combobox(frame1_rd, values=lista_periodos_rd, style="Custom.TCombobox", textvariable=periodo_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_3.grid(row=0, column=6, padx=0, pady=0,
                       sticky="nsew")
 
@@ -2957,20 +2971,20 @@ def defect_root():
 
     # spinbox_rs_4: Hora final
     hora_final_rd = tk.StringVar(value="11")
-    spinbox_rd_4 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_4 = ttk.Combobox(frame1_rd, values=horas_vals_rd, style="Custom.TCombobox", textvariable=hora_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_4.grid(row=0, column=8, padx=0, pady=0, sticky="nsew")
 
     # spinbox_rs_5: Minuto final
-    minuto_final_rd = tk.StringVar(value="59")
-    spinbox_rd_5 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    minuto_final_rd = tk.StringVar(value="30")
+    spinbox_rd_5 = ttk.Combobox(frame1_rd, values=minutos_vals_rd, style="Custom.TCombobox", textvariable=minuto_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_5.grid(row=0, column=9, padx=0, pady=0, sticky="nsew")
 
     # spinbox_rs_6: Periodo final
     periodo_final_rd = tk.StringVar(value="PM")
-    spinbox_rd_6 = tk.Spinbox(frame1_rd,  values=("PM", "AM"), textvariable=periodo_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_6 = ttk.Combobox(frame1_rd, values=lista_periodos_rd, style="Custom.TCombobox", textvariable=periodo_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_6.grid(row=0, column=10, padx=(0, 10), pady=0,
                       sticky="nsew")
 
@@ -4489,33 +4503,58 @@ label_47.grid(row=0, column=14, padx=0, pady=5, sticky="nsew")
 label_48 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
+
+# Configuración de estilo para que no se vea "viejo"
+style = ttk.Style()
+# Usar 'default' permite personalizar más colores
+style.theme_use('default')
+style.configure("Custom.TCombobox", fieldbackground="white",
+                foreground="black", padding=2)
+
+# Horas con formato 1, 2, 12...
+horas_vals = [str(i) for i in range(1, 13)]
+# Minutos con formato 00, 01, 02...
+minutos_vals = [f"{i:02d}" for i in range(60)]
+# Opciones de periodo
+lista_periodos = ["AM", "PM"]
+
 hora_inicial = tk.StringVar(value="6")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
-spinbox_0 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_0 = ttk.Combobox(Frame3, values=horas_vals, style="Custom.TCombobox", textvariable=hora_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_0.grid(row=0, column=0, padx=2, pady=5, sticky="nsew")
-spinbox_1 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_1 = ttk.Combobox(Frame3, values=minutos_vals, style="Custom.TCombobox", textvariable=minuto_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_1.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
-spinbox_2 = tk.Spinbox(Frame3, values=("AM", "PM"), textvariable=periodo_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_2 = ttk.Combobox(Frame3, values=lista_periodos, style="Custom.TCombobox", textvariable=periodo_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_2.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
+
+
 label_49 = tk.Label(Frame3, text="<- Horario ->",
                     fg="black", bg=color_1)
 label_49.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
+
 hora_final = tk.StringVar(value="3")
 minuto_final = tk.StringVar(value="00")
 periodo_final = tk.StringVar(value="PM")
-spinbox_3 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_3 = ttk.Combobox(Frame3, values=horas_vals, style="Custom.TCombobox", textvariable=hora_final,
+                         width=4, state="readonly", justify="center")
 spinbox_3.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
-spinbox_4 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_4 = ttk.Combobox(Frame3, values=minutos_vals, style="Custom.TCombobox", textvariable=minuto_final,
+                         width=4, state="readonly", justify="center")
 spinbox_4.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
-spinbox_5 = tk.Spinbox(Frame3, values=("PM", "AM"), textvariable=periodo_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_5 = ttk.Combobox(Frame3, values=lista_periodos, style="Custom.TCombobox", textvariable=periodo_final,
+                         width=4, state="readonly", justify="center")
 spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
+
 button_17 = tk.Button(Frame3, text="Actualizar", height=0, width=0,
                       border=3, background="#00B050", command=calcular_defectos)
 button_17.grid(row=0, column=7, padx=2, pady=5, sticky="nsew")
