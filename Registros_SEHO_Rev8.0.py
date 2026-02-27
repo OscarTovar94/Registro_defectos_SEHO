@@ -8,7 +8,6 @@ from datetime import datetime
 from tkinter import ttk
 import time
 import sys
-import configparser
 from PIL import Image, ImageTk
 import pandas as pd
 import chardet
@@ -19,6 +18,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import io
 import matplotlib.colors as mcolors
 import socket
+import tkinter.font as tkfont
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
@@ -2662,7 +2662,7 @@ def defect_root():
                                    format="%I:%M %p").time()
 
             # 4. Aplicar Filtro Estricto
-            df_log["Fecha/Hora"] = pd.to_datetime(
+            df_log.loc[:, "Fecha/Hora"] = pd.to_datetime(
                 df_log["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
 
             mask = (
@@ -2675,23 +2675,35 @@ def defect_root():
 
             # 5. Configurar Tabla y Estilos
             style = ttk.Style()
-            style.theme_use("clam")
+            style.theme_use("alt")
+
+            # Definimos las fuentes para poder medir el ancho del texto
+            fuente_cabecera = tkfont.Font(family='Segoe UI', size=18, weight='bold')
+            fuente_cuerpo = tkfont.Font(family='Segoe UI', size=14,  weight='bold')
+
             style.configure("Treeview.Heading", font=(
-                'Segoe UI', 12, 'bold'), background="#2C3E50", foreground="white")
+                'Segoe UI', 18, 'bold'), background="#2C3E50", foreground="white")
             style.configure("Treeview", font=(
-                'Segoe UI', 10, 'bold'), rowheight=25)
+                'Segoe UI', 14), rowheight=35)
+
             columnas = ("Pallet", "V/SEHO", "Defectos", "Producido",
                         "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
-            tabla = ttk.Treeview(
-                frame_tabla, columns=columnas, show="headings")
 
+            tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings")
+
+            # Configuración dinámica de columnas
             for col in columnas:
-                tabla.heading(col, text=col)
-                tabla.column(col, width=100, anchor="center")
+                # Calculamos el ancho del texto del encabezado + un margen de 30px
+                ancho_texto = fuente_cabecera.measure(col) + 10
 
-            scrollbar = ttk.Scrollbar(
-                frame_tabla, orient="vertical", command=tabla.yview)
+                tabla.heading(col, text=col)
+                # minwidth asegura que no se encoja demasiado, width establece el inicial
+                tabla.column(col, width=ancho_texto, minwidth=ancho_texto, anchor="center")
+
+            # Scrollbar y Layout
+            scrollbar = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
             tabla.configure(yscrollcommand=scrollbar.set)
+
             tabla.grid(row=0, column=0, sticky="nsew")
             scrollbar.grid(row=0, column=1, sticky="ns")
 
@@ -2940,7 +2952,7 @@ def defect_root():
     # Horas con formato 1, 2, 12...
     horas_vals_rd = [str(i) for i in range(1, 13)]
     # Minutos con formato 00, 01, 02...
-    minutos_vals_rd = [f"{i:02d}" for i in range(60)]
+    minutos_vals_rd = ["00", "10", "20", "30", "40", "50", "59"]
     # Opciones de periodo
     lista_periodos_rd = ["AM", "PM"]
 
@@ -4514,7 +4526,7 @@ style.configure("Custom.TCombobox", fieldbackground="white",
 # Horas con formato 1, 2, 12...
 horas_vals = [str(i) for i in range(1, 13)]
 # Minutos con formato 00, 01, 02...
-minutos_vals = [f"{i:02d}" for i in range(60)]
+minutos_vals = ["00", "10", "20", "30", "40", "50", "59"]
 # Opciones de periodo
 lista_periodos = ["AM", "PM"]
 

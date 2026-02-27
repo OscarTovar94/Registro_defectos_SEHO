@@ -6,13 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="aad8b3ac-1bd9-4715-992b-9e608189e079" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BackUp/Registros_SEHO_Rev8.0.py" beforeDir="false" afterPath="$PROJECT_DIR$/BackUp/Registros_SEHO_Rev8.0.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogFiles/LogFile.csv" beforeDir="false" afterPath="$PROJECT_DIR$/LogFiles/LogFile.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LogFiles/Register.csv" beforeDir="false" afterPath="$PROJECT_DIR$/LogFiles/Register.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Parameters.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Parameters.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Registros_SEHO_Rev8.0.py" beforeDir="false" afterPath="$PROJECT_DIR$/Registros_SEHO_Rev8.0.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/distribucion.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/distribucion.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/limits.ini" beforeDir="false" afterPath="$PROJECT_DIR$/limits.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/root_settings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/root_settings.ini" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -62,16 +60,5 @@
       <updated>1742775487552</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Registros_SEHO_Rev8.0.py</url>
-          <line>3328</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
