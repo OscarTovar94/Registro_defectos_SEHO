@@ -1,7 +1,7 @@
 Pallet,Modelo,Estandar,Wave1,Wave2,Flux,Conveyor
 1,Lion Mite,20,0,0,0,0
 2,Lion Mite,20,0,0,0,0
-3,Lion Mite,20,0,0,0,0
+3,Lion Mite,18,0,0,0,0
 4,Lion Mite,20,0,0,0,0
 5,Lion Mite,20,0,0,0,0
 6,Lion Mite,20,0,0,0,0
@@ -9,6 +9,7 @@ Pallet,Modelo,Estandar,Wave1,Wave2,Flux,Conveyor
 8,Lion Mite,20,0,0,0,0
 9,Lion Mite,20,0,0,0,0
 10,Lion Mite,20,0,0,0,0
+11,Lion Mite,20,0,0,0,0
 16,Tangtring,25,0,0,0,0
 26,BGA200,10,0,0,0,0
 27,BGA200,9,0,0,0,0

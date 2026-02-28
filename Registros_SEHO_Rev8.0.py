@@ -23,12 +23,12 @@ import tkinter.font as tkfont
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 def bloquear_instancia():
+    """Función para evitar abrir varias veces el programa"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.bind(("127.0.0.1", 65432))  # Puerto único
     except socket.error:
         messagebox.showinfo("El programa ya está abierto.")
-        print("El programa ya está abierto.")
         sys.exit()
 
 
@@ -2678,8 +2678,10 @@ def defect_root():
             style.theme_use("alt")
 
             # Definimos las fuentes para poder medir el ancho del texto
-            fuente_cabecera = tkfont.Font(family='Segoe UI', size=18, weight='bold')
-            fuente_cuerpo = tkfont.Font(family='Segoe UI', size=14,  weight='bold')
+            fuente_cabecera = tkfont.Font(
+                family='Segoe UI', size=18, weight='bold')
+            fuente_cuerpo = tkfont.Font(
+                family='Segoe UI', size=14,  weight='bold')
 
             style.configure("Treeview.Heading", font=(
                 'Segoe UI', 18, 'bold'), background="#2C3E50", foreground="white")
@@ -2689,7 +2691,8 @@ def defect_root():
             columnas = ("Pallet", "V/SEHO", "Defectos", "Producido",
                         "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
 
-            tabla = ttk.Treeview(frame_tabla, columns=columnas, show="headings")
+            tabla = ttk.Treeview(
+                frame_tabla, columns=columnas, show="headings")
 
             # Configuración dinámica de columnas
             for col in columnas:
@@ -2698,10 +2701,12 @@ def defect_root():
 
                 tabla.heading(col, text=col)
                 # minwidth asegura que no se encoja demasiado, width establece el inicial
-                tabla.column(col, width=ancho_texto, minwidth=ancho_texto, anchor="center")
+                tabla.column(col, width=ancho_texto,
+                             minwidth=ancho_texto, anchor="center")
 
             # Scrollbar y Layout
-            scrollbar = ttk.Scrollbar(frame_tabla, orient="vertical", command=tabla.yview)
+            scrollbar = ttk.Scrollbar(
+                frame_tabla, orient="vertical", command=tabla.yview)
             tabla.configure(yscrollcommand=scrollbar.set)
 
             tabla.grid(row=0, column=0, sticky="nsew")
