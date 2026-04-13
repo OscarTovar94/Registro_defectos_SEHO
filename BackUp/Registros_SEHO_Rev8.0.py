@@ -1,34 +1,43 @@
-# Creación de aplicación de registros de defectos SEHO en python para no depender de Excel
-# ------- libraries
-import tkinter as tk
-from tkinter import messagebox
-import csv
-import os
-from datetime import datetime
-from tkinter import ttk
-import time
-import sys
-import configparser
-from PIL import Image, ImageTk
-import pandas as pd
-import chardet
-from tkcalendar import DateEntry
-import serial
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import io
-import matplotlib.colors as mcolors
+import tkinter.font as tkfont
 import socket
+import matplotlib.colors as mcolors
+import io
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.pyplot as plt
+import serial
+
+import chardet
+import pandas as pd
+from PIL import Image, ImageTk
+import time
+from tkinter import ttk
+from datetime import datetime
+import os
+import csv
+from tkinter import messagebox
+import tkinter as tk
+import sys
+import win32event
+import win32api
+import winerror
+
+# ---- Control de instancia única ----
+mutex = win32event.CreateMutex(None, False, "DefectosSEHO_UnicaInstancia")
+last_error = win32api.GetLastError()
+
+if last_error == winerror.ERROR_ALREADY_EXISTS:
+    sys.exit(0)
+# ------- libraries
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
 def bloquear_instancia():
+    """Función para evitar abrir varias veces el programa"""
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
         sock.bind(("127.0.0.1", 65432))  # Puerto único
     except socket.error:
         messagebox.showinfo("El programa ya está abierto.")
-        print("El programa ya está abierto.")
         sys.exit()
 
 
@@ -63,7 +72,7 @@ guardando_en_progreso = False
 df_cache = None
 defect_names_cache = None
 
-csv_files = [csv_file, csv_file2]
+csv_files = [csv_file]
 
 csv_cache_mtime = {}
 
@@ -1930,6 +1939,7 @@ def support_root(funcion_andon):
 
 def defect_root():
     """ Función que abre la ventana defectos """
+    from tkcalendar import DateEntry
     # ---------- Logic root_defect
 
     def settings_root_rd(clave):
@@ -2662,7 +2672,7 @@ def defect_root():
                                    format="%I:%M %p").time()
 
             # 4. Aplicar Filtro Estricto
-            df_log["Fecha/Hora"] = pd.to_datetime(
+            df_log.loc[:, "Fecha/Hora"] = pd.to_datetime(
                 df_log["Fecha/Hora"], format="%d/%m/%Y %H:%M:%S")
 
             mask = (
@@ -2675,23 +2685,40 @@ def defect_root():
 
             # 5. Configurar Tabla y Estilos
             style = ttk.Style()
-            style.theme_use("clam")
+            style.theme_use("alt")
+
+            # Definimos las fuentes para poder medir el ancho del texto
+            fuente_cabecera = tkfont.Font(
+                family='Segoe UI', size=18, weight='bold')
+            fuente_cuerpo = tkfont.Font(
+                family='Segoe UI', size=14,  weight='bold')
+
             style.configure("Treeview.Heading", font=(
-                'Segoe UI', 12, 'bold'), background="#2C3E50", foreground="white")
+                'Segoe UI', 18, 'bold'), background="#2C3E50", foreground="white")
             style.configure("Treeview", font=(
-                'Segoe UI', 10, 'bold'), rowheight=25)
+                'Segoe UI', 14), rowheight=35)
+
             columnas = ("Pallet", "V/SEHO", "Defectos", "Producido",
                         "FPY", "TopDefecto", "C/TopDefecto", "%TopDefecto")
+
             tabla = ttk.Treeview(
                 frame_tabla, columns=columnas, show="headings")
 
+            # Configuración dinámica de columnas
             for col in columnas:
-                tabla.heading(col, text=col)
-                tabla.column(col, width=100, anchor="center")
+                # Calculamos el ancho del texto del encabezado + un margen de 30px
+                ancho_texto = fuente_cabecera.measure(col) + 10
 
+                tabla.heading(col, text=col)
+                # minwidth asegura que no se encoja demasiado, width establece el inicial
+                tabla.column(col, width=ancho_texto,
+                             minwidth=ancho_texto, anchor="center")
+
+            # Scrollbar y Layout
             scrollbar = ttk.Scrollbar(
                 frame_tabla, orient="vertical", command=tabla.yview)
             tabla.configure(yscrollcommand=scrollbar.set)
+
             tabla.grid(row=0, column=0, sticky="nsew")
             scrollbar.grid(row=0, column=1, sticky="ns")
 
@@ -2930,23 +2957,37 @@ def defect_root():
     date_rd_1.grid(row=0, column=3, padx=0, pady=0,
                    sticky="nsew")
 
+    # Configuración de estilo para que no se vea "viejo"
+    style = ttk.Style()
+    # Usar 'default' permite personalizar más colores
+    style.theme_use('default')
+    style.configure("Custom.TCombobox", fieldbackground="white",
+                    foreground="black", padding=2)
+
+    # Horas con formato 1, 2, 12...
+    horas_vals_rd = [str(i) for i in range(1, 13)]
+    # Minutos con formato 00, 01, 02...
+    minutos_vals_rd = ["00", "10", "20", "30", "40", "50", "59"]
+    # Opciones de periodo
+    lista_periodos_rd = ["AM", "PM"]
+
     # spinbox_rs_1: Hora de inicio
     hora_inicio_rd = tk.StringVar(value="6")
-    spinbox_rd_1 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_1 = ttk.Combobox(frame1_rd, values=horas_vals_rd, style="Custom.TCombobox", textvariable=hora_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_1.grid(row=0, column=4, padx=(10, 0), pady=0, sticky="nsew")
 
     # spinbox_rs_2: Minuto de inicio
     minuto_inicio_rd = tk.StringVar(value="00")
-    spinbox_rd_2 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_2 = ttk.Combobox(frame1_rd, values=minutos_vals_rd, style="Custom.TCombobox", textvariable=minuto_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_2.grid(row=0, column=5, padx=0, pady=0,
                       sticky="nsew")
 
     # spinbox_rs_3: Periodo de inicio
     periodo_inicio_rd = tk.StringVar(value="AM")
-    spinbox_rd_3 = tk.Spinbox(frame1_rd,  values=("AM", "PM"), textvariable=periodo_inicio_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_3 = ttk.Combobox(frame1_rd, values=lista_periodos_rd, style="Custom.TCombobox", textvariable=periodo_inicio_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_3.grid(row=0, column=6, padx=0, pady=0,
                       sticky="nsew")
 
@@ -2957,20 +2998,20 @@ def defect_root():
 
     # spinbox_rs_4: Hora final
     hora_final_rd = tk.StringVar(value="11")
-    spinbox_rd_4 = tk.Spinbox(frame1_rd,  from_=1, to=12, textvariable=hora_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_4 = ttk.Combobox(frame1_rd, values=horas_vals_rd, style="Custom.TCombobox", textvariable=hora_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_4.grid(row=0, column=8, padx=0, pady=0, sticky="nsew")
 
     # spinbox_rs_5: Minuto final
-    minuto_final_rd = tk.StringVar(value="59")
-    spinbox_rd_5 = tk.Spinbox(frame1_rd,  from_=0, to=59, textvariable=minuto_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    minuto_final_rd = tk.StringVar(value="30")
+    spinbox_rd_5 = ttk.Combobox(frame1_rd, values=minutos_vals_rd, style="Custom.TCombobox", textvariable=minuto_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_5.grid(row=0, column=9, padx=0, pady=0, sticky="nsew")
 
     # spinbox_rs_6: Periodo final
     periodo_final_rd = tk.StringVar(value="PM")
-    spinbox_rd_6 = tk.Spinbox(frame1_rd,  values=("PM", "AM"), textvariable=periodo_final_rd,
-                              wrap=True, fg="black", bg="#AEAEAE", justify="center", width=3)
+    spinbox_rd_6 = ttk.Combobox(frame1_rd, values=lista_periodos_rd, style="Custom.TCombobox", textvariable=periodo_final_rd,
+                                width=4, state="readonly", justify="center")
     spinbox_rd_6.grid(row=0, column=10, padx=(0, 10), pady=0,
                       sticky="nsew")
 
@@ -3835,6 +3876,7 @@ def calcular_top_defecto_por_modelo():
             if datos.empty or datos.sum().sum() == 0:
                 labels_top[i].config(text="")
                 labels_pct[i].config(text="")
+                labels_cantidad[i].config(text="")
                 continue
 
             suma_defectos = datos.sum()
@@ -4489,33 +4531,58 @@ label_47.grid(row=0, column=14, padx=0, pady=5, sticky="nsew")
 label_48 = tk.Label(Frame2,
                     fg="black", bg="#D0D0D0")
 label_48.grid(row=0, column=15, padx=0, pady=5, sticky="nsew")
+
+# Configuración de estilo para que no se vea "viejo"
+style = ttk.Style()
+# Usar 'default' permite personalizar más colores
+style.theme_use('default')
+style.configure("Custom.TCombobox", fieldbackground="white",
+                foreground="black", padding=2)
+
+# Horas con formato 1, 2, 12...
+horas_vals = [str(i) for i in range(1, 13)]
+# Minutos con formato 00, 01, 02...
+minutos_vals = ["00", "10", "20", "30", "40", "50", "59"]
+# Opciones de periodo
+lista_periodos = ["AM", "PM"]
+
 hora_inicial = tk.StringVar(value="6")
 minuto_inicial = tk.StringVar(value="00")
 periodo_inicial = tk.StringVar(value="AM")
-spinbox_0 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_0 = ttk.Combobox(Frame3, values=horas_vals, style="Custom.TCombobox", textvariable=hora_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_0.grid(row=0, column=0, padx=2, pady=5, sticky="nsew")
-spinbox_1 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_1 = ttk.Combobox(Frame3, values=minutos_vals, style="Custom.TCombobox", textvariable=minuto_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_1.grid(row=0, column=1, padx=2, pady=5, sticky="nsew")
-spinbox_2 = tk.Spinbox(Frame3, values=("AM", "PM"), textvariable=periodo_inicial,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_2 = ttk.Combobox(Frame3, values=lista_periodos, style="Custom.TCombobox", textvariable=periodo_inicial,
+                         width=4, state="readonly", justify="center")
 spinbox_2.grid(row=0, column=2, padx=2, pady=5, sticky="nsew")
+
+
 label_49 = tk.Label(Frame3, text="<- Horario ->",
                     fg="black", bg=color_1)
 label_49.grid(row=0, column=3, padx=0, pady=5, sticky="nsew")
+
 hora_final = tk.StringVar(value="3")
 minuto_final = tk.StringVar(value="00")
 periodo_final = tk.StringVar(value="PM")
-spinbox_3 = tk.Spinbox(Frame3, from_=1, to=12, textvariable=hora_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_3 = ttk.Combobox(Frame3, values=horas_vals, style="Custom.TCombobox", textvariable=hora_final,
+                         width=4, state="readonly", justify="center")
 spinbox_3.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
-spinbox_4 = tk.Spinbox(Frame3, from_=0, to=59, textvariable=minuto_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_4 = ttk.Combobox(Frame3, values=minutos_vals, style="Custom.TCombobox", textvariable=minuto_final,
+                         width=4, state="readonly", justify="center")
 spinbox_4.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
-spinbox_5 = tk.Spinbox(Frame3, values=("PM", "AM"), textvariable=periodo_final,
-                       wrap=True, width=3, fg="black", bg="#AEAEAE", justify="center")
+
+spinbox_5 = ttk.Combobox(Frame3, values=lista_periodos, style="Custom.TCombobox", textvariable=periodo_final,
+                         width=4, state="readonly", justify="center")
 spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
+
 button_17 = tk.Button(Frame3, text="Actualizar", height=0, width=0,
                       border=3, background="#00B050", command=calcular_defectos)
 button_17.grid(row=0, column=7, padx=2, pady=5, sticky="nsew")
