@@ -27,8 +27,21 @@ last_error = win32api.GetLastError()
 
 if last_error == winerror.ERROR_ALREADY_EXISTS:
     sys.exit(0)
+# ------- libraries
+
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
+def bloquear_instancia():
+    """Función para evitar abrir varias veces el programa"""
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        sock.bind(("127.0.0.1", 65432))  # Puerto único
+    except socket.error:
+        messagebox.showinfo("El programa ya está abierto.")
+        sys.exit()
+
+
+bloquear_instancia()
 
 
 def settings_root(clave):
@@ -47,7 +60,7 @@ def settings_root(clave):
     return None
 
 
-# Ruta archivos CSV
+# Ruta del segundo archivo CSV
 csv_file = settings_root("LogFile")
 csv_file2 = settings_root("Registro")
 guardando_en_progreso = False
@@ -65,7 +78,6 @@ csv_cache_mtime = {}
 
 
 def cargar_datos_cache():
-    """Función para subir los datos en memoria cache"""
 
     global df_cache
     global defect_names_cache

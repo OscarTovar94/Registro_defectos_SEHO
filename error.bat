@@ -1,3 +1,3 @@
 @echo
-python "C:\Registro_defectos_SEHO\Registros_SEHO_Rev8.1.py"
+python "C:\Registro_defectos_SEHO\Registros_SEHO_Rev8.0.py"
 pause
