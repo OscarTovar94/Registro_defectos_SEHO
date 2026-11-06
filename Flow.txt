@@ -1,0 +1,7 @@
+Ingresar cantidad en el defecto seleccionado
+					↓
+		Ingresa el número de pallet
+					↓
+┌───────────────┬───────────────┐
+│  PANEL PASS   │  PANEL FAIL   │
+└───────────────┴───────────────┘

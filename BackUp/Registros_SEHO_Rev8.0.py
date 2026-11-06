@@ -1,33 +1,24 @@
-import tkinter.font as tkfont
-import socket
-import matplotlib.colors as mcolors
-import io
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import matplotlib.pyplot as plt
-import serial
-
-import chardet
-import pandas as pd
-from PIL import Image, ImageTk
-import time
-from tkinter import ttk
-from datetime import datetime
-import os
-import csv
-from tkinter import messagebox
-import tkinter as tk
-import sys
-import win32event
-import win32api
-import winerror
-
-# ---- Control de instancia única ----
-mutex = win32event.CreateMutex(None, False, "DefectosSEHO_UnicaInstancia")
-last_error = win32api.GetLastError()
-
-if last_error == winerror.ERROR_ALREADY_EXISTS:
-    sys.exit(0)
+# Creación de aplicación de registros de defectos SEHO en python para no depender de Excel
 # ------- libraries
+import tkinter as tk
+from tkinter import messagebox
+import csv
+import os
+from datetime import datetime
+from tkinter import ttk
+import time
+import sys
+from PIL import Image, ImageTk
+import pandas as pd
+import chardet
+from tkcalendar import DateEntry
+import serial
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import io
+import matplotlib.colors as mcolors
+import socket
+import tkinter.font as tkfont
 
 
 # ------------------------------------- Logic -------------------------------------------------------------------------
@@ -72,7 +63,7 @@ guardando_en_progreso = False
 df_cache = None
 defect_names_cache = None
 
-csv_files = [csv_file]
+csv_files = [csv_file, csv_file2]
 
 csv_cache_mtime = {}
 
@@ -1939,7 +1930,6 @@ def support_root(funcion_andon):
 
 def defect_root():
     """ Función que abre la ventana defectos """
-    from tkcalendar import DateEntry
     # ---------- Logic root_defect
 
     def settings_root_rd(clave):
@@ -3876,7 +3866,6 @@ def calcular_top_defecto_por_modelo():
             if datos.empty or datos.sum().sum() == 0:
                 labels_top[i].config(text="")
                 labels_pct[i].config(text="")
-                labels_cantidad[i].config(text="")
                 continue
 
             suma_defectos = datos.sum()
