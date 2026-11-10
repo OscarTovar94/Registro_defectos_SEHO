@@ -474,6 +474,32 @@ def root_scale():
     label_197.config(font=("Arial", label_part_number, "bold"))  # No. Part 12
     label_198.config(font=("Arial", etiquetas_parte_2, "bold")
                      )  # No. Parte etiqueta
+    label_199.config(font=("Arial", etiquetas_parte_2, "bold"))
+    label_200.config(font=("Arial", label_part_number, "bold"))
+    label_201.config(font=("Arial", label_part_number, "bold"))
+    label_202.config(font=("Arial", label_part_number, "bold"))
+    label_203.config(font=("Arial", label_part_number, "bold"))
+    label_204.config(font=("Arial", label_part_number, "bold"))
+    label_205.config(font=("Arial", label_part_number, "bold"))
+    label_206.config(font=("Arial", label_part_number, "bold"))
+    label_207.config(font=("Arial", label_part_number, "bold"))
+    label_208.config(font=("Arial", label_part_number, "bold"))
+    label_209.config(font=("Arial", label_part_number, "bold"))
+    label_210.config(font=("Arial", label_part_number, "bold"))
+    label_211.config(font=("Arial", label_part_number, "bold"))
+    label_212.config(font=("Arial", etiquetas_parte_2, "bold"))
+    label_213.config(font=("Arial", label_part_number, "bold"))
+    label_214.config(font=("Arial", label_part_number, "bold"))
+    label_215.config(font=("Arial", label_part_number, "bold"))
+    label_216.config(font=("Arial", label_part_number, "bold"))
+    label_217.config(font=("Arial", label_part_number, "bold"))
+    label_218.config(font=("Arial", label_part_number, "bold"))
+    label_219.config(font=("Arial", label_part_number, "bold"))
+    label_220.config(font=("Arial", label_part_number, "bold"))
+    label_221.config(font=("Arial", label_part_number, "bold"))
+    label_222.config(font=("Arial", label_part_number, "bold"))
+    label_223.config(font=("Arial", label_part_number, "bold"))
+    label_224.config(font=("Arial", label_part_number, "bold"))
 
     # --- entry's
     entry_0.config(font=("Arial", defct, "bold"))  # Defect
@@ -3572,7 +3598,7 @@ color_3 = "#D9D9D9"
 
 # Crear csv_file si no existe y actualizar encabezado
 encabezados = [
-    'Modelo', 'No. Parte', 'No. Orden', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
+    'Modelo', 'No. Parte', 'No. Orden', 'No. Operador', 'Pallet', 'Defectos', 'Estandar', 'Fecha/Hora', 'FPY',
     'Wave1', 'Wave2', 'Flux', 'Conveyor',
     defect1, defect2, defect3, defect4, defect5, defect6, defect7, defect8,
     defect9, defect10, defect11, defect12, defect13, defect14, defect15,
@@ -3657,20 +3683,31 @@ def asegurar_csv2_con_encabezado(csv_file2, encabezado_nuevo):
 asegurar_csv2_con_encabezado(csv_file2, encabezados)
 
 
-def obtener_orden_y_parte_modelo(modelo):
-    """Busca los datos confirmados del modelo en las 12 columnas."""
+def obtener_datos_produccion_modelo(modelo):
+    """Obtiene los datos confirmados de las etiquetas del modelo seleccionado."""
     modelos = [label_50, label_51, label_52, label_53, label_54, label_55,
                label_56, label_57, label_58, label_59, label_60, label_61]
-    botones = [button_18, button_19, button_20, button_21, button_22, button_23,
-               button_24, button_25, button_26, button_27, button_28, button_29]
     partes = [label_186, label_187, label_188, label_189, label_190, label_191,
               label_192, label_193, label_194, label_195, label_196, label_197]
+    ordenes = [label_200, label_201, label_202, label_203, label_204, label_205,
+               label_206, label_207, label_208, label_209, label_210, label_211]
+    operadores = [label_213, label_214, label_215, label_216, label_217, label_218,
+                  label_219, label_220, label_221, label_222, label_223, label_224]
 
-    for etiqueta_modelo, boton, etiqueta_parte in zip(modelos, botones, partes):
+    for etiqueta_modelo, parte, orden, operador in zip(modelos, partes, ordenes, operadores):
         if etiqueta_modelo.cget("text").strip() == modelo:
-            return (etiqueta_parte.cget("text").strip(),
-                    getattr(boton, "numero_orden", "").strip())
-    return "", ""
+            return (parte.cget("text").strip(), orden.cget("text").strip(),
+                    operador.cget("text").strip())
+    return "", "", ""
+
+
+def datos_produccion_validos(parte, orden, operador):
+    """Verifica los tres datos antes de permitir un registro."""
+    return (len(parte) == 6 and parte.isascii() and parte.isdigit()
+            and len(orden) == 9 and orden[:2].isascii()
+            and orden[:2].isalpha() and orden[:2].isupper()
+            and 1 <= len(operador) <= 4 and operador.isascii()
+            and operador.isdigit())
 
 
 def guardar_datos(event=None):
@@ -3695,15 +3732,16 @@ def guardar_datos(event=None):
             return
 
         modelo_actual = label_36.cget("text").strip()
-        numero_parte, numero_orden = obtener_orden_y_parte_modelo(
+        numero_parte, numero_orden, numero_operador = obtener_datos_produccion_modelo(
             modelo_actual)
 
-        if not modelo_actual or not numero_parte or not numero_orden:
+        if not modelo_actual or not datos_produccion_validos(
+                numero_parte, numero_orden, numero_operador):
             messagebox.showwarning(
                 "Datos de producción incompletos",
                 f"No se puede registrar el pallet del modelo "
                 f"{modelo_actual or '(sin modelo)'}\n"
-                "Debe confirmar el No. Parte y el No. Orden "
+                "Debe confirmar No. Parte, No. Orden y No. Operador "
                 "en la columna correspondiente."
             )
             return
@@ -3714,6 +3752,7 @@ def guardar_datos(event=None):
             modelo_actual,  # Modelo
             numero_parte,  # No. Parte
             numero_orden,  # No. Orden
+            numero_operador,  # No. Operador
             entry_30.get().strip() or "0",  # Pallet
             label_34.cget("text").strip() or "0",  # Defectos
             label_38.cget("text").strip() or "0",  # Estandar
@@ -3738,7 +3777,7 @@ def guardar_datos(event=None):
 
         # 2. Validación: Verificar que el Pallet y Modelo no estén vacíos
         # (dat1 y dat2 en tu código original)
-        if not datos[0] or datos[3] == "0" or datos[3] == "":
+        if not datos[0] or datos[4] == "0" or datos[4] == "":
             messagebox.showwarning(
                 "Atención", "El número de Pallet es obligatorio.")
             guardando_en_progreso = False
@@ -4313,6 +4352,8 @@ Frame4.grid_rowconfigure(9, weight=0)
 Frame4.grid_rowconfigure(10, weight=0)
 Frame4.grid_rowconfigure(11, weight=0)
 Frame4.grid_rowconfigure(12, weight=0)
+Frame4.grid_rowconfigure(13, weight=0)
+Frame4.grid_rowconfigure(14, weight=0)
 for col in range(1, 13):
     Frame4.grid_columnconfigure(col, weight=1, uniform="cols")
 # ------- Frame5
@@ -4829,12 +4870,10 @@ spinbox_5.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
 def reiniciar():
     """Reset the labels and buttons to their initial state."""
     for label in (label_186, label_187, label_188, label_189, label_190, label_191, label_192,
-                  label_193, label_194, label_195, label_196, label_197):
+                  label_193, label_194, label_195, label_196, label_197, label_200, label_201, label_202, label_203, label_204, label_205, label_206,
+                  label_207, label_208, label_209, label_210, label_211, label_213, label_214, label_215, label_216, label_217, label_218, label_219,
+                  label_220, label_221, label_222, label_223, label_224):
         label.config(text="", bg=color_1)
-
-    for button in (button_18, button_19, button_20, button_21, button_22, button_23, button_24,
-                   button_25, button_26, button_27, button_28, button_29):
-        button.config(text="No. Orden", bg=color_button_norden)
 
     calcular_defectos()
 
@@ -5035,38 +5074,205 @@ button_11.grid(row=4, column=12, padx=0, pady=0, sticky="nsew")
 # --------------------------- Insertar aquí los nuevos botones de cambio de número de orden.
 
 color_button_norden = "#F1A983"
-color_button_orden_ok = "#90EE90"
+color_button_orden_ok = "#FFFFC9"
 color_label_part = "#FFFFC9"
 color_label_part_ok = "#FFFFC9"
 
+# -------------------------------------------------------------------------------------------
+label_198 = tk.Label(Frame4, text="No. Parte",
+                     fg="black", bg="#47D359", anchor="e")
+label_198.grid(row=5, column=0, padx=0, pady=0, sticky="nsew")
 
-def solicitar_orden_produccion(boton, label):
-    """Function to request the production order number and part number from the user."""
+label_186 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_186.grid(row=5, column=1, padx=0, pady=0, sticky="nsew")
 
-    ventana = tk.Toplevel(boton.winfo_toplevel())
-    ventana.title("Orden de producción")
-    ventana.geometry("430x260")
+label_187 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_187.grid(row=5, column=2, padx=0, pady=0, sticky="nsew")
+
+label_188 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_188.grid(row=5, column=3, padx=0, pady=0, sticky="nsew")
+
+label_189 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_189.grid(row=5, column=4, padx=0, pady=0, sticky="nsew")
+
+label_190 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_190.grid(row=5, column=5, padx=0, pady=0, sticky="nsew")
+
+label_191 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_191.grid(row=5, column=6, padx=0, pady=0, sticky="nsew")
+
+label_192 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_192.grid(row=5, column=7, padx=0, pady=0, sticky="nsew")
+
+label_193 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_193.grid(row=5, column=8, padx=0, pady=0, sticky="nsew")
+
+label_194 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_194.grid(row=5, column=9, padx=0, pady=0, sticky="nsew")
+
+label_195 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_195.grid(row=5, column=10, padx=0, pady=0, sticky="nsew")
+
+label_196 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_196.grid(row=5, column=11, padx=0, pady=0, sticky="nsew")
+
+label_197 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_197.grid(row=5, column=12, padx=0, pady=0, sticky="nsew")
+
+# -------------------------------------------------------------------------------------------
+
+label_199 = tk.Label(Frame4, text="No. Orden",
+                     fg="black", bg="#47D359", anchor="e")
+label_199.grid(row=6, column=0, padx=0, pady=0, sticky="nsew")
+
+label_200 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_200.grid(row=6, column=1, padx=0, pady=0, sticky="nsew")
+
+label_201 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_201.grid(row=6, column=2, padx=0, pady=0, sticky="nsew")
+
+label_202 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_202.grid(row=6, column=3, padx=0, pady=0, sticky="nsew")
+
+label_203 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_203.grid(row=6, column=4, padx=0, pady=0, sticky="nsew")
+
+label_204 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_204.grid(row=6, column=5, padx=0, pady=0, sticky="nsew")
+
+label_205 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_205.grid(row=6, column=6, padx=0, pady=0, sticky="nsew")
+
+label_206 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_206.grid(row=6, column=7, padx=0, pady=0, sticky="nsew")
+
+label_207 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_207.grid(row=6, column=8, padx=0, pady=0, sticky="nsew")
+
+label_208 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_208.grid(row=6, column=9, padx=0, pady=0, sticky="nsew")
+
+label_209 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_209.grid(row=6, column=10, padx=0, pady=0, sticky="nsew")
+
+label_210 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_210.grid(row=6, column=11, padx=0, pady=0, sticky="nsew")
+
+label_211 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_211.grid(row=6, column=12, padx=0, pady=0, sticky="nsew")
+
+# -------------------------------------------------------------------------------------------
+
+label_212 = tk.Label(Frame4, text="No. Operador",
+                     fg="black", bg="#47D359", anchor="e")
+label_212.grid(row=7, column=0, padx=0, pady=0, sticky="nsew")
+
+label_213 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_213.grid(row=7, column=1, padx=0, pady=0, sticky="nsew")
+
+label_214 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_214.grid(row=7, column=2, padx=0, pady=0, sticky="nsew")
+
+label_215 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_215.grid(row=7, column=3, padx=0, pady=0, sticky="nsew")
+
+label_216 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_216.grid(row=7, column=4, padx=0, pady=0, sticky="nsew")
+
+label_217 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_217.grid(row=7, column=5, padx=0, pady=0, sticky="nsew")
+
+label_218 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_218.grid(row=7, column=6, padx=0, pady=0, sticky="nsew")
+
+label_219 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_219.grid(row=7, column=7, padx=0, pady=0, sticky="nsew")
+
+label_220 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_220.grid(row=7, column=8, padx=0, pady=0, sticky="nsew")
+
+label_221 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_221.grid(row=7, column=9, padx=0, pady=0, sticky="nsew")
+
+label_222 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_222.grid(row=7, column=10, padx=0, pady=0, sticky="nsew")
+
+label_223 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_223.grid(row=7, column=11, padx=0, pady=0, sticky="nsew")
+
+label_224 = tk.Label(Frame4,
+                     fg="black", bg=color_1)
+label_224.grid(row=7, column=12, padx=0, pady=0, sticky="nsew")
+
+# -------------------------------------------------------------------------------------------
+
+
+def solicitar_orden_produccion(label_orden, label_parte, label_operador):
+    """Solicita orden de producción, número de parte y operador."""
+
+    ventana = tk.Toplevel(label_orden.winfo_toplevel())
+    ventana.title("Datos de producción")
+    ventana.geometry("430x310")
     ventana.resizable(False, False)
     ventana.configure(bg="#F2F2F2")
 
-    # Mantener ventana modal mientras esté abierta
-    ventana.transient(boton.winfo_toplevel())
+    # Mantener ventana modal
+    ventana.transient(label_orden.winfo_toplevel())
     ventana.grab_set()
 
-    # Permitir cerrar la ventana mediante la X
+    # Permitir cerrar con la X
     def cerrar_ventana():
         ventana.grab_release()
         ventana.destroy()
 
     ventana.protocol("WM_DELETE_WINDOW", cerrar_ventana)
 
-    # Centrar ventana en pantalla
+    # Centrar ventana
     ventana.update_idletasks()
 
     x = (ventana.winfo_screenwidth() - 430) // 2
-    y = (ventana.winfo_screenheight() - 260) // 2
+    y = (ventana.winfo_screenheight() - 310) // 2
 
-    ventana.geometry(f"430x260+{x}+{y}")
+    ventana.geometry(f"430x310+{x}+{y}")
+
+    # ==============================
+    # NÚMERO DE ORDEN
+    # ==============================
 
     tk.Label(
         ventana,
@@ -5083,6 +5289,10 @@ def solicitar_orden_produccion(boton, label):
     )
     entry_orden.pack(pady=10)
 
+    # ==============================
+    # NÚMERO DE PARTE
+    # ==============================
+
     tk.Label(
         ventana,
         text="Ingrese o escanee el número de parte:",
@@ -5098,427 +5308,478 @@ def solicitar_orden_produccion(boton, label):
     )
     entry_part.pack(pady=10)
 
+    # ==============================
+    # NÚMERO DE OPERADOR
+    # ==============================
+
+    tk.Label(
+        ventana,
+        text="Ingrese o escanee el número de operador:",
+        font=("Arial", 11),
+        bg="#F2F2F2"
+    ).pack(pady=5)
+
+    entry_operador = tk.Entry(
+        ventana,
+        font=("Arial", 16),
+        justify="center",
+        width=25
+    )
+    entry_operador.pack(pady=10)
+
+    # ==============================
+    # VALIDAR ORDEN
+    # ==============================
+
     def validar_orden():
         numero_orden = entry_orden.get().strip()
-        if (len(numero_orden) != 9 or not numero_orden[:2].isascii()
-                or not numero_orden[:2].isalpha()
-                or not numero_orden[:2].isupper()):
+
+        if (
+            len(numero_orden) != 9
+            or not numero_orden[:2].isascii()
+            or not numero_orden[:2].isalpha()
+            or not numero_orden[:2].isupper()
+        ):
             messagebox.showwarning(
                 "Orden no válida",
-                "La orden debe tener 9 caracteres y comenzar con dos letras mayúsculas.",
+                "La orden debe tener 9 caracteres y comenzar "
+                "con dos letras mayúsculas.",
                 parent=ventana
             )
             entry_orden.delete(0, tk.END)
             entry_orden.focus_set()
             return None
+
         return numero_orden
+
+    # ==============================
+    # CONFIRMAR ORDEN
+    # ==============================
 
     def confirmar_orden(event=None):
         if validar_orden() is not None:
             entry_part.focus_set()
 
-    def confirmar_part(event=None):
-        numero_orden = validar_orden()
-        if numero_orden is None:
-            return
+    # ==============================
+    # VALIDAR NÚMERO DE PARTE
+    # ==============================
 
+    def validar_parte():
         numero_part = entry_part.get().strip()
-        if len(numero_part) < 6 or not numero_part[:6].isascii() or not numero_part[:6].isdigit():
+
+        if (
+            len(numero_part) < 6
+            or not numero_part[:6].isascii()
+            or not numero_part[:6].isdigit()
+        ):
             messagebox.showwarning(
                 "Número de parte no válido",
-                "El número de parte debe contener al menos 6 caracteres "
-                "y los primeros 6 deben ser números.",
+                "El número de parte debe contener al menos "
+                "6 caracteres y los primeros 6 deben ser números.",
                 parent=ventana
             )
             entry_part.delete(0, tk.END)
             entry_part.focus_set()
+            return None
+
+        return numero_part[:6]
+
+    # ==============================
+    # CONFIRMAR NÚMERO DE PARTE
+    # ==============================
+
+    def confirmar_part(event=None):
+        if validar_parte() is not None:
+            entry_operador.focus_set()
+
+    # ==============================
+    # CONFIRMAR OPERADOR Y GUARDAR
+    # ==============================
+
+    def confirmar_operador(event=None):
+
+        numero_orden = validar_orden()
+        if numero_orden is None:
             return
 
-        numero_part = numero_part[:6]
-        # Confirmar ambos datos juntos; cerrar la X no altera datos anteriores.
-        boton.numero_orden = numero_orden
-        boton.config(text=numero_orden, bg=color_button_orden_ok,
-                     activebackground=color_button_orden_ok, fg="black")
-        label.config(text=numero_part, bg=color_label_part_ok)
+        numero_part = validar_parte()
+        if numero_part is None:
+            return
+
+        numero_operador = entry_operador.get().strip()
+
+        if (
+            not 1 <= len(numero_operador) <= 4
+            or not numero_operador.isascii()
+            or not numero_operador.isdigit()
+        ):
+            messagebox.showwarning(
+                "Número de operador no válido",
+                "El número de operador debe contener "
+                "entre 1 y 4 dígitos numéricos.",
+                parent=ventana
+            )
+            entry_operador.delete(0, tk.END)
+            entry_operador.focus_set()
+            return
+
+        # Guardar datos únicamente cuando los tres son válidos
+        # Actualizar etiqueta de orden (el botón solo abre el formulario)
+        label_orden.config(
+            text=numero_orden,
+            bg=color_button_orden_ok,
+            fg="black"
+        )
+
+        # Actualizar número de parte
+        label_parte.config(
+            text=numero_part,
+            bg=color_label_part_ok
+        )
+
+        # Actualizar número de operador
+        label_operador.config(
+            text=numero_operador,
+            bg=color_label_part_ok
+        )
+
         cerrar_ventana()
+
+    # ==============================
+    # BOTÓN CONFIRMAR
+    # ==============================
 
     tk.Button(
         ventana,
-        text="CONFIRMAR ORDEN",
+        text="CONFIRMAR",
         font=("Arial", 11, "bold"),
         bg="#4CAF50",
         fg="white",
         width=18,
-        command=confirmar_orden
+        command=confirmar_operador
     ).pack(pady=10)
 
-    # Confirmar automáticamente al presionar Enter
+    # ==============================
+    # EVENTOS ENTER
+    # ==============================
+
     entry_orden.bind("<Return>", confirmar_orden)
     entry_orden.bind("<KP_Enter>", confirmar_orden)
 
     entry_part.bind("<Return>", confirmar_part)
     entry_part.bind("<KP_Enter>", confirmar_part)
 
-    # Enfocar automáticamente el campo de captura
+    entry_operador.bind("<Return>", confirmar_operador)
+    entry_operador.bind("<KP_Enter>", confirmar_operador)
+
+    # Enfoque inicial
     ventana.after(100, entry_orden.focus_force)
 
-    # Esperar hasta que la ventana se cierre
+    # Esperar hasta cerrar ventana
     ventana.wait_window()
 
 
-button_18 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
-                      border=3, background=color_button_norden, command=lambda: solicitar_orden_produccion(button_18, label_186))
-button_18.grid(row=5, column=1, padx=0, pady=0, sticky="nsew")
+button_18 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
+                      border=3, background=color_button_norden,
+                      command=lambda: solicitar_orden_produccion(label_200, label_186, label_213))
+button_18.grid(row=8, column=1, padx=0, pady=0, sticky="nsew")
 
 
-button_19 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_19 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
                       command=lambda: solicitar_orden_produccion(
-                          button_19, label_187)
+                          label_201, label_187, label_214)
                       )
-button_19.grid(row=5, column=2, padx=0, pady=0, sticky="nsew")
+button_19.grid(row=8, column=2, padx=0, pady=0, sticky="nsew")
 
-button_20 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_20 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_20, label_188))
-button_20.grid(row=5, column=3, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_202, label_188, label_215))
+button_20.grid(row=8, column=3, padx=0, pady=0, sticky="nsew")
 
-button_21 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_21 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_21, label_189))
-button_21.grid(row=5, column=4, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_203, label_189, label_216))
+button_21.grid(row=8, column=4, padx=0, pady=0, sticky="nsew")
 
-button_22 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_22 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_22, label_190))
-button_22.grid(row=5, column=5, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_204, label_190, label_217))
+button_22.grid(row=8, column=5, padx=0, pady=0, sticky="nsew")
 
-button_23 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_23 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_23, label_191))
-button_23.grid(row=5, column=6, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_205, label_191, label_218))
+button_23.grid(row=8, column=6, padx=0, pady=0, sticky="nsew")
 
-button_24 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_24 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_24, label_192))
-button_24.grid(row=5, column=7, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_206, label_192, label_219))
+button_24.grid(row=8, column=7, padx=0, pady=0, sticky="nsew")
 
-button_25 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_25 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_25, label_193))
-button_25.grid(row=5, column=8, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_207, label_193, label_220))
+button_25.grid(row=8, column=8, padx=0, pady=0, sticky="nsew")
 
-button_26 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_26 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_26, label_194))
-button_26.grid(row=5, column=9, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_208, label_194, label_221))
+button_26.grid(row=8, column=9, padx=0, pady=0, sticky="nsew")
 
-button_27 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_27 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_27, label_195))
-button_27.grid(row=5, column=10, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_209, label_195, label_222))
+button_27.grid(row=8, column=10, padx=0, pady=0, sticky="nsew")
 
-button_28 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_28 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_28, label_196))
-button_28.grid(row=5, column=11, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_210, label_196, label_223))
+button_28.grid(row=8, column=11, padx=0, pady=0, sticky="nsew")
 
-button_29 = tk.Button(Frame4, text="No. Orden", height=0, width=0,
+button_29 = tk.Button(Frame4, text="Dat. Prod.", height=0, width=0,
                       border=3, background=color_button_norden,
-                      command=lambda: solicitar_orden_produccion(button_29, label_197))
-button_29.grid(row=5, column=12, padx=0, pady=0, sticky="nsew")
-
-# -------------------------------------------------------------------------------------------
-label_198 = tk.Label(Frame4, text="No. Parte",
-                     fg="black", bg="#CAEDFB", anchor="e")
-label_198.grid(row=6, column=0, padx=0, pady=0, sticky="nsew")
-
-label_186 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_186.grid(row=6, column=1, padx=0, pady=0, sticky="nsew")
-
-label_187 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_187.grid(row=6, column=2, padx=0, pady=0, sticky="nsew")
-
-label_188 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_188.grid(row=6, column=3, padx=0, pady=0, sticky="nsew")
-
-label_189 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_189.grid(row=6, column=4, padx=0, pady=0, sticky="nsew")
-
-label_190 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_190.grid(row=6, column=5, padx=0, pady=0, sticky="nsew")
-
-label_191 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_191.grid(row=6, column=6, padx=0, pady=0, sticky="nsew")
-
-label_192 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_192.grid(row=6, column=7, padx=0, pady=0, sticky="nsew")
-
-label_193 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_193.grid(row=6, column=8, padx=0, pady=0, sticky="nsew")
-
-label_194 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_194.grid(row=6, column=9, padx=0, pady=0, sticky="nsew")
-
-label_195 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_195.grid(row=6, column=10, padx=0, pady=0, sticky="nsew")
-
-label_196 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_196.grid(row=6, column=11, padx=0, pady=0, sticky="nsew")
-
-label_197 = tk.Label(Frame4,
-                     fg="black", bg=color_1)
-label_197.grid(row=6, column=12, padx=0, pady=0, sticky="nsew")
+                      command=lambda: solicitar_orden_produccion(label_211, label_197, label_224))
+button_29.grid(row=8, column=12, padx=0, pady=0, sticky="nsew")
 
 
 # -------------------------------------------------------------------------------------------
 
 label_101 = tk.Label(Frame4, text="FPY Total:",
                      fg="black", bg="#CAEDFB", anchor="e")
-label_101.grid(row=7, column=0, padx=0, pady=0, sticky="nsew")
+label_101.grid(row=9, column=0, padx=0, pady=0, sticky="nsew")
 label_102 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_102.grid(row=7, column=1, padx=0, pady=0, sticky="nsew")
+label_102.grid(row=9, column=1, padx=0, pady=0, sticky="nsew")
 label_103 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_103.grid(row=7, column=2, padx=0, pady=0, sticky="nsew")
+label_103.grid(row=9, column=2, padx=0, pady=0, sticky="nsew")
 label_104 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_104.grid(row=7, column=3, padx=0, pady=0, sticky="nsew")
+label_104.grid(row=9, column=3, padx=0, pady=0, sticky="nsew")
 label_105 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_105.grid(row=7, column=4, padx=0, pady=0, sticky="nsew")
+label_105.grid(row=9, column=4, padx=0, pady=0, sticky="nsew")
 label_106 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_106.grid(row=7, column=5, padx=0, pady=0, sticky="nsew")
+label_106.grid(row=9, column=5, padx=0, pady=0, sticky="nsew")
 label_107 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_107.grid(row=7, column=6, padx=0, pady=0, sticky="nsew")
+label_107.grid(row=9, column=6, padx=0, pady=0, sticky="nsew")
 label_108 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_108.grid(row=7, column=7, padx=0, pady=0, sticky="nsew")
+label_108.grid(row=9, column=7, padx=0, pady=0, sticky="nsew")
 label_109 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_109.grid(row=7, column=8, padx=0, pady=0, sticky="nsew")
+label_109.grid(row=9, column=8, padx=0, pady=0, sticky="nsew")
 label_110 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_110.grid(row=7, column=9, padx=0, pady=0, sticky="nsew")
+label_110.grid(row=9, column=9, padx=0, pady=0, sticky="nsew")
 label_111 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_111.grid(row=7, column=10, padx=0, pady=0, sticky="nsew")
+label_111.grid(row=9, column=10, padx=0, pady=0, sticky="nsew")
 label_112 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_112.grid(row=7, column=11, padx=0, pady=0, sticky="nsew")
+label_112.grid(row=9, column=11, padx=0, pady=0, sticky="nsew")
 label_113 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_113.grid(row=7, column=12, padx=0, pady=0, sticky="nsew")
+label_113.grid(row=9, column=12, padx=0, pady=0, sticky="nsew")
 # label_114: Total Defect:
 label_114 = tk.Label(Frame4, text="Total Defect:",
                      fg="black", bg="#CAEDFB", anchor="e")
-label_114.grid(row=8, column=0, padx=0, pady=0, sticky="nsew")
+label_114.grid(row=10, column=0, padx=0, pady=0, sticky="nsew")
 label_115 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_115.grid(row=8, column=1, padx=0, pady=0, sticky="nsew")
+label_115.grid(row=10, column=1, padx=0, pady=0, sticky="nsew")
 label_116 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_116.grid(row=8, column=2, padx=0, pady=0, sticky="nsew")
+label_116.grid(row=10, column=2, padx=0, pady=0, sticky="nsew")
 label_117 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_117.grid(row=8, column=3, padx=0, pady=0, sticky="nsew")
+label_117.grid(row=10, column=3, padx=0, pady=0, sticky="nsew")
 label_118 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_118.grid(row=8, column=4, padx=0, pady=0, sticky="nsew")
+label_118.grid(row=10, column=4, padx=0, pady=0, sticky="nsew")
 label_119 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_119.grid(row=8, column=5, padx=0, pady=0, sticky="nsew")
+label_119.grid(row=10, column=5, padx=0, pady=0, sticky="nsew")
 label_120 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_120.grid(row=8, column=6, padx=0, pady=0, sticky="nsew")
+label_120.grid(row=10, column=6, padx=0, pady=0, sticky="nsew")
 label_121 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_121.grid(row=8, column=7, padx=0, pady=0, sticky="nsew")
+label_121.grid(row=10, column=7, padx=0, pady=0, sticky="nsew")
 label_122 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_122.grid(row=8, column=8, padx=0, pady=0, sticky="nsew")
+label_122.grid(row=10, column=8, padx=0, pady=0, sticky="nsew")
 label_123 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_123.grid(row=8, column=9, padx=0, pady=0, sticky="nsew")
+label_123.grid(row=10, column=9, padx=0, pady=0, sticky="nsew")
 label_124 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_124.grid(row=8, column=10, padx=0, pady=0, sticky="nsew")
+label_124.grid(row=10, column=10, padx=0, pady=0, sticky="nsew")
 label_125 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_125.grid(row=8, column=11, padx=0, pady=0, sticky="nsew")
+label_125.grid(row=10, column=11, padx=0, pady=0, sticky="nsew")
 label_126 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_126.grid(row=8, column=12, padx=0, pady=0, sticky="nsew")
+label_126.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
 label_127 = tk.Label(Frame4, text="Total Produc:",
                      fg="black", bg="#CAEDFB", anchor="e")
-label_127.grid(row=9, column=0, padx=0, pady=0, sticky="nsew")
+label_127.grid(row=11, column=0, padx=0, pady=0, sticky="nsew")
 label_128 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_128.grid(row=9, column=1, padx=0, pady=0, sticky="nsew")
+label_128.grid(row=11, column=1, padx=0, pady=0, sticky="nsew")
 label_129 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_129.grid(row=9, column=2, padx=0, pady=0, sticky="nsew")
+label_129.grid(row=11, column=2, padx=0, pady=0, sticky="nsew")
 label_130 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_130.grid(row=9, column=3, padx=0, pady=0, sticky="nsew")
+label_130.grid(row=11, column=3, padx=0, pady=0, sticky="nsew")
 label_131 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_131.grid(row=9, column=4, padx=0, pady=0, sticky="nsew")
+label_131.grid(row=11, column=4, padx=0, pady=0, sticky="nsew")
 label_132 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_132.grid(row=9, column=5, padx=0, pady=0, sticky="nsew")
+label_132.grid(row=11, column=5, padx=0, pady=0, sticky="nsew")
 label_133 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_133.grid(row=9, column=6, padx=0, pady=0, sticky="nsew")
+label_133.grid(row=11, column=6, padx=0, pady=0, sticky="nsew")
 label_134 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_134.grid(row=9, column=7, padx=0, pady=0, sticky="nsew")
+label_134.grid(row=11, column=7, padx=0, pady=0, sticky="nsew")
 label_135 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_135.grid(row=9, column=8, padx=0, pady=0, sticky="nsew")
+label_135.grid(row=11, column=8, padx=0, pady=0, sticky="nsew")
 label_136 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_136.grid(row=9, column=9, padx=0, pady=0, sticky="nsew")
+label_136.grid(row=11, column=9, padx=0, pady=0, sticky="nsew")
 label_137 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_137.grid(row=9, column=10, padx=0, pady=0, sticky="nsew")
+label_137.grid(row=11, column=10, padx=0, pady=0, sticky="nsew")
 label_138 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_138.grid(row=9, column=11, padx=0, pady=0, sticky="nsew")
+label_138.grid(row=11, column=11, padx=0, pady=0, sticky="nsew")
 label_139 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_139.grid(row=9, column=12, padx=0, pady=0, sticky="nsew")
+label_139.grid(row=11, column=12, padx=0, pady=0, sticky="nsew")
 label_140 = tk.Label(Frame4, text="TopDefect:",
                      fg="black", bg="#FBE2D5", anchor="e")
-label_140.grid(row=10, column=0, padx=0, pady=0, sticky="nsew")
+label_140.grid(row=12, column=0, padx=0, pady=0, sticky="nsew")
 label_141 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_141.grid(row=10, column=1, padx=0, pady=0, sticky="nsew")
+label_141.grid(row=12, column=1, padx=0, pady=0, sticky="nsew")
 label_142 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_142.grid(row=10, column=2, padx=0, pady=0, sticky="nsew")
+label_142.grid(row=12, column=2, padx=0, pady=0, sticky="nsew")
 label_143 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_143.grid(row=10, column=3, padx=0, pady=0, sticky="nsew")
+label_143.grid(row=12, column=3, padx=0, pady=0, sticky="nsew")
 label_144 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_144.grid(row=10, column=4, padx=0, pady=0, sticky="nsew")
+label_144.grid(row=12, column=4, padx=0, pady=0, sticky="nsew")
 label_145 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_145.grid(row=10, column=5, padx=0, pady=0, sticky="nsew")
+label_145.grid(row=12, column=5, padx=0, pady=0, sticky="nsew")
 label_146 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_146.grid(row=10, column=6, padx=0, pady=0, sticky="nsew")
+label_146.grid(row=12, column=6, padx=0, pady=0, sticky="nsew")
 label_147 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_147.grid(row=10, column=7, padx=0, pady=0, sticky="nsew")
+label_147.grid(row=12, column=7, padx=0, pady=0, sticky="nsew")
 label_148 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_148.grid(row=10, column=8, padx=0, pady=0, sticky="nsew")
+label_148.grid(row=12, column=8, padx=0, pady=0, sticky="nsew")
 label_149 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_149.grid(row=10, column=9, padx=0, pady=0, sticky="nsew")
+label_149.grid(row=12, column=9, padx=0, pady=0, sticky="nsew")
 label_150 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_150.grid(row=10, column=10, padx=0, pady=0, sticky="nsew")
+label_150.grid(row=12, column=10, padx=0, pady=0, sticky="nsew")
 label_151 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_151.grid(row=10, column=11, padx=0, pady=0, sticky="nsew")
+label_151.grid(row=12, column=11, padx=0, pady=0, sticky="nsew")
 label_152 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_152.grid(row=10, column=12, padx=0, pady=0, sticky="nsew")
+label_152.grid(row=12, column=12, padx=0, pady=0, sticky="nsew")
 label_153 = tk.Label(Frame4, text="Cant.Defect:",
                      fg="black", bg="#FBE2D5", anchor="e")
-label_153.grid(row=11, column=0, padx=0, pady=0, sticky="nsew")
+label_153.grid(row=13, column=0, padx=0, pady=0, sticky="nsew")
 label_154 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_154.grid(row=11, column=1, padx=0, pady=0, sticky="nsew")
+label_154.grid(row=13, column=1, padx=0, pady=0, sticky="nsew")
 label_155 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_155.grid(row=11, column=2, padx=0, pady=0, sticky="nsew")
+label_155.grid(row=13, column=2, padx=0, pady=0, sticky="nsew")
 label_156 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_156.grid(row=11, column=3, padx=0, pady=0, sticky="nsew")
+label_156.grid(row=13, column=3, padx=0, pady=0, sticky="nsew")
 label_157 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_157.grid(row=11, column=4, padx=0, pady=0, sticky="nsew")
+label_157.grid(row=13, column=4, padx=0, pady=0, sticky="nsew")
 label_158 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_158.grid(row=11, column=5, padx=0, pady=0, sticky="nsew")
+label_158.grid(row=13, column=5, padx=0, pady=0, sticky="nsew")
 label_159 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_159.grid(row=11, column=6, padx=0, pady=0, sticky="nsew")
+label_159.grid(row=13, column=6, padx=0, pady=0, sticky="nsew")
 label_160 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_160.grid(row=11, column=7, padx=0, pady=0, sticky="nsew")
+label_160.grid(row=13, column=7, padx=0, pady=0, sticky="nsew")
 label_161 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_161.grid(row=11, column=8, padx=0, pady=0, sticky="nsew")
+label_161.grid(row=13, column=8, padx=0, pady=0, sticky="nsew")
 label_162 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_162.grid(row=11, column=9, padx=0, pady=0, sticky="nsew")
+label_162.grid(row=13, column=9, padx=0, pady=0, sticky="nsew")
 label_163 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_163.grid(row=11, column=10, padx=0, pady=0, sticky="nsew")
+label_163.grid(row=13, column=10, padx=0, pady=0, sticky="nsew")
 label_164 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_164.grid(row=11, column=11, padx=0, pady=0, sticky="nsew")
+label_164.grid(row=13, column=11, padx=0, pady=0, sticky="nsew")
 label_165 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_165.grid(row=11, column=12, padx=0, pady=0, sticky="nsew")
+label_165.grid(row=13, column=12, padx=0, pady=0, sticky="nsew")
 label_166 = tk.Label(Frame4, text="%Defect:",
                      fg="black", bg="#FBE2D5", anchor="e")
-label_166.grid(row=12, column=0, padx=0, pady=0, sticky="nsew")
+label_166.grid(row=14, column=0, padx=0, pady=0, sticky="nsew")
 label_167 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_167.grid(row=12, column=1, padx=0, pady=0, sticky="nsew")
+label_167.grid(row=14, column=1, padx=0, pady=0, sticky="nsew")
 label_168 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_168.grid(row=12, column=2, padx=0, pady=0, sticky="nsew")
+label_168.grid(row=14, column=2, padx=0, pady=0, sticky="nsew")
 label_169 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_169.grid(row=12, column=3, padx=0, pady=0, sticky="nsew")
+label_169.grid(row=14, column=3, padx=0, pady=0, sticky="nsew")
 label_170 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_170.grid(row=12, column=4, padx=0, pady=0, sticky="nsew")
+label_170.grid(row=14, column=4, padx=0, pady=0, sticky="nsew")
 label_171 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_171.grid(row=12, column=5, padx=0, pady=0, sticky="nsew")
+label_171.grid(row=14, column=5, padx=0, pady=0, sticky="nsew")
 label_172 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_172.grid(row=12, column=6, padx=0, pady=0, sticky="nsew")
+label_172.grid(row=14, column=6, padx=0, pady=0, sticky="nsew")
 label_173 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_173.grid(row=12, column=7, padx=0, pady=0, sticky="nsew")
+label_173.grid(row=14, column=7, padx=0, pady=0, sticky="nsew")
 label_174 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_174.grid(row=12, column=8, padx=0, pady=0, sticky="nsew")
+label_174.grid(row=14, column=8, padx=0, pady=0, sticky="nsew")
 label_175 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_175.grid(row=12, column=9, padx=0, pady=0, sticky="nsew")
+label_175.grid(row=14, column=9, padx=0, pady=0, sticky="nsew")
 label_176 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_176.grid(row=12, column=10, padx=0, pady=0, sticky="nsew")
+label_176.grid(row=14, column=10, padx=0, pady=0, sticky="nsew")
 label_177 = tk.Label(Frame4,
                      fg="black", bg=color_2)
-label_177.grid(row=12, column=11, padx=0, pady=0, sticky="nsew")
+label_177.grid(row=14, column=11, padx=0, pady=0, sticky="nsew")
 label_178 = tk.Label(Frame4,
                      fg="black", bg=color_3)
-label_178.grid(row=12, column=12, padx=0, pady=0, sticky="nsew")
+label_178.grid(row=14, column=12, padx=0, pady=0, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
