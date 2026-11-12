@@ -240,12 +240,18 @@ def guardar_datos(event=None):
             guardando_en_progreso = False
             return
 
+        # Avisar cada vez que se registra un pallet cuyo mantenimiento está vencido.
+        alerta_mantenimiento(pallet)
+
         # 3. Escritura en archivos (Usando context manager 'with' para cierre automático)
         archivos = [csv_file, csv_file2]
         for ruta in archivos:
             with open(ruta, mode='a', newline='', encoding='utf-8') as file:
                 writer = csv.writer(file)
                 writer.writerow(datos)
+
+        # Avisar también cuando el registro actual alcanza exactamente el límite.
+        alerta_mantenimiento(pallet, despues_de_guardar=True)
 
         # 4. Limpieza de la interfaz
         for entry in entries_defectos:

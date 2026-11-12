@@ -1531,6 +1531,8 @@ label_178.grid(row=14, column=12, padx=0, pady=0, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
 
+Frame5.grid_columnconfigure(0, weight=1)
+Frame5.grid_columnconfigure(7, weight=1)
 label_179 = tk.Label(Frame5, fg="black", bg=color_1, anchor="sw")
 label_179.grid(row=0, column=0, padx=0, pady=5, sticky="nsew")
 button_12 = tk.Button(Frame5, text="Defectos", height=0, width=0,
@@ -1548,9 +1550,12 @@ button_15.grid(row=0, column=4, padx=2, pady=5, sticky="nsew")
 button_16 = tk.Button(Frame5, text="LogFile", height=0, width=0,
                       border=3, background="#00B050", command=lambda: root_logfile(actualizar_principal))
 button_16.grid(row=0, column=5, padx=2, pady=5, sticky="nsew")
-label_180 = tk.Label(Frame5, text="Rev9.0 (By: Oscar Tovar)",
+button_mantenimiento = tk.Button(Frame5, text="Mantenimiento", height=0, width=0,
+                                 border=3, background="#F2A65A", command=root_mantenimiento)
+button_mantenimiento.grid(row=0, column=6, padx=2, pady=5, sticky="nsew")
+label_180 = tk.Label(Frame5, text="Rev9.3 (By: Oscar Tovar)",
                      fg="black", bg=color_1, anchor="se")
-label_180.grid(row=0, column=6, padx=0, pady=5, sticky="nsew")
+label_180.grid(row=0, column=7, padx=0, pady=5, sticky="nsew")
 
 # ---------------------------------------------------------------------------------------------------------------------
 entry_0.bind("<KeyRelease>", suma_defectos)

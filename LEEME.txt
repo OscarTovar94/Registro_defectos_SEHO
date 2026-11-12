@@ -1,9 +1,0 @@
-SEHO Rev9.1 - división inicial conservadora
-
-Ejecutar: python main.py
-
-Se conserva el orden original de ejecución, incluyendo creación de widgets, eventos y funciones. Los archivos son fragmentos organizados del script original y se ejecutan en un espacio de nombres compartido para evitar romper referencias globales. Es una primera etapa, NO una refactorización completa ni una validación funcional.
-
-Dependencias, rutas C:/Registro_defectos_SEHO y requisitos de Windows siguen siendo los originales.
-No se ha añadido conexión a base de datos.
-Conservar copia de Rev9.0 y probar en un equipo de desarrollo antes de producción.

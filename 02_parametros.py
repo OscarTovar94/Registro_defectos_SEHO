@@ -112,6 +112,13 @@ def root_parametros():
                 self.df = pd.read_csv(
                     self.archivo_csv, encoding=encoding_detectado)
 
+                # Mantener compatibilidad con Parameters.csv anteriores.
+                if "Mantenimientos" not in self.df.columns:
+                    self.df["Mantenimientos"] = 30
+                else:
+                    self.df["Mantenimientos"] = pd.to_numeric(
+                        self.df["Mantenimientos"], errors="coerce").fillna(30).astype(int)
+
                 # Nombre de la primera columna
                 col0 = self.df.columns[0]
 
@@ -235,6 +242,7 @@ def root_parametros():
 
                     # Crear nueva fila con 'N/A' en todas las columnas
                     nueva_fila = {col: '0' for col in self.df.columns}
+                    nueva_fila["Mantenimientos"] = 30
 
                     # Dividir el DataFrame y concatenar con la nueva fila en medio
                     self.df = pd.concat([
@@ -279,6 +287,16 @@ def root_parametros():
         def guardar_csv(self):
             """ Guarda el DataFrame modificado en el mismo archivo CSV """
             try:
+                if "Mantenimientos" not in self.df.columns:
+                    self.df["Mantenimientos"] = 30
+                limites = pd.to_numeric(self.df["Mantenimientos"], errors="coerce")
+                if ((limites.notna()) & (limites <= 0)).any():
+                    messagebox.showwarning("Mantenimientos", "El límite debe ser un entero positivo.", parent=self.root)
+                    return
+                if ((limites.notna()) & (limites % 1 != 0)).any():
+                    messagebox.showwarning("Mantenimientos", "El límite debe ser un entero.", parent=self.root)
+                    return
+                self.df["Mantenimientos"] = limites.fillna(30).astype(int)
                 self.df.to_csv(self.archivo_csv, index=False, encoding="utf-8")
                 messagebox.showinfo(
                     "Éxito", "Datos guardados correctamente.", parent=self.root)

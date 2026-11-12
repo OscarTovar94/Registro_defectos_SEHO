@@ -151,7 +151,7 @@ def root_scale():
         12
     )
 
-    aplicar_fuente(buttons(*range(12, 17)), 10)
+    aplicar_fuente(buttons(*range(12, 17)) + [button_mantenimiento], 10)
     aplicar_fuente(buttons(17), 10)
 
 
@@ -318,5 +318,3 @@ def reset(busqueda, reemplazo):
     except Exception as e:
         messagebox.showerror("Error", f"Ocurrió un problema: {str(e)}")
         return 0
-
-
