@@ -5,13 +5,13 @@ def defect_root():
     def settings_root_rd(clave):
         """Function to load settings."""
         try:
-            with open("C:/Registro_defectos_SEHO/root_settings_rd.ini", "r",  encoding="utf-8") as config:
+            with open("C:/Registro_defectos_SEHO/SystemFiles/root_settings_rd.ini", "r",  encoding="utf-8") as config:
                 for linea in config:
                     if linea.startswith(clave):
                         return linea.split("=")[1].strip()
         except FileNotFoundError:
             messagebox.showerror(
-                "Error", "El archivo de configuración 'setting.txt' no fue encontrado.")
+                "Error", "El archivo de configuración 'root_settings_rd.ini' no fue encontrado.")
         except ImportError as e:
             messagebox.showerror(
                 "Error", f"Ocurrió un error al leer la configuración: {e}")
