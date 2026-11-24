@@ -76,7 +76,7 @@ def root_scale():
     # BLOQUE PRINCIPAL
     # --------------------------------------------------
 
-    aplicar_fuente(labels(62, 88), 13)
+    aplicar_fuente(labels(62, 88, 75), 13)
 
     aplicar_fuente(
         labels(
